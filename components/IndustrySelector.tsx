@@ -61,7 +61,7 @@ export function IndustrySelector({ onSelectIndustry, selectedIndustry }: Industr
     const selected = industries.find(i => i.id === selectedIndustry);
     
     return (
-      <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-5 mb-6">
+      <div className="bg-[#0a0a0a] rounded-lg p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="text-2xl">{selected?.emoji}</span>
@@ -82,7 +82,7 @@ export function IndustrySelector({ onSelectIndustry, selectedIndustry }: Industr
   }
 
   return (
-    <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-5 mb-6">
+    <div>
       <h2 className="text-base font-semibold text-white mb-4">
         Choose Your Industry
       </h2>
