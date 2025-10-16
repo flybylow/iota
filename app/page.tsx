@@ -23,13 +23,13 @@ export default function Home() {
   const tabs = [
     {
       id: 'create' as TabType,
-      label: 'Step 1: Create Identity',
+      label: 'Create Identity',
       icon: KeyRound,
       color: 'blue',
     },
     {
       id: 'verify' as TabType,
-      label: 'Step 2: Verify Identity',
+      label: 'Verify Identity',
       icon: ShieldCheck,
       color: 'indigo',
     },

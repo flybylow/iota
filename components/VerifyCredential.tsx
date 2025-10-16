@@ -159,7 +159,7 @@ export function VerifyCredential() {
               value={didInput}
               onChange={(e) => setDidInput(e.target.value)}
               placeholder="did:iota:smr:0x..."
-              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition-colors font-mono text-sm"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:bg-[#252525] transition-colors font-mono text-sm"
             />
             <div className="mt-3 flex flex-wrap gap-2">
               {savedDIDs.length > 0 && (
