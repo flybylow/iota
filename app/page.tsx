@@ -78,27 +78,35 @@ export default function Home() {
           <div className="flex items-center justify-between max-w-2xl mx-auto">
             {tabs.map((tab, index) => (
               <React.Fragment key={tab.id}>
-                <div className="flex flex-col items-center">
+                <button 
+                  onClick={() => {
+                    setActiveTab(tab.id);
+                    if (!selectedIndustry) {
+                      // Scroll to industry selector if none selected
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                  }}
+                  className="flex flex-col items-center group"
+                >
                   <div 
                     className={`
                       w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center
                       border-2 transition-all cursor-pointer
                       ${activeTab === tab.id 
                         ? 'bg-' + tab.color + '-500/20 border-' + tab.color + '-500 scale-110' 
-                        : 'bg-[#2a2a2a] border-[#3a3a3a] hover:border-zinc-500'
+                        : 'bg-[#2a2a2a] border-[#3a3a3a] hover:border-blue-500/50 hover:bg-[#2f2f2f]'
                       }
                     `}
-                    onClick={() => setActiveTab(tab.id)}
                   >
                     <span className="text-xl">{tab.label.split(' ')[0]}</span>
                   </div>
                   <p className={`
                     text-xs mt-1.5 font-medium transition-colors
-                    ${activeTab === tab.id ? 'text-white' : 'text-zinc-500'}
+                    ${activeTab === tab.id ? 'text-white' : 'text-zinc-500 group-hover:text-zinc-300'}
                   `}>
                     {tab.description}
                   </p>
-                </div>
+                </button>
                 {index < tabs.length - 1 && (
                   <div className="flex-1 h-0.5 bg-[#3a3a3a] mx-2 sm:mx-4"></div>
                 )}
