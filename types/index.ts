@@ -3,6 +3,8 @@
 export interface DIDCreationResult {
   did: string;
   document: Record<string, unknown>;
+  privateKey?: number[];
+  needsPublishing?: boolean;
 }
 
 export interface CredentialData {
@@ -15,6 +17,7 @@ export interface VerificationResult {
   isValid: boolean;
   credential?: Record<string, unknown>;
   error?: string;
+  onChain?: boolean;
 }
 
 export interface DIDInfo {
