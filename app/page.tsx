@@ -54,24 +54,21 @@ export default function Home() {
       {/* Header */}
       <header className="bg-[#1a1a1a] border-b border-[#27272a]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-          <div className="text-center space-y-2">
-            <h1 
-              onClick={() => {
-                setActiveTab('farmer');
-                setSelectedIndustry(null);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="text-2xl sm:text-3xl font-bold text-white cursor-pointer hover:text-blue-400 transition-colors"
-            >
-              👛 Digital Product Passport Demo
-            </h1>
-            <p className="text-sm sm:text-base text-zinc-300 max-w-2xl mx-auto">
-              See how blockchain-powered identities enable transparent, verifiable supply chains
-            </p>
-            <p className="text-xs text-zinc-400">
-              Follow a chocolate bar from Ecuador farm → Belgian factory → Dutch consumer
-            </p>
-          </div>
+                <div className="text-center space-y-2">
+                    <h1 
+                      onClick={() => {
+                        setActiveTab('farmer');
+                        setSelectedIndustry(null);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className="text-2xl sm:text-3xl font-bold text-white cursor-pointer hover:text-blue-400 transition-colors"
+                    >
+                      👛 Digital Product Passport Demo
+                    </h1>
+                    <p className="text-sm sm:text-base text-zinc-300 max-w-2xl mx-auto">
+                      See how blockchain-powered identities enable transparent, verifiable supply chains
+                    </p>
+                  </div>
         </div>
       </header>
 
@@ -147,34 +144,26 @@ export default function Home() {
               This demo shows real-world DPP implementation for supply chain transparency, 
               product authentication, and regulatory compliance.
             </p>
-            <div className="flex flex-wrap justify-center items-stretch gap-4 mt-4">
-              <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg px-4 py-3 flex items-center gap-2">
+            <div className="flex flex-wrap justify-center items-center gap-3 mt-4">
+              <div className="bg-gradient-to-br from-[#2a2a2a] to-[#1f1f1f] border border-[#3a3a3a] rounded-full px-5 py-2.5 shadow-lg">
                 <p className="text-sm font-medium text-white">⚡ Fast</p>
-                <span className="text-zinc-600">•</span>
-                <p className="text-xs text-zinc-400">Instant verification</p>
               </div>
-              <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg px-4 py-3 flex items-center gap-2">
+              <div className="bg-gradient-to-br from-[#2a2a2a] to-[#1f1f1f] border border-[#3a3a3a] rounded-full px-5 py-2.5 shadow-lg">
                 <p className="text-sm font-medium text-white">✅ Compliant</p>
-                <span className="text-zinc-600">•</span>
-                <p className="text-xs text-zinc-400">ESPR ready</p>
               </div>
-              <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg px-4 py-3 flex items-center gap-2">
+              <div className="bg-gradient-to-br from-[#2a2a2a] to-[#1f1f1f] border border-[#3a3a3a] rounded-full px-5 py-2.5 shadow-lg">
                 <p className="text-sm font-medium text-white">🔗 Interoperable</p>
-                <span className="text-zinc-600">•</span>
-                <p className="text-xs text-zinc-400">W3C standards</p>
               </div>
               <a
                 href="https://wiki.iota.org/identity.rs/introduction/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#2a2a2a] border border-blue-500/20 rounded-lg px-4 py-3 flex items-center gap-2 hover:border-blue-500/40 transition-colors group no-underline"
+                className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border border-blue-500/30 rounded-full px-5 py-2.5 shadow-lg hover:border-blue-500/50 hover:from-blue-500/15 hover:to-blue-600/10 transition-all group no-underline"
               >
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-2">
                   <p className="text-sm font-medium text-blue-400 group-hover:text-blue-300">🔒 Verifiable</p>
-                  <ExternalLink className="w-3 h-3 text-blue-400 group-hover:text-blue-300" />
+                  <ExternalLink className="w-3.5 h-3.5 text-blue-400 group-hover:text-blue-300" />
                 </div>
-                <span className="text-zinc-600">•</span>
-                <p className="text-xs text-zinc-400">IOTA Identity</p>
               </a>
             </div>
           </div>
