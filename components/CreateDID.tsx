@@ -86,7 +86,7 @@ export function CreateDID() {
         <h2 className="text-2xl font-semibold text-white mb-2">
           Create Your Digital Identity
         </h2>
-        <p className="text-zinc-400 text-sm">
+        <p className="text-zinc-100 text-sm">
           An identity that you own forever.
         </p>
       </div>
@@ -151,7 +151,7 @@ export function CreateDID() {
               What is this?
             </summary>
             <div className="mt-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-4 text-left">
-              <p className="text-zinc-300 mb-3 text-sm">
+              <p className="text-white mb-3 text-sm">
                 A <strong>Decentralized Identifier (DID)</strong> is a digital identity that:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">

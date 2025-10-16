@@ -103,7 +103,7 @@ export function VerifyCredential() {
         <h2 className="text-2xl font-semibold text-white mb-2">
           Verify a Digital Identity
         </h2>
-        <p className="text-zinc-400 text-sm">
+        <p className="text-zinc-100 text-sm">
           Verify the identity is real, active, and correctly signed.
         </p>
       </div>
@@ -314,13 +314,13 @@ export function VerifyCredential() {
           </details>
 
           <details className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-4">
-            <summary className="cursor-pointer font-medium text-zinc-300 text-sm hover:text-white transition-colors">
+            <summary className="cursor-pointer font-medium text-white text-sm hover:text-blue-400 transition-colors">
               Why This Matters
             </summary>
             <div className="mt-4">
               <div className="grid grid-cols-2 gap-3 mb-3 text-xs">
-                <div className="text-center text-zinc-400 font-medium">Traditional</div>
-                <div className="text-center text-zinc-400 font-medium">Decentralized</div>
+                <div className="text-center text-white font-medium">Traditional</div>
+                <div className="text-center text-white font-medium">Decentralized</div>
               </div>
 
               <div className="space-y-2">
