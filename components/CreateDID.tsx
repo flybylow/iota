@@ -1,39 +1,25 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createDID } from '@/lib/iotaIdentity';
 import { DIDCreationResult } from '@/types';
 import { Loader2, CheckCircle2, Copy, AlertCircle, Sparkles } from 'lucide-react';
-import confetti from 'canvas-confetti';
 
 /**
  * CreateDID Component
  * 
  * Simplified UX for creating decentralized identities.
- * Focus: Plain language, progressive loading, celebration on success.
+ * Focus: Plain language, progressive loading.
  */
 
-interface CreateDIDProps {
-  onSuccess?: () => void;
-}
-
-export function CreateDID({ onSuccess }: CreateDIDProps) {
+export function CreateDID() {
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState<string>('');
   const [result, setResult] = useState<DIDCreationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   
-  // Trigger confetti on success
-  useEffect(() => {
-    if (result && !error) {
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
-    }
-  }, [result, error]);
+  // Confetti moved to verification step
 
   const handleCreateDID = async () => {
     setLoading(true);
@@ -63,11 +49,6 @@ export function CreateDID({ onSuccess }: CreateDIDProps) {
         created: new Date().toISOString(),
       });
       localStorage.setItem('iota-dids', JSON.stringify(savedDIDs));
-      
-      // Trigger success callback after short delay
-      setTimeout(() => {
-        if (onSuccess) onSuccess();
-      }, 3000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create identity');
     } finally {
@@ -282,7 +263,7 @@ export function CreateDID({ onSuccess }: CreateDIDProps) {
               Ready for the next step?
             </p>
             <p className="text-sm opacity-90">
-              Automatically moving to verification in 3 seconds... or click Step 2 above!
+              Click <strong>Step 2: Verify Identity</strong> above to continue!
             </p>
           </div>
         </div>

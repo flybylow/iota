@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { resolveDID } from '@/lib/iotaIdentity';
 import { Loader2, CheckCircle2, XCircle, Shield, AlertCircle } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
 /**
  * VerifyCredential Component (now focused on verifying DIDs)
@@ -31,6 +32,17 @@ export function VerifyCredential() {
     const dids = JSON.parse(localStorage.getItem('iota-dids') || '[]');
     setSavedDIDs(dids);
   }, []);
+
+  // Trigger confetti on successful verification
+  useEffect(() => {
+    if (result && result.isValid) {
+      confetti({
+        particleCount: 150,
+        spread: 80,
+        origin: { y: 0.6 }
+      });
+    }
+  }, [result]);
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();

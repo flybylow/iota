@@ -89,7 +89,7 @@ export default function Home() {
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-xl shadow-lg p-8">
-          {activeTab === 'create' && <CreateDID onSuccess={() => setActiveTab('verify')} />}
+          {activeTab === 'create' && <CreateDID />}
           {activeTab === 'verify' && <VerifyCredential />}
         </div>
       </main>
