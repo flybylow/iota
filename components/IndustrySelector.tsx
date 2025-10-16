@@ -63,12 +63,11 @@ export function IndustrySelector({ onSelectIndustry, selectedIndustry }: Industr
     return (
       <div className="bg-[#0a0a0a] rounded-lg p-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="text-2xl">{selected?.emoji}</span>
-            <div>
-              <p className="text-sm text-zinc-400">Selected Industry:</p>
-              <p className="text-base font-semibold text-white">{selected?.name}</p>
-            </div>
+          <div className="flex items-center gap-2.5">
+            <span className="text-xl">{selected?.emoji}</span>
+            <p className="text-sm text-zinc-400">
+              Selected Industry: <span className="font-semibold text-white">{selected?.name}</span>
+            </p>
           </div>
           <button
             onClick={() => onSelectIndustry('')}
