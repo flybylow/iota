@@ -83,20 +83,15 @@ export function IndustrySelector({ onSelectIndustry, selectedIndustry }: Industr
 
   return (
     <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-5 mb-6">
-      <div className="mb-4">
-        <h2 className="text-base font-semibold text-white mb-1">
-          Choose Your Industry
-        </h2>
-        <p className="text-xs text-zinc-400">
-          This demo uses chocolate, but applies to all sectors
-        </p>
-      </div>
+      <h2 className="text-base font-semibold text-white mb-4">
+        Choose Your Industry
+      </h2>
 
       <div className="space-y-2">
         {industries.map((industry) => (
           <label
             key={industry.id}
-            className="flex items-center gap-3 p-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg cursor-pointer hover:bg-[#2f2f2f] hover:border-blue-500/30 transition-colors group"
+            className="flex items-center gap-3 p-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg cursor-pointer hover:bg-[#2f2f2f] hover:border-blue-500/30 transition-colors"
           >
             <input
               type="radio"
@@ -106,17 +101,12 @@ export function IndustrySelector({ onSelectIndustry, selectedIndustry }: Industr
               className="w-4 h-4 text-blue-600"
             />
             <span className="text-xl">{industry.emoji}</span>
-            <div className="flex-1">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-white">{industry.name}</span>
-                {industry.id === 'battery' && (
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
-                    {industry.urgency}
-                  </span>
-                )}
-              </div>
-              <p className="text-xs text-zinc-500">{industry.examples}</p>
-            </div>
+            <span className="text-sm font-medium text-white">{industry.name}</span>
+            {industry.id === 'battery' && (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 ml-auto">
+                {industry.urgency}
+              </span>
+            )}
           </label>
         ))}
       </div>
