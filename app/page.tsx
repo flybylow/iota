@@ -41,10 +41,9 @@ export default function Home() {
       <header className="bg-[#1a1a1a] border-b border-[#27272a]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
           <div className="text-center">
-            <h1 className="text-xl sm:text-2xl font-semibold text-white mb-1">
-              Decentralized Identity
+            <h1 className="text-xl sm:text-2xl font-semibold text-white">
+              Decentralized Identity <span className="text-sm font-normal text-zinc-300">(on IOTA)</span>
             </h1>
-            <p className="text-zinc-100 text-sm">on IOTA</p>
           </div>
         </div>
       </header>
