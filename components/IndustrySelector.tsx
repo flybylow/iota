@@ -40,20 +40,20 @@ export function IndustrySelector({ onSelectIndustry, selectedIndustry }: Industr
       name: 'Fashion & Textiles',
       icon: Shirt,
       emoji: '👕',
-      examples: 'Clothing, Shoes, Accessories',
+      examples: 'Apparel, Footwear, Luxury Goods',
       color: 'purple',
-      urgency: 'Transparency required',
-      description: 'Verify sustainable materials, ethical labor, and carbon footprint claims'
+      urgency: 'ESG reporting 2025',
+      description: 'Prove organic cotton, track water usage, verify fair labor practices, and combat counterfeiting'
     },
     {
       id: 'electronics',
       name: 'Electronics',
       icon: Smartphone,
       emoji: '📱',
-      examples: 'Phones, Laptops, Appliances',
+      examples: 'Smartphones, Laptops, IoT Devices',
       color: 'blue',
-      urgency: 'ESPR compliance',
-      description: 'Track components, materials, repairability, and recycling information'
+      urgency: 'Right to repair 2024',
+      description: 'Verify conflict-free minerals, track rare earth sourcing, prove repairability scores, enable circular economy'
     }
   ];
 
