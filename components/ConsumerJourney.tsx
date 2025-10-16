@@ -359,7 +359,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
                     )}
                     <div>
                       <p className="text-sm text-white font-medium">{step.issuer}</p>
-                      <p className="text-xs text-zinc-500">
+                      <p className="text-xs text-white">
                         DID: {step.issuerDID.substring(0, 35)}...
                       </p>
                     </div>
