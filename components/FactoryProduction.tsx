@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { industryData, type IndustryId } from '@/data/industry-data';
-import { Loader2, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
+import { Loader2, CheckCircle2, XCircle, AlertCircle, Factory } from 'lucide-react';
 import type { DPPCredential, ProductionCertificationData } from '@/types/dpp';
 
 /**
