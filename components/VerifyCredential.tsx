@@ -432,68 +432,86 @@ export function VerifyCredential() {
 
           {/* Side-by-Side Comparison */}
           <div className="bg-gradient-to-br from-gray-50 to-blue-50 border-2 border-gray-300 rounded-xl p-6">
-            <h3 className="font-bold text-gray-900 mb-4 text-lg text-center">
+            <h3 className="font-bold text-gray-900 mb-6 text-lg text-center">
               🔍 Why This Matters
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Traditional */}
-              <div className="bg-white rounded-lg p-4 border-2 border-red-200">
-                <h4 className="font-semibold text-red-900 mb-3 flex items-center gap-2">
+            
+            {/* Headers */}
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="text-center">
+                <h4 className="font-semibold text-red-900 flex items-center justify-center gap-2">
                   <XCircle className="w-5 h-5" />
-                  Traditional Identity Verification
+                  <span>Traditional</span>
                 </h4>
-                <ul className="space-y-2 text-sm text-gray-700">
-                  <li className="flex items-start gap-2">
-                    <span className="text-red-500">❌</span>
-                    <span>Call company</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-red-500">❌</span>
-                    <span>Wait 3-5 days</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-red-500">❌</span>
-                    <span>Trust humans (can lie)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-red-500">❌</span>
-                    <span>Paper certificates (can be forged)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-red-500">❌</span>
-                    <span>Centralized database (single point fail)</span>
-                  </li>
-                </ul>
+              </div>
+              <div className="text-center">
+                <h4 className="font-semibold text-green-900 flex items-center justify-center gap-2">
+                  <CheckCircle2 className="w-5 h-5" />
+                  <span>Decentralized (DIDs)</span>
+                </h4>
+              </div>
+            </div>
+
+            {/* Horizontal Comparison Rows */}
+            <div className="space-y-3">
+              {/* Row 1 */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-center gap-2">
+                  <span className="text-red-500 text-lg">❌</span>
+                  <span className="text-sm text-gray-800">Call company</span>
+                </div>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
+                  <span className="text-green-600 text-lg">✅</span>
+                  <span className="text-sm text-gray-800">Instant verification (seconds)</span>
+                </div>
               </div>
 
-              {/* Decentralized */}
-              <div className="bg-white rounded-lg p-4 border-2 border-green-200">
-                <h4 className="font-semibold text-green-900 mb-3 flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5" />
-                  With Decentralized Identity (DIDs)
-                </h4>
-                <ul className="space-y-2 text-sm text-gray-700">
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-600">✅</span>
-                    <span>Instant verification (seconds)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-600">✅</span>
-                    <span>Trust mathematics (can&apos;t lie)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-600">✅</span>
-                    <span>No paper needed (digital proof)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-600">✅</span>
-                    <span>No central authority (no single failure)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-600">✅</span>
-                    <span>Works globally (no borders)</span>
-                  </li>
-                </ul>
+              {/* Row 2 */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-center gap-2">
+                  <span className="text-red-500 text-lg">❌</span>
+                  <span className="text-sm text-gray-800">Wait 3-5 days</span>
+                </div>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
+                  <span className="text-green-600 text-lg">✅</span>
+                  <span className="text-sm text-gray-800">Trust mathematics (can&apos;t lie)</span>
+                </div>
+              </div>
+
+              {/* Row 3 */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-center gap-2">
+                  <span className="text-red-500 text-lg">❌</span>
+                  <span className="text-sm text-gray-800">Trust humans (can lie)</span>
+                </div>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
+                  <span className="text-green-600 text-lg">✅</span>
+                  <span className="text-sm text-gray-800">No paper needed (digital proof)</span>
+                </div>
+              </div>
+
+              {/* Row 4 */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-center gap-2">
+                  <span className="text-red-500 text-lg">❌</span>
+                  <span className="text-sm text-gray-800">Paper certificates (can be forged)</span>
+                </div>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
+                  <span className="text-green-600 text-lg">✅</span>
+                  <span className="text-sm text-gray-800">No central authority (no single failure)</span>
+                </div>
+              </div>
+
+              {/* Row 5 */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-center gap-2">
+                  <span className="text-red-500 text-lg">❌</span>
+                  <span className="text-sm text-gray-800">Centralized database (single point fail)</span>
+                </div>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
+                  <span className="text-green-600 text-lg">✅</span>
+                  <span className="text-sm text-gray-800">Works globally (no borders)</span>
+                </div>
               </div>
             </div>
           </div>
