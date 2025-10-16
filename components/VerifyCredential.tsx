@@ -161,7 +161,8 @@ export function VerifyCredential() {
                   <button
                     type="button"
                     onClick={loadMyIdentity}
-                    className="flex-1 px-4 py-3 bg-[#3a3a3a] border border-[#4a4a4a] text-white text-sm font-medium rounded-lg hover:bg-[#4a4a4a] hover:border-blue-400 transition-colors min-h-[44px]"
+                    className="flex-1 px-4 py-3 bg-[#3a3a3a] border border-[#4a4a4a] !text-white text-sm font-medium rounded-lg hover:bg-[#4a4a4a] hover:border-blue-400 transition-colors min-h-[44px]"
+                    style={{ color: '#ffffff' }}
                   >
                     Use My ID
                   </button>
@@ -169,7 +170,8 @@ export function VerifyCredential() {
                 <button
                   type="button"
                   onClick={loadExampleDID}
-                  className="flex-1 px-4 py-3 bg-[#3a3a3a] border border-[#4a4a4a] text-white text-sm font-medium rounded-lg hover:bg-[#4a4a4a] hover:border-blue-400 transition-colors min-h-[44px]"
+                  className="flex-1 px-4 py-3 bg-[#3a3a3a] border border-[#4a4a4a] !text-white text-sm font-medium rounded-lg hover:bg-[#4a4a4a] hover:border-blue-400 transition-colors min-h-[44px]"
+                  style={{ color: '#ffffff' }}
                 >
                   Use Example
                 </button>
@@ -180,7 +182,8 @@ export function VerifyCredential() {
                 value={didInput}
                 onChange={(e) => setDidInput(e.target.value)}
                 placeholder="did:iota:smr:0x..."
-                className="w-full px-5 py-4 mt-3 mb-1 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:bg-[#252525] transition-colors text-sm"
+                className="w-full px-5 py-4 mt-3 mb-1 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg !text-white placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:bg-[#252525] transition-colors text-sm font-normal"
+                style={{ color: '#ffffff' }}
               />
             </div>
 
