@@ -1,18 +1,30 @@
-# IOTA DID Explorer for Digital Product Passports
+# 🍫 Digital Product Passport - Chocolate Supply Chain Demo
 
-A working demonstration of decentralized identity (DIDs) and verifiable credentials on IOTA, adapted for supply chain and Digital Product Passport (DPP) use cases.
+Interactive demonstration of blockchain-powered supply chain transparency using **IOTA Decentralized Identifiers (DIDs)** and **Verifiable Credentials**.
 
-![IOTA DID Explorer](https://img.shields.io/badge/Next.js-15-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![IOTA](https://img.shields.io/badge/IOTA-Identity-teal) ![DPP](https://img.shields.io/badge/DPP-Ready-green)
+![Next.js](https://img.shields.io/badge/Next.js-15-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![IOTA](https://img.shields.io/badge/IOTA-Identity-teal) ![DPP](https://img.shields.io/badge/DPP-EU%20Ready-green)
+
+## 🌐 Live Demo
+
+**[View Live Demo →](https://iota-snowy-nine.vercel.app)**
 
 ---
 
-## 🎯 What This Is
+## 🎯 What This Demonstrates
 
-This is a **proof-of-concept** showing how **IOTA Decentralized Identifiers (DIDs)** and **Verifiable Credentials (VCs)** can power the next generation of **Digital Product Passports** for EU compliance.
+A **working reference implementation** showing how **W3C Decentralized Identifiers** and **Verifiable Credentials** enable transparent, verifiable supply chains for **EU Digital Product Passport** compliance.
 
-**Built for:** Supply chain transparency, product authentication, and regulatory compliance  
-**Based on:** W3C DID standards + IOTA Identity SDK  
-**Use case:** Adaptable for chocolate, batteries, textiles, electronics supply chains
+**Journey:** Ecuador farm → Belgian factory → Dutch consumer  
+**Tech:** IOTA Tangle + W3C DID standards + Next.js  
+**Purpose:** Prove DPP implementation expertise for consulting clients
+
+### Real-World Business Value
+
+This demo proves you can build production DPP solutions. Perfect for showing:
+- 🍫 Food & Beverage manufacturers (chocolate, coffee, wine)
+- 🔋 Battery producers (EU mandatory 2027)
+- 👕 Fashion brands (textile transparency)
+- 📱 Electronics companies (ESPR compliance)
 
 ---
 
@@ -34,22 +46,33 @@ Then open: **http://localhost:3000**
 
 ---
 
-## ✨ Features
+## ✨ What You'll See
 
-### Current Implementation
-- ✅ **Create Decentralized Identities (DIDs)** - Each supply chain actor gets a unique DID
-- ✅ **Issue Verifiable Credentials** - Certifications, origin certificates, quality tests
-- ✅ **Verify Credentials** - Cryptographic verification without central authority
-- ✅ **Pre-filled Demo Data** - Test instantly with example credentials
-- ✅ **Browser Persistence** - LocalStorage for demo purposes
-- ✅ **Beautiful UI** - Modern interface with educational tooltips
+### Interactive 3-Step Supply Chain Journey
 
-### Digital Product Passport Ready
-- ✅ **W3C DID Standard Compliant** - Future-proof identity framework
-- ✅ **IOTA Tangle Integration** - Fee-less, scalable blockchain
-- ✅ **Supply Chain Tracking** - Track products from origin to consumer
-- ✅ **No Transaction Fees** - Perfect for high-volume product authentication
-- ✅ **Offline-First Ready** - Credentials work without constant connectivity
+**Step 1: 🌱 Farmer** (Maria's Organic Cocoa Farm, Ecuador)
+- Issues organic origin certificate
+- Certifies harvest date, batch weight, Fair Trade compliance
+- Cryptographically signs with farmer's DID
+
+**Step 2: 🏭 Factory** (Chocolate Dreams, Belgium)
+- **Verifies** farmer's certificate before producing
+- Issues production certificate (batch #, recipe, quality checks)
+- **Credential chaining** - links to farmer's certificate
+
+**Step 3: ✅ Consumer** (Amsterdam, Netherlands)
+- Scans QR code on chocolate bar
+- Sees complete verified supply chain journey
+- Instant cryptographic proof of all claims
+
+### Key Features
+
+- ✅ **Credential Chaining** - Each step verifies previous steps
+- ✅ **Real Stakeholders** - Farmer, Factory, Lab, Consumer roles
+- ✅ **Visual Timeline** - See complete product journey
+- ✅ **Instant Verification** - No phone calls, no waiting
+- ✅ **EU Compliant** - Built for ESPR regulations
+- ✅ **Production-Ready Pattern** - Adaptable to any supply chain
 
 ---
 
@@ -66,94 +89,107 @@ Then open: **http://localhost:3000**
 
 ---
 
-## 📖 Use Cases
+## 📖 How It Works - Chocolate Supply Chain
 
-### Current Demo: University Degrees
-1. **University** creates DID → Issues degree credential to student
-2. **Student** holds credential in digital wallet
-3. **Employer** verifies authenticity cryptographically
-4. ✅ **Result:** Tamper-proof, instantly verifiable degree
-
-### Adapted for DPP: Chocolate Supply Chain
-
-#### Scenario: Bean-to-Bar Traceability
-
-**Supply Chain Actors:**
-1. 🌱 **Cocoa Farmer** (Ghana)
-   - DID: `did:iota:smr:0x1a2b3c...`
-   - Issues: Organic farming credential
-
-2. 🏭 **Processing Factory** (Belgium)
-   - DID: `did:iota:smr:0x4d5e6f...`
-   - Verifies: Farmer's organic cert
-   - Issues: Production credential (batch #, date, factory cert)
-
-3. 🔬 **Quality Lab** (TÜV)
-   - DID: `did:iota:smr:0x7g8h9i...`
-   - Verifies: Factory credential
-   - Issues: Quality test results (heavy metals, purity)
-
-4. 🛍️ **Consumer** (EU)
-   - Scans QR code on chocolate bar
-   - Sees complete, verified supply chain
-   - Trusts product origin and quality
-
-#### How It Works
+### The Journey: Bean-to-Bar Traceability
 
 ```
-Farmer              Factory             Lab                 Consumer
-  |                    |                  |                     |
-  | 1. Create DID      |                  |                     |
-  |----------------    |                  |                     |
-  |                    |                  |                     |
-  | 2. Issue Organic   |                  |                     |
-  |    Credential      |                  |                     |
-  |------------------->|                  |                     |
-  |                    | 3. Verify Farmer |                     |
-  |                    |    Credential    |                     |
-  |                    |---------------   |                     |
-  |                    |                  |                     |
-  |                    | 4. Issue         |                     |
-  |                    |    Production    |                     |
-  |                    |    Credential    |                     |
-  |                    |----------------->|                     |
-  |                    |                  | 5. Verify Factory   |
-  |                    |                  |    Credential       |
-  |                    |                  |----------------     |
-  |                    |                  |                     |
-  |                    |                  | 6. Issue Test       |
-  |                    |                  |    Results          |
-  |                    |                  |-------------------->|
-  |                    |                  |                     |
-  |                    |                  |                     | 7. Scan QR
-  |                    |                  |                     |    See Chain
-  |                    |                  |                     |<-----------
+🌱 Farmer            🏭 Factory          ✅ Consumer
+(Ecuador)            (Belgium)           (Netherlands)
+    |                    |                     |
+    | 1. Issue Origin    |                     |
+    |    Certificate     |                     |
+    |------------------->|                     |
+    |                    |                     |
+    |                    | 2. Verify Origin    |
+    |                    |    ✓ Valid          |
+    |                    |                     |
+    |                    | 3. Issue Production |
+    |                    |    Certificate      |
+    |                    |-------------------->|
+    |                    |                     |
+    |                    |                     | 4. Scan QR Code
+    |                    |                     |    
+    |                    |                     | 5. Verify Complete
+    |                    |                     |    Chain ✓
 ```
+
+### Stakeholder Details
+
+**Maria's Organic Cocoa Farm** (Ecuador)
+- **DID:** `did:iota:smr:0xfarmer...`
+- **Role:** Origin certification
+- **Certifications:** EU Organic, Fair Trade
+- **Issues:** Harvest certificate (date, weight, variety, fermentation)
+
+**Chocolate Dreams Factory** (Belgium)
+- **DID:** `did:iota:smr:0xfactory...`
+- **Role:** Production certification  
+- **Certifications:** ISO 22000, BRC Food Safety
+- **Issues:** Production certificate (batch #, recipe, quality checks)
+- **Critical:** Verifies farmer's certificate BEFORE producing
+
+**Consumer** (Amsterdam)
+- Scans QR code on chocolate bar
+- Sees complete verified journey in seconds
+- Trusts organic and Fair Trade claims
+
+### Why This Matters
+
+**Traditional verification:**
+- ❌ Call supplier → Wait 3-5 days
+- ❌ Trust humans (can lie)
+- ❌ Paper certificates (can be forged)
+
+**With DIDs:**
+- ✅ Instant verification (2 seconds)
+- ✅ Trust mathematics (can't lie)
+- ✅ Cryptographic proof (can't be forged)
+- ✅ Complete chain of custody
 
 ---
 
-## 🔧 How It Works
+## 🔧 Technical Implementation
 
-### Tab 1: Create DID
-**For:** Supply chain actors (farmers, factories, labs)
-- Generates unique decentralized identifier
-- Format: `did:iota:smr:0x...` (Shimmer testnet)
-- No central authority required
-- Cryptographically secure
+### Credential Chaining Pattern
 
-### Tab 2: Issue Credential
-**For:** Issuing certifications, test results, origin proofs
-- Issuer DID required (created in Tab 1)
-- Holder DID (recipient - can be product, batch, or company)
-- Claims: Customizable data (origin, quality, certifications)
-- Digitally signed and tamper-proof
+The key innovation is **credential chaining** - each step references previous steps:
 
-### Tab 3: Verify Credential
-**For:** Anyone in supply chain or end consumers
-- Paste credential to verify
-- Cryptographic validation
-- Check expiration dates
-- See full credential details
+```typescript
+// Farmer issues origin certificate
+const originCert = {
+  issuer: "did:iota:smr:0xfarmer...",
+  subject: "did:iota:smr:0xproduct-ch-2025-001",
+  type: "OrganicOriginCertification",
+  data: {
+    farm: "Maria's Organic Cocoa",
+    harvest: "2025-10-01",
+    certified: "EU Organic"
+  }
+};
+
+// Factory MUST verify farmer's cert before producing
+const verify = await verifyCredential(originCert);
+if (!verify.isValid) {
+  throw new Error("Cannot produce: Invalid organic cert!");
+}
+
+// Factory issues production cert that LINKS to farmer's cert
+const productionCert = {
+  issuer: "did:iota:smr:0xfactory...",
+  subject: "did:iota:smr:0xproduct-ch-2025-001",
+  type: "ProductionCertification",
+  data: { /* production details */ },
+  previousCredentials: [originCert] // 🔗 THE CHAIN
+};
+```
+
+### W3C Standards Compliance
+
+- **DIDs:** W3C Decentralized Identifier v1.0
+- **VCs:** W3C Verifiable Credentials Data Model v1.1
+- **Signatures:** Ed25519 cryptographic signatures
+- **Storage:** IOTA Tangle (distributed ledger)
 
 ---
 
@@ -325,15 +361,43 @@ See [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
-**Built at:** Howest University of Applied Sciences  
-**Research Area:** Digital Product Passports for supply chain transparency  
-**Inspired by:** EU ESPR regulations and circular economy initiatives
+**Research:** Digital Product Passports for supply chain transparency  
+**Inspired by:** EU ESPR regulations and circular economy initiatives  
+**Built with:** Next.js 15, TypeScript, IOTA Identity SDK, Tailwind CSS
 
 **Special thanks to:**
-- IOTA Foundation for the Identity SDK
-- W3C for DID/VC standards
+- IOTA Foundation for the feeless, scalable Identity SDK
+- W3C for open DID/VC standards
 - CIRPASS-2 project for DPP framework guidance
-- Next.js team for excellent developer experience
+- Next.js and Vercel teams for excellent developer experience
+
+---
+
+## 🎬 Demo Script for Sales Calls
+
+**Opening (30 seconds):**
+> "Let me show you a working example of how blockchain-powered identity solves supply chain trust. 
+> This is a chocolate bar traveling from Ecuador to Netherlands."
+
+**Step 1 (60 seconds):**
+> "Here's Maria, an organic cocoa farmer in Ecuador. She issues a digital certificate proving her 
+> cocoa is organic. This certificate is cryptographically signed - can't be forged."
+
+**Step 2 (60 seconds):**
+> "The chocolate factory receives the cocoa. Before producing, they VERIFY the organic certificate. 
+> Only if it's valid do they proceed. They then issue their own production certificate that 
+> references Maria's certificate."
+
+**Step 3 (30 seconds):**
+> "Now a consumer scans the QR code. In 2 seconds, they see the entire verified supply chain. 
+> No phone calls. No waiting. Just instant cryptographic verification."
+
+**Closing (30 seconds):**
+> "This is what we build for companies. We can adapt this exact pattern for your products - 
+> batteries, textiles, electronics, whatever you make."
+
+**CTA:**
+> "Want to see how this would work for YOUR products? Let's schedule 30 minutes next week."
 
 ---
 
