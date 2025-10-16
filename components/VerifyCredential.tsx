@@ -150,9 +150,9 @@ export function VerifyCredential() {
       {/* Input Form */}
       {!loading && !result && (
         <div className="max-w-2xl mx-auto">
-          <form onSubmit={handleVerify} className="space-y-6">
-            <div className="space-y-3">
-              <label className="block text-sm font-medium text-zinc-300">
+          <form onSubmit={handleVerify} className="space-y-4">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-white">
                 Enter a DID to verify:
               </label>
               <input
@@ -160,24 +160,24 @@ export function VerifyCredential() {
                 value={didInput}
                 onChange={(e) => setDidInput(e.target.value)}
                 placeholder="did:iota:smr:0x..."
-                className="w-full px-4 py-3.5 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:bg-[#252525] transition-colors text-sm"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:bg-[#252525] transition-colors text-sm"
               />
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-row gap-2">
               {savedDIDs.length > 0 && (
                 <button
                   type="button"
                   onClick={loadMyIdentity}
-                  className="flex-1 px-4 py-2.5 bg-[#3a3a3a] border border-[#4a4a4a] text-zinc-100 text-sm rounded-lg hover:bg-[#4a4a4a] hover:border-blue-400 transition-colors"
+                  className="flex-1 px-3 py-2.5 bg-[#3a3a3a] border border-[#4a4a4a] text-white text-sm rounded-lg hover:bg-[#4a4a4a] hover:border-blue-400 transition-colors min-h-[44px]"
                 >
-                  Use My Identity
+                  Use My ID
                 </button>
               )}
               <button
                 type="button"
                 onClick={loadExampleDID}
-              className="flex-1 px-4 py-2.5 bg-[#3a3a3a] border border-[#4a4a4a] text-zinc-100 text-sm rounded-lg hover:bg-[#4a4a4a] hover:border-blue-400 transition-colors"
+              className="flex-1 px-3 py-2.5 bg-[#3a3a3a] border border-[#4a4a4a] text-white text-sm rounded-lg hover:bg-[#4a4a4a] hover:border-blue-400 transition-colors min-h-[44px]"
             >
               Use Example
             </button>
@@ -186,7 +186,7 @@ export function VerifyCredential() {
           <button
             type="submit"
             disabled={loading || !didInput.trim()}
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-4 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm min-h-[48px]"
+            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-3.5 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm min-h-[48px]"
           >
             <Shield className="w-4 h-4" />
             Verify Identity
