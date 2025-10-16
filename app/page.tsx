@@ -23,13 +23,13 @@ export default function Home() {
   const tabs = [
     {
       id: 'create' as TabType,
-      label: 'Create Identity',
+      label: 'Create',
       icon: KeyRound,
       color: 'blue',
     },
     {
       id: 'verify' as TabType,
-      label: 'Verify Identity',
+      label: 'Verify',
       icon: ShieldCheck,
       color: 'indigo',
     },
@@ -71,8 +71,7 @@ export default function Home() {
                   `}
                 >
                   <Icon className="w-4 h-4" />
-                  <span className="hidden xs:inline sm:inline">{tab.label}</span>
-                  <span className="xs:hidden sm:hidden">{tab.label.split(' ')[0]}</span>
+                  {tab.label}
                 </button>
               );
             })}
