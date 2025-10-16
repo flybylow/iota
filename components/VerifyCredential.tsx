@@ -168,7 +168,7 @@ export function VerifyCredential() {
               <button
                 type="button"
                 onClick={loadMyIdentity}
-                className="flex-1 px-4 py-2.5 bg-[#2a2a2a] border border-[#3a3a3a] text-zinc-300 text-sm rounded-lg hover:bg-[#3a3a3a] hover:border-blue-500/30 transition-colors"
+                className="flex-1 px-4 py-2.5 bg-[#3a3a3a] border border-[#4a4a4a] text-zinc-100 text-sm rounded-lg hover:bg-[#4a4a4a] hover:border-blue-400 transition-colors"
               >
                 Use My Identity
               </button>
@@ -176,7 +176,7 @@ export function VerifyCredential() {
             <button
               type="button"
               onClick={loadExampleDID}
-              className="flex-1 px-4 py-2.5 bg-[#2a2a2a] border border-[#3a3a3a] text-zinc-300 text-sm rounded-lg hover:bg-[#3a3a3a] hover:border-blue-500/30 transition-colors"
+              className="flex-1 px-4 py-2.5 bg-[#3a3a3a] border border-[#4a4a4a] text-zinc-100 text-sm rounded-lg hover:bg-[#4a4a4a] hover:border-blue-400 transition-colors"
             >
               Use Example
             </button>
