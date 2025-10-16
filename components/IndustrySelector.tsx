@@ -16,7 +16,7 @@ interface IndustrySelectorProps {
 export function IndustrySelector({ onSelectIndustry, selectedIndustry }: IndustrySelectorProps) {
   const industries = [
     {
-      id: 'food',
+      id: 'food-beverage',
       name: 'Food & Beverage',
       icon: Coffee,
       emoji: '🍫',
@@ -36,7 +36,7 @@ export function IndustrySelector({ onSelectIndustry, selectedIndustry }: Industr
       description: 'Digital Battery Passport required by EU regulation for all EV batteries'
     },
     {
-      id: 'textile',
+      id: 'fashion',
       name: 'Fashion & Textiles',
       icon: Shirt,
       emoji: '👕',
