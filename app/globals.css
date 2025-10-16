@@ -63,6 +63,17 @@ body {
   .md\:grid-cols-2 {
     grid-template-columns: 1fr !important;
   }
+
+  /* Mobile spacing adjustments */
+  main {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Ensure input text is readable on mobile */
+  input, textarea {
+    font-size: 16px !important;
+  }
 }
 
 /* Smooth scrolling */
