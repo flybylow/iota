@@ -162,7 +162,7 @@ export function CreateDID() {
 
       {/* Create Button */}
       {!loading && !result && (
-        <div className="space-y-4">
+        <>
           <button
             onClick={handleCreateDID}
             disabled={loading}
@@ -173,7 +173,7 @@ export function CreateDID() {
           <div className="text-xs text-zinc-500">
             Takes ~5 seconds • Free on testnet
           </div>
-        </div>
+        </>
       )}
 
       {/* Success Result */}
