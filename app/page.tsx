@@ -44,7 +44,7 @@ export default function Home() {
             <h1 className="text-xl sm:text-2xl font-semibold text-white mb-1">
               Decentralized Identity
             </h1>
-            <p className="text-zinc-400 text-sm">on IOTA</p>
+            <p className="text-zinc-100 text-sm">on IOTA</p>
           </div>
         </div>
       </header>
