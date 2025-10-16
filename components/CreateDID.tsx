@@ -260,21 +260,22 @@ export function CreateDID() {
             <h3 className="text-lg font-semibold">Identity Created</h3>
           </div>
 
-          {identityName && (
-            <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4">
-              <p className="text-xs text-white mb-1">Identity Name:</p>
-              <p className="text-sm text-zinc-100 font-medium">{identityName}</p>
+          <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4 space-y-2">
+            {identityName && (
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-white">Identity Name:</span>
+                <span className="text-sm text-zinc-100 font-medium">{identityName}</span>
+              </div>
+            )}
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-white">Type:</span>
+              <span className="text-sm text-zinc-100">
+                {identityType === 'supplier' && '👨‍🌾 Supplier/Farmer'}
+                {identityType === 'manufacturer' && '🏭 Manufacturer'}
+                {identityType === 'product' && '📦 Product/Batch'}
+                {identityType === 'other' && '🧪 Other (Demo)'}
+              </span>
             </div>
-          )}
-
-          <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4">
-            <p className="text-xs text-white mb-1">Type:</p>
-            <p className="text-sm text-zinc-100">
-              {identityType === 'supplier' && '👨‍🌾 Supplier/Farmer'}
-              {identityType === 'manufacturer' && '🏭 Manufacturer'}
-              {identityType === 'product' && '📦 Product/Batch'}
-              {identityType === 'other' && '🧪 Other (Demo)'}
-            </p>
           </div>
 
           <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4">
