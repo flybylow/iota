@@ -82,7 +82,7 @@ export function CreateDID() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
+      <div className="text-center">
         <h2 className="text-2xl font-semibold text-white mb-2">
           Create Your Digital Identity
         </h2>
@@ -132,7 +132,7 @@ export function CreateDID() {
 
       {/* Create Button */}
       {!loading && !result && (
-        <>
+        <div className="flex justify-center">
           <button
             onClick={handleCreateDID}
             disabled={loading}
@@ -140,13 +140,13 @@ export function CreateDID() {
           >
             Create Identity
           </button>
-        </>
+        </div>
       )}
 
       {/* What is This - Collapsible */}
       {!loading && !result && (
-        <details className="text-sm">
-          <summary className="cursor-pointer text-blue-400 hover:text-blue-300 underline px-2">
+        <details className="text-sm text-center">
+          <summary className="cursor-pointer text-blue-400 hover:text-blue-300 underline">
             What is this?
           </summary>
           <div className="mt-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-4">
