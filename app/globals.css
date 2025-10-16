@@ -66,13 +66,33 @@ body {
 
   /* Mobile spacing adjustments */
   main {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
   }
 
   /* Ensure input text is readable on mobile */
   input, textarea {
     font-size: 16px !important;
+  }
+
+  /* Reduce card padding on mobile */
+  .bg-\[#1a1a1a\].rounded-lg {
+    padding: 1.25rem !important;
+  }
+
+  /* Better header spacing on mobile */
+  header {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 641px) and (max-width: 1024px) {
+  main {
+    max-width: 48rem; /* 768px */
   }
 }
 

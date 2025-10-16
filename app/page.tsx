@@ -39,9 +39,9 @@ export default function Home() {
     <div className="min-h-screen bg-[#0a0a0a]">
       {/* Header */}
       <header className="bg-[#1a1a1a] border-b border-[#27272a]">
-        <div className="max-w-5xl mx-auto px-6 py-8">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
           <div className="text-center">
-            <h1 className="text-2xl font-semibold text-white mb-1">
+            <h1 className="text-xl sm:text-2xl font-semibold text-white mb-1">
               Decentralized Identity
             </h1>
             <p className="text-zinc-400 text-sm">on IOTA</p>
@@ -51,8 +51,8 @@ export default function Home() {
 
       {/* Tab Navigation */}
       <div className="bg-[#1a1a1a] border-b border-[#27272a]">
-        <div className="max-w-5xl mx-auto px-6">
-          <nav className="flex gap-2">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <nav className="flex gap-1 sm:gap-2 justify-center">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -62,7 +62,7 @@ export default function Home() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`
-                    flex items-center gap-2 px-5 py-3.5 text-sm transition-all font-medium
+                    flex items-center gap-2 px-4 sm:px-5 py-3.5 text-sm transition-all font-medium
                     border-b-2
                     ${isActive
                       ? 'text-white border-blue-500'
@@ -71,7 +71,8 @@ export default function Home() {
                   `}
                 >
                   <Icon className="w-4 h-4" />
-                  {tab.label}
+                  <span className="hidden xs:inline sm:inline">{tab.label}</span>
+                  <span className="xs:hidden sm:hidden">{tab.label.split(' ')[0]}</span>
                 </button>
               );
             })}
@@ -80,16 +81,16 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <main className="max-w-5xl mx-auto px-6 py-12">
-        <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-8">
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-5 sm:p-8">
           {activeTab === 'create' && <CreateDID />}
           {activeTab === 'verify' && <VerifyCredential />}
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#27272a] mt-16">
-        <div className="max-w-5xl mx-auto px-6 py-6 space-y-1">
+      <footer className="border-t border-[#27272a] mt-8 sm:mt-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-1">
           <p className="text-center text-xs text-zinc-500">
             Takes ~5 seconds • Free on testnet
           </p>
