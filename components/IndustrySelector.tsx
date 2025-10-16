@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Coffee, Battery, Shirt, Smartphone, ChevronRight } from 'lucide-react';
+import { Coffee, Battery, Shirt, Smartphone } from 'lucide-react';
 
 /**
  * Industry Selector Component

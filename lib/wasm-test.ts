@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * WASM Initialization Test
  * Phase 1: Test if @iota/identity-wasm can initialize in Next.js environment

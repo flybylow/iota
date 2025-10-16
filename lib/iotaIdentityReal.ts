@@ -10,6 +10,7 @@ import { IOTA_CONFIG } from './config';
 import { savePrivateKey, loadPrivateKey, hasPrivateKey } from './keyStorage';
 
 // Dynamic imports for WASM (Next.js client-side only)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let Identity: any = null;
 let wasmInitialized = false;
 
@@ -24,9 +25,9 @@ async function initWasm() {
     console.log('🔄 Initializing IOTA Identity WASM...');
     
     // Dynamically import the WASM module (client-side only)
-    const module = await import('@iota/identity-wasm/web');
-    await module.init();
-    Identity = module;
+    const identityModule = await import('@iota/identity-wasm/web');
+    await identityModule.init();
+    Identity = identityModule;
     
     wasmInitialized = true;
     console.log('✅ IOTA Identity WASM initialized');
@@ -58,15 +59,9 @@ export async function createDID(): Promise<DIDCreationResult> {
     // Create a new DID document with Ed25519 keys
     const {
       IotaDocument,
-      IotaIdentityClient,
       MethodScope,
-      Storage,
       KeyType,
-      JwsAlgorithm,
     } = Identity;
-    
-    // Create client to interact with the IOTA node
-    const client = new IotaIdentityClient(IOTA_CONFIG.apiEndpoint);
     
     // Generate a new private key
     const privateKey = new Uint8Array(32);
@@ -139,10 +134,6 @@ export async function issueCredential(
     
     const {
       Credential,
-      FailFast,
-      JwsAlgorithm,
-      ProofOptions,
-      Storage,
       Timestamp,
       Duration,
     } = Identity;
@@ -251,7 +242,6 @@ export async function verifyCredential(credentialJWT: string): Promise<Verificat
       IotaIdentityClient,
       CredentialValidator,
       FailFast,
-      JwtCredentialValidator,
     } = Identity;
     
     // Create client to interact with the IOTA node
@@ -316,6 +306,7 @@ export async function verifyCredential(credentialJWT: string): Promise<Verificat
  * @param did - The DID to resolve
  * @returns The DID Document from the blockchain
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function resolveDID(did: string): Promise<any> {
   try {
     await initWasm();
