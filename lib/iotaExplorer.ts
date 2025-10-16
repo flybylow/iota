@@ -21,12 +21,40 @@ export function extractAddressFromDID(did: string): string {
 
 /**
  * Generate explorer URL for a DID
- * For demo purposes, links to IOTA Identity documentation
- * In production, would link to actual DID on blockchain
+ * 
+ * Detects if DID is real (on blockchain) or mock (demo only)
+ * - Real DIDs: Link to blockchain explorer
+ * - Mock DIDs: Link to IOTA Identity documentation
  */
-export function getExplorerURL(did: string, network: 'testnet' | 'mainnet' = 'testnet'): string {
-  // For demo with mock DIDs, link to IOTA Identity docs instead of non-existent blockchain entries
-  return IOTA_IDENTITY_DOCS;
+export function getExplorerURL(did: string, network: 'testnet' | 'mainnet' = 'testnet', forceReal: boolean = false): string {
+  // Check if this is a mock DID (contains placeholder patterns)
+  const isMockDID = did.includes('farmermaria') || 
+                    did.includes('factorychoco') || 
+                    did.includes('ch2025001') ||
+                    did.includes('minerlithium') ||
+                    did.includes('mfgbattery') ||
+                    did.includes('farmercotton') ||
+                    did.includes('factorytextile') ||
+                    did.includes('supplierrare') ||
+                    did.includes('mfgtechassembly');
+  
+  // For mock DIDs in demo mode, link to docs
+  if (isMockDID && !forceReal) {
+    return IOTA_IDENTITY_DOCS;
+  }
+  
+  // For real DIDs, link to blockchain explorer
+  return getRealExplorerURL(did, network);
+}
+
+/**
+ * Get the actual blockchain explorer URL for a DID
+ * Use this when you know the DID is published on-chain
+ */
+export function getRealExplorerURL(did: string, network: 'testnet' | 'mainnet' = 'testnet'): string {
+  const address = extractAddressFromDID(did);
+  const baseURL = network === 'testnet' ? SHIMMER_TESTNET_EXPLORER : SHIMMER_MAINNET_EXPLORER;
+  return `${baseURL}/addr/${address}`;
 }
 
 /**
