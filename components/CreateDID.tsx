@@ -87,7 +87,7 @@ export function CreateDID() {
           Create Your Digital Identity
         </h2>
         <p className="text-zinc-400 text-sm">
-          A permanent identity that you own forever.
+          An identity that you own forever.
         </p>
       </div>
 
