@@ -100,31 +100,35 @@ export function CreateDID() {
         </p>
       </div>
 
-      {/* What is This Card */}
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6">
-        <h3 className="font-bold text-blue-900 mb-3 text-lg">🤔 What is this?</h3>
-        <p className="text-blue-800 mb-4">
-          A <strong>Decentralized Identifier (DID)</strong> is a permanent digital identity that:
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-          <div className="flex items-start gap-2">
-            <span className="text-green-600 text-lg">✓</span>
-            <span className="text-blue-900"><strong>You own forever</strong> - no expiration</span>
-          </div>
-          <div className="flex items-start gap-2">
-            <span className="text-green-600 text-lg">✓</span>
-            <span className="text-blue-900"><strong>Works everywhere</strong> globally</span>
-          </div>
-          <div className="flex items-start gap-2">
-            <span className="text-green-600 text-lg">✓</span>
-            <span className="text-blue-900"><strong>No company can take away</strong></span>
-          </div>
-          <div className="flex items-start gap-2">
-            <span className="text-green-600 text-lg">✓</span>
-            <span className="text-blue-900"><strong>Anyone can verify</strong> it&apos;s real</span>
+      {/* What is This - Collapsible */}
+      <details className="text-sm">
+        <summary className="cursor-pointer text-blue-600 hover:text-blue-800 underline">
+          🤔 What is this?
+        </summary>
+        <div className="mt-3 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <p className="text-blue-900 mb-3">
+            A <strong>Decentralized Identifier (DID)</strong> is a permanent digital identity that:
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+            <div className="flex items-start gap-2">
+              <span className="text-green-600">✓</span>
+              <span className="text-blue-900">You own forever - no expiration</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-green-600">✓</span>
+              <span className="text-blue-900">Works everywhere globally</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-green-600">✓</span>
+              <span className="text-blue-900">No company can take away</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-green-600">✓</span>
+              <span className="text-blue-900">Anyone can verify it&apos;s real</span>
+            </div>
           </div>
         </div>
-      </div>
+      </details>
 
       {/* Loading State */}
       {loading && (
