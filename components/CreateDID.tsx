@@ -23,6 +23,8 @@ export function CreateDID() {
     setError(null);
     setResult(null);
     
+    console.log('Creating DID with:', { identityType, identityName });
+    
     try {
       setLoadingStep('Generating cryptographic keys...');
       await new Promise(resolve => setTimeout(resolve, 800));
@@ -43,7 +45,7 @@ export function CreateDID() {
         ...didResult,
         created: new Date().toISOString(),
         type: identityType,
-        name: identityName || undefined,
+        name: identityName.trim() || undefined,
       });
       localStorage.setItem('iota-dids', JSON.stringify(savedDIDs));
     } catch (err) {
@@ -261,10 +263,10 @@ export function CreateDID() {
           </div>
 
           <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4 space-y-2">
-            {identityName && (
+            {identityName.trim() && (
               <div className="flex items-center gap-2">
                 <span className="text-xs text-white w-24">Identity Name:</span>
-                <span className="text-sm text-zinc-100 font-medium">{identityName}</span>
+                <span className="text-sm text-zinc-100 font-medium">{identityName.trim()}</span>
               </div>
             )}
             <div className="flex items-center gap-2">
