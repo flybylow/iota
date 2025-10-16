@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, Shield, QrCode, ExternalLink } from 'lucide-react';
+import { CheckCircle2, Shield, QrCode, ExternalLink, Sprout, Factory } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { getExplorerURL } from '@/lib/iotaExplorer';
 import { industryData, type IndustryId } from '@/data/industry-data';
