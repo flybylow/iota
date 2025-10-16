@@ -151,7 +151,7 @@ export function CreateDID() {
           </summary>
           <div className="mt-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-4">
             <p className="text-zinc-300 mb-3 text-sm">
-              A <strong>Decentralized Identifier (DID)</strong> is a permanent digital identity that:
+              A <strong>Decentralized Identifier (DID)</strong> is a digital identity that:
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
               <div className="flex items-start gap-2">
