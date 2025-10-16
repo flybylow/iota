@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircle2, Shield, Sprout, Factory, QrCode, ExternalLink } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { getExplorerURL } from '@/lib/iotaExplorer';
 import type { DPPCredential } from '@/types/dpp';
 
 /**
@@ -308,6 +309,55 @@ export function ConsumerJourney() {
                   <span className="text-green-400">100% ✓</span>
                 </li>
               </ul>
+            </div>
+          </div>
+
+          {/* External Proof - IOTA Explorer */}
+          <div className="bg-[#1a1a1a] border border-blue-500/20 rounded-lg p-5">
+            <div className="flex items-center gap-2 mb-3">
+              <ExternalLink className="w-5 h-5 text-blue-400" />
+              <h4 className="text-sm font-medium text-blue-400">🔒 External Proof</h4>
+            </div>
+            
+            <p className="text-xs text-zinc-400 mb-4">
+              All identities and credentials are verifiable on the IOTA Tangle. 
+              Click below to independently verify on the blockchain:
+            </p>
+            
+            <div className="space-y-2">
+              {journey.map((step, index) => (
+                <a
+                  key={index}
+                  href={getExplorerURL(step.issuerDID)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg hover:border-blue-500/30 transition-colors group"
+                >
+                  <div className="flex items-center gap-3">
+                    {step.credentialType === 'OrganicOriginCertification' && (
+                      <Sprout className="w-4 h-4 text-green-400" />
+                    )}
+                    {step.credentialType === 'ProductionCertification' && (
+                      <Factory className="w-4 h-4 text-blue-400" />
+                    )}
+                    <div>
+                      <p className="text-sm text-white font-medium">{step.issuer}</p>
+                      <p className="text-xs text-zinc-500">
+                        DID: {step.issuerDID.substring(0, 35)}...
+                      </p>
+                    </div>
+                  </div>
+                  <ExternalLink className="w-4 h-4 text-zinc-500 group-hover:text-blue-400 transition-colors" />
+                </a>
+              ))}
+            </div>
+            
+            <div className="mt-4 pt-3 border-t border-[#27272a]">
+              <p className="text-xs text-zinc-500">
+                💡 <strong className="text-zinc-400">What this proves:</strong> These identities exist on a public, 
+                immutable blockchain. Anyone, anywhere can verify them independently without 
+                trusting this website.
+              </p>
             </div>
           </div>
 

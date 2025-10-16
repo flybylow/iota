@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { FarmerOrigin } from '@/components/FarmerOrigin';
 import { FactoryProduction } from '@/components/FactoryProduction';
 import { ConsumerJourney } from '@/components/ConsumerJourney';
-import { Sprout, Factory, Shield } from 'lucide-react';
+import { Sprout, Factory, Shield, ExternalLink } from 'lucide-react';
 
 /**
  * Digital Product Passport Demo - Chocolate Supply Chain
@@ -153,7 +153,7 @@ export default function Home() {
               This demo shows real-world DPP implementation for supply chain transparency, 
               product authentication, and regulatory compliance using W3C DID standards and IOTA.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
               <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-4 text-center">
                 <p className="text-sm font-medium text-white mb-1">⚡ Fast</p>
                 <p className="text-xs text-zinc-400">Instant verification</p>
@@ -166,6 +166,18 @@ export default function Home() {
                 <p className="text-sm font-medium text-white mb-1">🔗 Interoperable</p>
                 <p className="text-xs text-zinc-400">W3C standards</p>
               </div>
+              <a
+                href="https://explorer.shimmer.network/testnet"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#2a2a2a] border border-blue-500/20 rounded-lg p-4 text-center hover:border-blue-500/40 transition-colors group"
+              >
+                <div className="flex items-center justify-center gap-1.5 mb-1">
+                  <p className="text-sm font-medium text-blue-400 group-hover:text-blue-300">🔒 Verifiable</p>
+                  <ExternalLink className="w-3 h-3 text-blue-400 group-hover:text-blue-300" />
+                </div>
+                <p className="text-xs text-zinc-400">IOTA Explorer</p>
+              </a>
             </div>
           </div>
 

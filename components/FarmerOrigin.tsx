@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { createDID } from '@/lib/iotaIdentity';
 import { stakeholders } from '@/data/stakeholders';
 import { chocolateProduct } from '@/data/chocolate-product';
-import { Loader2, CheckCircle2, Copy, Sprout } from 'lucide-react';
+import { Loader2, CheckCircle2, Copy, Sprout, ExternalLink } from 'lucide-react';
+import { getExplorerURL } from '@/lib/iotaExplorer';
 import type { DPPCredential, OriginCertificationData } from '@/types/dpp';
 
 /**
@@ -250,6 +251,22 @@ export function FarmerOrigin() {
                 <span className="text-zinc-400">Issued:</span>
                 <span className="text-zinc-200">{new Date(credential.issuedAt).toLocaleString()}</span>
               </div>
+            </div>
+            
+            {/* External Proof */}
+            <div className="mt-3 pt-3 border-t border-[#3a3a3a]">
+              <a
+                href={getExplorerURL(stakeholders.farmer.did)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-xs text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                <ExternalLink className="w-3 h-3" />
+                <span>View DID on IOTA Explorer (External Proof)</span>
+              </a>
+              <p className="text-xs text-zinc-500 mt-1.5">
+                🔒 Independently verify this identity on the blockchain
+              </p>
             </div>
           </div>
 
