@@ -15,6 +15,8 @@ export function CreateDID() {
   const [result, setResult] = useState<DIDCreationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [identityType, setIdentityType] = useState<string>('other');
+  const [identityName, setIdentityName] = useState<string>('');
 
   const handleCreateDID = async () => {
     setLoading(true);
@@ -40,6 +42,8 @@ export function CreateDID() {
       savedDIDs.push({
         ...didResult,
         created: new Date().toISOString(),
+        type: identityType,
+        name: identityName || undefined,
       });
       localStorage.setItem('iota-dids', JSON.stringify(savedDIDs));
     } catch (err) {
@@ -130,6 +134,77 @@ export function CreateDID() {
         </div>
       )}
 
+      {/* Identity Type Selection */}
+      {!loading && !result && (
+        <div className="max-w-2xl mx-auto space-y-4">
+          <div className="space-y-3">
+            <label className="block text-base font-medium text-white">
+              What type of identity to create?
+            </label>
+            <div className="space-y-2">
+              <label className="flex items-center gap-3 p-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg cursor-pointer hover:bg-[#3a3a3a] transition-colors">
+                <input
+                  type="radio"
+                  name="identityType"
+                  value="supplier"
+                  checked={identityType === 'supplier'}
+                  onChange={(e) => setIdentityType(e.target.value)}
+                  className="w-4 h-4 text-blue-600"
+                />
+                <span className="text-white text-sm">👨‍🌾 Supplier/Farmer</span>
+              </label>
+              <label className="flex items-center gap-3 p-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg cursor-pointer hover:bg-[#3a3a3a] transition-colors">
+                <input
+                  type="radio"
+                  name="identityType"
+                  value="manufacturer"
+                  checked={identityType === 'manufacturer'}
+                  onChange={(e) => setIdentityType(e.target.value)}
+                  className="w-4 h-4 text-blue-600"
+                />
+                <span className="text-white text-sm">🏭 Manufacturer</span>
+              </label>
+              <label className="flex items-center gap-3 p-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg cursor-pointer hover:bg-[#3a3a3a] transition-colors">
+                <input
+                  type="radio"
+                  name="identityType"
+                  value="product"
+                  checked={identityType === 'product'}
+                  onChange={(e) => setIdentityType(e.target.value)}
+                  className="w-4 h-4 text-blue-600"
+                />
+                <span className="text-white text-sm">📦 Product/Batch</span>
+              </label>
+              <label className="flex items-center gap-3 p-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg cursor-pointer hover:bg-[#3a3a3a] transition-colors">
+                <input
+                  type="radio"
+                  name="identityType"
+                  value="other"
+                  checked={identityType === 'other'}
+                  onChange={(e) => setIdentityType(e.target.value)}
+                  className="w-4 h-4 text-blue-600"
+                />
+                <span className="text-white text-sm">🧪 Other (Demo)</span>
+              </label>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-base font-medium text-white">
+              Optional: Give it a name
+            </label>
+            <input
+              type="text"
+              value={identityName}
+              onChange={(e) => setIdentityName(e.target.value)}
+              placeholder="e.g., Acme Coffee Farm, Batch #12345"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg !text-white placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:bg-[#252525] transition-colors text-sm"
+              style={{ color: '#ffffff' }}
+            />
+          </div>
+        </div>
+      )}
+
       {/* Create Button */}
       {!loading && !result && (
         <div className="flex justify-center">
@@ -183,6 +258,23 @@ export function CreateDID() {
           <div className="flex items-center gap-3 text-green-400">
             <CheckCircle2 className="w-6 h-6" />
             <h3 className="text-lg font-semibold">Identity Created</h3>
+          </div>
+
+          {identityName && (
+            <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4">
+              <p className="text-xs text-white mb-1">Identity Name:</p>
+              <p className="text-sm text-zinc-100 font-medium">{identityName}</p>
+            </div>
+          )}
+
+          <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4">
+            <p className="text-xs text-white mb-1">Type:</p>
+            <p className="text-sm text-zinc-100">
+              {identityType === 'supplier' && '👨‍🌾 Supplier/Farmer'}
+              {identityType === 'manufacturer' && '🏭 Manufacturer'}
+              {identityType === 'product' && '📦 Product/Batch'}
+              {identityType === 'other' && '🧪 Other (Demo)'}
+            </p>
           </div>
 
           <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4">
