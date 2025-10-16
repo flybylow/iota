@@ -237,13 +237,17 @@ export async function resolveDID(did: string): Promise<unknown> {
     
     // Validate DID format
     if (!did || typeof did !== 'string') {
-      throw new Error('Invalid DID: must be a non-empty string');
+      const error = new Error('Invalid DID: must be a non-empty string');
+      error.name = 'ValidationError';
+      throw error;
     }
     
     // Check if it's a valid IOTA DID format
     const iotaDIDRegex = /^did:iota:(smr|rms|iota):0x[0-9a-fA-F]{64}$/;
     if (!iotaDIDRegex.test(did)) {
-      throw new Error('Invalid IOTA DID format. Expected: did:iota:smr:0x[64 hex chars]');
+      const error = new Error('Invalid DID format. Please enter a valid IOTA DID starting with did:iota:smr:0x...');
+      error.name = 'ValidationError';
+      throw error;
     }
     
     // Check if DID exists in localStorage (for demo purposes)
@@ -254,7 +258,9 @@ export async function resolveDID(did: string): Promise<unknown> {
     const exampleDID = 'did:iota:smr:0xec6c94cbe765fb6bbd0b8e8753740798e299f3b2e4d43806dd36ec2db2f8e96c';
     
     if (!existsLocally && did !== exampleDID) {
-      throw new Error('DID not found on network. In demo mode, you can only verify DIDs you created or the example DID.');
+      const error = new Error('DID not found. You can only verify DIDs you created or use the example.');
+      error.name = 'ValidationError';
+      throw error;
     }
     
     // Create mock DID document for demo
@@ -273,7 +279,10 @@ export async function resolveDID(did: string): Promise<unknown> {
     
     return document;
   } catch (error) {
-    console.error('❌ Error resolving DID:', error);
+    // Only log unexpected errors, not validation errors
+    if (error instanceof Error && error.name !== 'ValidationError') {
+      console.error('❌ Error resolving DID:', error);
+    }
     throw error;
   }
 }
