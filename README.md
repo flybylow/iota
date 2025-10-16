@@ -138,12 +138,12 @@ Then open: **http://localhost:3000**
 
 **Traditional verification:**
 - ❌ Call supplier → Wait 3-5 days
-- ❌ Trust humans (can lie)
+- ❌ Rely on reputation & processes
 - ❌ Paper certificates (can be forged)
 
 **With DIDs:**
 - ✅ Instant verification (2 seconds)
-- ✅ Trust mathematics (can't lie)
+- ✅ Cryptographically verifiable
 - ✅ Cryptographic proof (can't be forged)
 - ✅ Complete chain of custody
 

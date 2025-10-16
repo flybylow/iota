@@ -23,7 +23,7 @@ type TabType = 'farmer' | 'factory' | 'consumer';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabType>('farmer');
-  const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null);
+  const [selectedIndustry, setSelectedIndustry] = useState<string | null>('food-beverage');
 
   const tabs = [
     {
@@ -51,24 +51,39 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Header */}
-      <header className="bg-[#1a1a1a] border-b border-[#27272a]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-                <div className="text-center space-y-2">
-                    <h1 
-                      onClick={() => {
-                        setActiveTab('farmer');
-                        setSelectedIndustry(null);
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                      className="text-2xl sm:text-3xl font-bold text-white cursor-pointer hover:text-blue-400 transition-colors"
-                    >
-                      👛 Digital Product Passport Demo
-                    </h1>
-                    <p className="text-sm sm:text-base text-zinc-300 max-w-2xl mx-auto">
-                      See how blockchain-powered identities enable transparent, verifiable supply chains
-                    </p>
-                  </div>
+      {/* Hero Section */}
+      <header className="bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] border-b border-[#27272a]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+          {/* Hero Badge */}
+          <div className="flex justify-center mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-full">
+              <span className="text-lg">🔐</span>
+              <span className="text-sm text-green-400 font-medium">Digital Product Passport Demo</span>
+            </div>
+          </div>
+
+          {/* Hero Title */}
+          <div className="text-center space-y-4 mb-8">
+            <h1 
+              onClick={() => {
+                setActiveTab('farmer');
+                setSelectedIndustry(null);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="text-3xl sm:text-5xl font-bold text-white cursor-pointer hover:text-blue-400 transition-colors leading-tight"
+            >
+              Transparent Supply Chains,
+              <br />
+              <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                Powered by Blockchain Identity
+              </span>
+            </h1>
+            <p className="text-base sm:text-lg text-zinc-300 max-w-2xl mx-auto leading-relaxed">
+              See how decentralized identifiers (DIDs) and verifiable credentials 
+              enable instant, cryptographic verification of product claims—from 
+              farm to consumer.
+            </p>
+          </div>
         </div>
       </header>
 

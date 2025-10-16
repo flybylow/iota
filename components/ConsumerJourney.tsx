@@ -24,7 +24,6 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
   const data = industryData[industryKey];
   
   const product = data.product;
-  const labels = data.labels;
   const [journey, setJourney] = useState<DPPCredential[]>([]);
   const [loading, setLoading] = useState(false);
   const [verified, setVerified] = useState(false);
@@ -92,16 +91,60 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
+        <div className="inline-flex items-center gap-2 mb-2 px-3 py-1.5 bg-purple-500/10 border border-purple-500/20 rounded-full">
+          <span className="text-sm text-purple-400 font-medium">Step 3 of 3</span>
+        </div>
         <div className="flex items-center justify-center gap-2 mb-3">
           <Shield className="w-8 h-8 text-purple-500" />
           <h2 className="text-2xl font-semibold text-white">
-            Step 3: Consumer Verification
+            Consumer Verifies Complete Chain
           </h2>
         </div>
         <p className="text-zinc-300 text-sm">
           Scan QR code to verify entire supply chain
         </p>
       </div>
+
+      {/* Context/Story Card - Collapsible */}
+      {!verified && !loading && (
+        <details className="bg-gradient-to-br from-purple-500/10 to-pink-500/5 border border-purple-500/20 rounded-lg overflow-hidden group">
+          <summary className="p-5 cursor-pointer list-none hover:bg-purple-500/5 transition-colors">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-2xl">🍫</span>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-base font-semibold text-white flex items-center gap-2">
+                  You Buy the Chocolate
+                  <span className="text-xs text-zinc-400 group-open:rotate-180 transition-transform">▼</span>
+                </h3>
+                <p className="text-xs text-zinc-400 mt-1">Click to learn more about the consumer story</p>
+              </div>
+            </div>
+          </summary>
+          <div className="px-5 pb-5 pt-2 space-y-3">
+            <p className="text-sm text-zinc-300 leading-relaxed">
+              You&apos;re standing in a supermarket in Amsterdam. The chocolate bar 
+              claims to be &quot;Single-origin Ecuador, Organic, Fair Trade.&quot; 
+              But is it true?
+            </p>
+            <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-3 space-y-2">
+              <div>
+                <p className="text-xs font-medium text-zinc-400 mb-1">❌ Traditional Method:</p>
+                <p className="text-xs text-zinc-500 leading-relaxed">
+                  Rely on brand reputation. Call suppliers to verify (takes days).
+                </p>
+              </div>
+              <div>
+                <p className="text-xs font-medium text-green-400 mb-1">✅ With DIDs:</p>
+                <p className="text-xs text-zinc-300 leading-relaxed">
+                  Scan QR code. Verify entire supply chain in 2 seconds with cryptographic proof.
+                </p>
+              </div>
+            </div>
+          </div>
+        </details>
+      )}
 
       {!verified && !loading && (
         <>
@@ -397,6 +440,154 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
                 Learn more
                 <ExternalLink className="w-3 h-3" />
               </a>
+            </p>
+          </div>
+
+          {/* Comparison Section */}
+          <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-white mb-4 text-center">
+              Traditional vs Blockchain Identity
+            </h3>
+            
+            <div className="overflow-x-auto">
+              <div className="min-w-[500px]">
+                {/* Header Row */}
+                <div className="grid grid-cols-3 gap-px bg-[#3a3a3a] rounded-t-lg overflow-hidden">
+                  <div className="bg-[#1a1a1a] p-3"></div>
+                  <div className="bg-[#1a1a1a] p-3">
+                    <p className="text-xs font-medium text-zinc-400 text-center">Traditional Method</p>
+                  </div>
+                  <div className="bg-blue-500/10 p-3">
+                    <p className="text-xs font-semibold text-blue-400 text-center">With DIDs</p>
+                  </div>
+                </div>
+                
+                {/* Data Rows */}
+                <div className="grid grid-cols-3 gap-px bg-[#3a3a3a]">
+                  <div className="bg-[#1a1a1a] p-3">
+                    <p className="text-xs font-medium text-zinc-300">Speed</p>
+                  </div>
+                  <div className="bg-[#1a1a1a] p-3">
+                    <p className="text-xs text-zinc-400">3-5 business days</p>
+                  </div>
+                  <div className="bg-green-500/5 p-3">
+                    <p className="text-xs font-medium text-green-400">2 seconds ⚡</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-px bg-[#3a3a3a]">
+                  <div className="bg-[#1a1a1a] p-3">
+                    <p className="text-xs font-medium text-zinc-300">Cost</p>
+                  </div>
+                  <div className="bg-[#1a1a1a] p-3">
+                    <p className="text-xs text-zinc-400">Phone calls, emails, labor</p>
+                  </div>
+                  <div className="bg-green-500/5 p-3">
+                    <p className="text-xs font-medium text-green-400">$0.001 per verification</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-px bg-[#3a3a3a]">
+                  <div className="bg-[#1a1a1a] p-3">
+                    <p className="text-xs font-medium text-zinc-300">Trust Model</p>
+                  </div>
+                  <div className="bg-[#1a1a1a] p-3">
+                    <p className="text-xs text-zinc-400">Rely on reputation & processes</p>
+                  </div>
+                  <div className="bg-green-500/5 p-3">
+                    <p className="text-xs font-medium text-green-400">Cryptographically verifiable ✅</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-px bg-[#3a3a3a]">
+                  <div className="bg-[#1a1a1a] p-3">
+                    <p className="text-xs font-medium text-zinc-300">Forgery Risk</p>
+                  </div>
+                  <div className="bg-[#1a1a1a] p-3">
+                    <p className="text-xs text-zinc-400">Paper certificates can be faked</p>
+                  </div>
+                  <div className="bg-green-500/5 p-3">
+                    <p className="text-xs font-medium text-green-400">Mathematically impossible ✅</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-px bg-[#3a3a3a] rounded-b-lg overflow-hidden">
+                  <div className="bg-[#1a1a1a] p-3">
+                    <p className="text-xs font-medium text-zinc-300">Availability</p>
+                  </div>
+                  <div className="bg-[#1a1a1a] p-3">
+                    <p className="text-xs text-zinc-400">9-5 business hours</p>
+                  </div>
+                  <div className="bg-green-500/5 p-3">
+                    <p className="text-xs font-medium text-green-400">24/7 global access ✅</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* DPP Use Cases */}
+          <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-white mb-3 text-center">
+              💡 For Digital Product Passports
+            </h3>
+            <p className="text-sm text-zinc-300 mb-4 text-center">
+              This demo shows the core technology behind EU Digital Product Passports. 
+              Every product will have a verifiable identity and supply chain history.
+            </p>
+            
+            <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4">
+              <p className="text-xs font-medium text-white mb-3">Works for any product:</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div className="flex items-center gap-2 text-zinc-300">
+                  <span>🔋</span>
+                  <span>EV Batteries (mandatory Feb 2027)</span>
+                </div>
+                <div className="flex items-center gap-2 text-zinc-300">
+                  <span>👕</span>
+                  <span>Textiles & Fashion (2027)</span>
+                </div>
+                <div className="flex items-center gap-2 text-zinc-300">
+                  <span>📱</span>
+                  <span>Electronics (2028)</span>
+                </div>
+                <div className="flex items-center gap-2 text-zinc-300">
+                  <span>🪑</span>
+                  <span>Furniture (2028)</span>
+                </div>
+                <div className="flex items-center gap-2 text-zinc-300">
+                  <span>🍫</span>
+                  <span>Food & Beverage (voluntary)</span>
+                </div>
+                <div className="flex items-center gap-2 text-zinc-300">
+                  <span>🏗️</span>
+                  <span>Construction Materials (2028)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Final CTA */}
+          <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl p-6 sm:p-8 text-center">
+            <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">
+              Ready to Implement DPP for Your Products?
+            </h3>
+            <p className="text-sm text-white/90 mb-6 max-w-xl mx-auto">
+              We help manufacturers design and build Digital Product Passport systems 
+              using this exact technology.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-3 justify-center mb-4">
+              <button className="px-6 py-3 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors text-sm">
+                📅 Book 30-Minute Consultation
+              </button>
+              <button className="px-6 py-3 bg-purple-700 text-white font-semibold rounded-lg hover:bg-purple-800 transition-colors text-sm border-2 border-white/20">
+                📧 Get Implementation Guide
+              </button>
+            </div>
+            
+            <p className="text-xs text-white/70">
+              No sales pitch. Let&apos;s discuss your specific needs.
             </p>
           </div>
 

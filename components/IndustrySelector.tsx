@@ -96,6 +96,7 @@ export function IndustrySelector({ onSelectIndustry, selectedIndustry }: Industr
               type="radio"
               name="industry"
               value={industry.id}
+              checked={selectedIndustry === industry.id}
               onChange={() => onSelectIndustry(industry.id)}
               className="w-4 h-4 text-blue-600"
             />

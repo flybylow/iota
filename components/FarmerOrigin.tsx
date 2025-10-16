@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { createDID } from '@/lib/iotaIdentity';
 import { industryData, type IndustryId } from '@/data/industry-data';
 import { Loader2, CheckCircle2, Copy, ExternalLink } from 'lucide-react';
 import { getExplorerURL } from '@/lib/iotaExplorer';
@@ -101,16 +100,52 @@ export function FarmerOrigin({ industry }: FarmerOriginProps) {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
+        <div className="inline-flex items-center gap-2 mb-2 px-3 py-1.5 bg-green-500/10 border border-green-500/20 rounded-full">
+          <span className="text-sm text-green-400 font-medium">Step 1 of 3</span>
+        </div>
         <div className="flex items-center justify-center gap-2 mb-3">
           <span className="text-3xl">{labels.originIcon}</span>
           <h2 className="text-2xl font-semibold text-white">
-            Step 1: Origin Certification
+            {labels.originStep} Issues Certificate
           </h2>
         </div>
         <p className="text-zinc-300 text-sm">
           {labels.originStep} certifies {product.type.replace('_', ' ')} origin
         </p>
       </div>
+
+      {/* Context/Story Card - Collapsible */}
+      <details className="bg-gradient-to-br from-green-500/10 to-blue-500/5 border border-green-500/20 rounded-lg overflow-hidden group">
+        <summary className="p-5 cursor-pointer list-none hover:bg-green-500/5 transition-colors">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="text-2xl">{labels.originIcon}</span>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-base font-semibold text-white flex items-center gap-2">
+                Meet the Producer
+                <span className="text-xs text-zinc-400 group-open:rotate-180 transition-transform">▼</span>
+              </h3>
+              <p className="text-xs text-zinc-400 mt-1">Click to learn more about the origin story</p>
+            </div>
+          </div>
+        </summary>
+        <div className="px-5 pb-5 pt-2 space-y-3">
+          <p className="text-sm text-zinc-300 leading-relaxed">
+            {industryKey === 'food-beverage' ? 
+              "Maria runs an organic cocoa farm in Ecuador. To sell her cocoa to premium chocolate makers, she needs to prove it's authentic and organically certified." :
+              `${originStakeholder.name} needs to certify the origin and quality of materials before they can be used in production.`
+            }
+          </p>
+          <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-3">
+            <p className="text-xs font-medium text-yellow-400 mb-1">⚡ The Challenge:</p>
+            <p className="text-xs text-zinc-400 leading-relaxed">
+              Traditional paper certificates can be forged. Phone calls take days. 
+              {industryKey === 'food-beverage' ? ' She' : ' They'} need instant, verifiable proof.
+            </p>
+          </div>
+        </div>
+      </details>
 
       {/* Stakeholder Info Card */}
       <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-5">

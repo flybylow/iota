@@ -68,7 +68,7 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
       } else {
         setVerificationStatus('failed');
       }
-    } catch (err) {
+    } catch {
       setVerificationStatus('failed');
     } finally {
       setLoading(false);
@@ -135,16 +135,52 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
+        <div className="inline-flex items-center gap-2 mb-2 px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full">
+          <span className="text-sm text-blue-400 font-medium">Step 2 of 3</span>
+        </div>
         <div className="flex items-center justify-center gap-2 mb-3">
           <span className="text-3xl">{labels.productionIcon}</span>
           <h2 className="text-2xl font-semibold text-white">
-            Step 2: {labels.productionStep}
+            {labels.productionStep} Verifies & Produces
           </h2>
         </div>
         <p className="text-zinc-300 text-sm">
           Verify origin, then produce {product.type.replace('_', ' ')}
         </p>
       </div>
+
+      {/* Context/Story Card - Collapsible */}
+      <details className="bg-gradient-to-br from-blue-500/10 to-purple-500/5 border border-blue-500/20 rounded-lg overflow-hidden group">
+        <summary className="p-5 cursor-pointer list-none hover:bg-blue-500/5 transition-colors">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="text-2xl">{labels.productionIcon}</span>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-base font-semibold text-white flex items-center gap-2">
+                {productionStakeholder.name}
+                <span className="text-xs text-zinc-400 group-open:rotate-180 transition-transform">▼</span>
+              </h3>
+              <p className="text-xs text-zinc-400 mt-1">Click to learn more about the production story</p>
+            </div>
+          </div>
+        </summary>
+        <div className="px-5 pb-5 pt-2 space-y-3">
+          <p className="text-sm text-zinc-300 leading-relaxed">
+            {industryKey === 'food-beverage' ? 
+              "Located in Bruges, Belgium. Receives cocoa from multiple suppliers across South America. Before using any cocoa, they must verify its authenticity and organic certification." :
+              `${productionStakeholder.name} receives materials from multiple suppliers. They must verify authenticity before production.`
+            }
+          </p>
+          <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-3">
+            <p className="text-xs font-medium text-yellow-400 mb-1">⚡ The Challenge:</p>
+            <p className="text-xs text-zinc-400 leading-relaxed">
+              With traditional methods, calling suppliers and checking paper certificates 
+              takes 3-5 business days. Production is delayed, costs increase.
+            </p>
+          </div>
+        </div>
+      </details>
 
       {/* Production Stakeholder Info Card */}
       <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-5">
@@ -271,7 +307,7 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
                 </p>
                 <ul className="space-y-1.5 text-xs text-zinc-300">
                   {/* Food & Beverage - ingredients */}
-                  {'ingredients' in product && product.ingredients.map((ingredient: any, idx: number) => (
+                  {'ingredients' in product && (product.ingredients as Array<{percentage: number, name: string, origin: string}>).map((ingredient, idx: number) => (
                     <li key={idx}>
                       • {ingredient.percentage}% {ingredient.name} 
                       {idx === 0 ? ` (verified from ${originStakeholder.name} ✓)` : ` (${ingredient.origin})`}
@@ -279,7 +315,7 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
                   ))}
                   
                   {/* Battery & Fashion - materials */}
-                  {'materials' in product && product.materials.map((material: any, idx: number) => (
+                  {'materials' in product && (product.materials as Array<{percentage: number, name: string, origin: string}>).map((material, idx: number) => (
                     <li key={idx}>
                       • {material.percentage}% {material.name} 
                       {idx === 0 ? ` (verified from ${originStakeholder.name} ✓)` : ` (${material.origin})`}
@@ -287,7 +323,7 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
                   ))}
                   
                   {/* Electronics - components */}
-                  {'components' in product && product.components.map((component: any, idx: number) => (
+                  {'components' in product && (product.components as Array<{name: string, origin: string}>).map((component, idx: number) => (
                     <li key={idx}>
                       • {component.name} ({component.origin})
                       {idx === 0 ? ' ✓' : ''}
