@@ -116,11 +116,32 @@ export default function Home() {
           selectedIndustry={selectedIndustry}
         />
 
-        <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-5 sm:p-8">
-          {activeTab === 'farmer' && <FarmerOrigin />}
-          {activeTab === 'factory' && <FactoryProduction />}
-          {activeTab === 'consumer' && <ConsumerJourney />}
-        </div>
+        {selectedIndustry ? (
+          <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-5 sm:p-8">
+            {activeTab === 'farmer' && <FarmerOrigin />}
+            {activeTab === 'factory' && <FactoryProduction />}
+            {activeTab === 'consumer' && <ConsumerJourney />}
+          </div>
+        ) : (
+          <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-8 sm:p-12">
+            <div className="text-center space-y-4 max-w-2xl mx-auto">
+              <div className="text-6xl mb-4">🍫</div>
+              <h3 className="text-lg font-semibold text-white">
+                Select an Industry to Begin
+              </h3>
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                Choose an industry above to see how Digital Product Passports enable transparent, 
+                verifiable supply chains using blockchain-powered decentralized identities.
+              </p>
+              <div className="pt-4 border-t border-[#27272a] mt-6">
+                <p className="text-xs text-zinc-500">
+                  This interactive demo demonstrates credential chaining, external verification, 
+                  and EU DPP compliance patterns that work across all sectors.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
 
       {/* Footer */}
