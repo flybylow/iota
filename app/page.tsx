@@ -36,30 +36,23 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+    <div className="min-h-screen bg-[#0a0a0a]">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <div className="flex items-center gap-3">
-            <div className="bg-gradient-to-br from-blue-600 to-purple-600 p-3 rounded-xl">
-              <KeyRound className="w-8 h-8 text-white" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                IOTA DID Explorer
-              </h1>
-              <p className="text-gray-600 text-sm">
-                Learn about Decentralized Identity on IOTA
-              </p>
-            </div>
+      <header className="bg-[#1a1a1a] border-b border-[#27272a]">
+        <div className="max-w-5xl mx-auto px-6 py-8">
+          <div className="text-center">
+            <h1 className="text-2xl font-semibold text-white mb-1">
+              Decentralized Identity
+            </h1>
+            <p className="text-zinc-400 text-sm">on IOTA</p>
           </div>
         </div>
       </header>
 
       {/* Tab Navigation */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4">
-          <nav className="flex gap-1">
+      <div className="bg-[#1a1a1a] border-b border-[#27272a]">
+        <div className="max-w-5xl mx-auto px-6">
+          <nav className="flex gap-2">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -69,15 +62,15 @@ export default function Home() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`
-                    flex items-center gap-2 px-6 py-4 font-semibold transition-all duration-200
-                    border-b-2 relative
+                    flex items-center gap-2 px-5 py-3.5 text-sm transition-all font-medium
+                    border-b-2
                     ${isActive
-                      ? 'text-blue-600 border-blue-600 bg-blue-50'
-                      : 'text-gray-600 border-transparent hover:text-gray-900 hover:bg-gray-50'
+                      ? 'text-white border-blue-500'
+                      : 'text-zinc-400 border-transparent hover:text-zinc-200'
                     }
                   `}
                 >
-                  <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-gray-500'}`} />
+                  <Icon className="w-4 h-4" />
                   {tab.label}
                 </button>
               );
@@ -87,22 +80,19 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-xl shadow-lg p-8">
+      <main className="max-w-5xl mx-auto px-6 py-12">
+        <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-8">
           {activeTab === 'create' && <CreateDID />}
           {activeTab === 'verify' && <VerifyCredential />}
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-12">
-        <div className="max-w-6xl mx-auto px-4 py-6">
+      <footer className="border-t border-[#27272a] mt-16">
+        <div className="max-w-5xl mx-auto px-6 py-8">
           <div className="text-center space-y-2">
-            <p className="text-sm text-gray-600">
-              💡 <strong>Quick Demo:</strong> Create an identity, then verify it - takes 60 seconds!
-            </p>
-            <p className="text-xs text-gray-500">
-              Decentralized Identity Demo • Built with Next.js & IOTA • No blockchain fees on testnet
+            <p className="text-sm text-zinc-400">
+              Decentralized Identity Demo • Built with Next.js & IOTA
             </p>
           </div>
         </div>
