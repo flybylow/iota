@@ -96,7 +96,7 @@ export function CreateDID() {
           🆔 Create Your Digital Identity
         </h2>
         <p className="text-lg text-gray-700">
-          Think of it like creating an email address - but one that you own forever, works everywhere globally, and no company can take away.
+          A permanent identity that you own forever and no company can take away.
         </p>
       </div>
 

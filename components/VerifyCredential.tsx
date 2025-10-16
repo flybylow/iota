@@ -111,7 +111,7 @@ export function VerifyCredential() {
           🔍 Verify a Digital Identity
         </h2>
         <p className="text-lg text-gray-700">
-          Before trusting a product, supplier, or claim - verify the identity is real, active, and correctly signed.
+          Verify the identity is real, active, and correctly signed.
         </p>
       </div>
 
