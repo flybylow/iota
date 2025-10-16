@@ -98,7 +98,7 @@ export function CreateDID() {
             <Loader2 className="w-10 h-10 animate-spin text-blue-500 mx-auto" />
             <p className="text-white font-medium">Creating your identity...</p>
             <div className="bg-[#1a1a1a] rounded-lg p-4 text-left space-y-2">
-              <p className="text-xs text-zinc-400 mb-3">What&apos;s happening:</p>
+              <p className="text-xs text-white mb-3">What&apos;s happening:</p>
               <div className="space-y-2 text-xs">
                 <div className="flex items-center gap-2 text-zinc-500">
                   <span className={loadingStep.includes('keys') ? 'text-blue-400' : ''}>
@@ -157,19 +157,19 @@ export function CreateDID() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
                 <div className="flex items-start gap-2">
                   <span className="text-green-500">✓</span>
-                  <span className="text-zinc-400">You own forever - no expiration</span>
+                  <span className="text-zinc-100">You own forever - no expiration</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <span className="text-green-500">✓</span>
-                  <span className="text-zinc-400">Works everywhere globally</span>
+                  <span className="text-zinc-100">Works everywhere globally</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <span className="text-green-500">✓</span>
-                  <span className="text-zinc-400">No company can take away</span>
+                  <span className="text-zinc-100">No company can take away</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <span className="text-green-500">✓</span>
-                  <span className="text-zinc-400">Anyone can verify it&apos;s real</span>
+                  <span className="text-zinc-100">Anyone can verify it&apos;s real</span>
                 </div>
               </div>
             </div>
@@ -186,9 +186,9 @@ export function CreateDID() {
           </div>
 
           <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4">
-            <p className="text-xs text-zinc-500 mb-2">Your DID:</p>
+            <p className="text-xs text-white mb-2">Your DID:</p>
             <div className="flex items-start justify-between gap-2">
-              <code className="text-xs text-zinc-300 break-all flex-1">{result.did}</code>
+              <code className="text-xs text-zinc-100 break-all flex-1">{result.did}</code>
               <button
                 onClick={() => copyToClipboard(result.did)}
                 className="text-zinc-400 hover:text-white transition-colors flex-shrink-0"
@@ -203,8 +203,8 @@ export function CreateDID() {
             </div>
           </div>
 
-          <div className="text-xs text-zinc-400 space-y-2">
-            <p className="font-medium text-zinc-300">What happened:</p>
+          <div className="text-xs text-zinc-100 space-y-2">
+            <p className="font-medium text-white">What happened:</p>
             <ul className="space-y-1 ml-4">
               <li>• Created a permanent digital identity</li>
               <li>• Published on IOTA network</li>

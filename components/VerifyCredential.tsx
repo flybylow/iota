@@ -115,7 +115,7 @@ export function VerifyCredential() {
             <Shield className="w-10 h-10 text-blue-500 mx-auto animate-pulse" />
             <p className="text-white font-medium">Verifying identity...</p>
             <div className="bg-[#1a1a1a] rounded-lg p-4 text-left space-y-2">
-              <p className="text-xs text-zinc-400 mb-3">Checking:</p>
+              <p className="text-xs text-white mb-3">Checking:</p>
               <div className="space-y-2 text-xs">
                 <div className="flex items-center gap-2 text-zinc-500">
                   <span className={loadingStep.includes('network') ? 'text-blue-400' : ''}>
@@ -205,16 +205,16 @@ export function VerifyCredential() {
 
           <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4 space-y-3">
             <div>
-              <p className="text-xs text-zinc-500 mb-1">DID:</p>
-              <code className="text-xs text-zinc-300 break-all">{result.did}</code>
+              <p className="text-xs text-white mb-1">DID:</p>
+              <code className="text-xs text-zinc-100 break-all">{result.did}</code>
             </div>
             <div>
-              <p className="text-xs text-zinc-500 mb-1">Status:</p>
+              <p className="text-xs text-white mb-1">Status:</p>
               <p className="text-sm font-semibold text-green-400">ACTIVE</p>
             </div>
           </div>
 
-          <div className="text-xs text-zinc-400 space-y-2">
+          <div className="text-xs text-zinc-100 space-y-2">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-3 h-3 text-green-500" />
@@ -303,8 +303,8 @@ export function VerifyCredential() {
               How does verification work?
             </summary>
             <div className="mt-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-4 text-left">
-              <p className="text-zinc-400 text-xs mb-3">The verification process:</p>
-              <ol className="ml-4 space-y-1 list-decimal text-xs text-zinc-400">
+              <p className="text-white text-xs mb-3">The verification process:</p>
+              <ol className="ml-4 space-y-1 list-decimal text-xs text-zinc-100">
                 <li>DID is published with public key</li>
                 <li>Verifier fetches DID document from IOTA</li>
                 <li>Cryptographic check: signature valid?</li>
@@ -327,55 +327,55 @@ export function VerifyCredential() {
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-red-500/10 border border-red-500/20 rounded p-2 flex items-center gap-2 text-xs">
                     <span className="text-red-400">✕</span>
-                    <span className="text-zinc-400">Call company</span>
+                    <span className="text-zinc-100">Call company</span>
                   </div>
                   <div className="bg-green-500/10 border border-green-500/20 rounded p-2 flex items-center gap-2 text-xs">
                     <span className="text-green-400">✓</span>
-                    <span className="text-zinc-400">Instant verification</span>
+                    <span className="text-zinc-100">Instant verification</span>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-red-500/10 border border-red-500/20 rounded p-2 flex items-center gap-2 text-xs">
                     <span className="text-red-400">✕</span>
-                    <span className="text-zinc-400">Wait 3-5 days</span>
+                    <span className="text-zinc-100">Wait 3-5 days</span>
                   </div>
                   <div className="bg-green-500/10 border border-green-500/20 rounded p-2 flex items-center gap-2 text-xs">
                     <span className="text-green-400">✓</span>
-                    <span className="text-zinc-400">Trust mathematics</span>
+                    <span className="text-zinc-100">Trust mathematics</span>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-red-500/10 border border-red-500/20 rounded p-2 flex items-center gap-2 text-xs">
                     <span className="text-red-400">✕</span>
-                    <span className="text-zinc-400">Trust humans</span>
+                    <span className="text-zinc-100">Trust humans</span>
                   </div>
                   <div className="bg-green-500/10 border border-green-500/20 rounded p-2 flex items-center gap-2 text-xs">
                     <span className="text-green-400">✓</span>
-                    <span className="text-zinc-400">No paper needed</span>
+                    <span className="text-zinc-100">No paper needed</span>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-red-500/10 border border-red-500/20 rounded p-2 flex items-center gap-2 text-xs">
                     <span className="text-red-400">✕</span>
-                    <span className="text-zinc-400">Paper certificates</span>
+                    <span className="text-zinc-100">Paper certificates</span>
                   </div>
                   <div className="bg-green-500/10 border border-green-500/20 rounded p-2 flex items-center gap-2 text-xs">
                     <span className="text-green-400">✓</span>
-                    <span className="text-zinc-400">No central authority</span>
+                    <span className="text-zinc-100">No central authority</span>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-red-500/10 border border-red-500/20 rounded p-2 flex items-center gap-2 text-xs">
                     <span className="text-red-400">✕</span>
-                    <span className="text-zinc-400">Centralized database</span>
+                    <span className="text-zinc-100">Centralized database</span>
                   </div>
                   <div className="bg-green-500/10 border border-green-500/20 rounded p-2 flex items-center gap-2 text-xs">
                     <span className="text-green-400">✓</span>
-                    <span className="text-zinc-400">Works globally</span>
+                    <span className="text-zinc-100">Works globally</span>
                   </div>
                 </div>
               </div>
