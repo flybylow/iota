@@ -83,14 +83,9 @@ export function IndustrySelector({ onSelectIndustry, selectedIndustry }: Industr
 
   return (
     <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-5 mb-6">
-      <div className="mb-4">
-        <h2 className="text-base font-semibold text-white mb-1">
-          Choose Your Industry
-        </h2>
-        <p className="text-xs text-zinc-400">
-          This demo uses chocolate, but applies to all sectors
-        </p>
-      </div>
+      <h2 className="text-base font-semibold text-white mb-4">
+        Choose Your Industry
+      </h2>
 
       <div className="space-y-2">
         {industries.map((industry) => (

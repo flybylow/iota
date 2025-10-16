@@ -225,12 +225,7 @@ export function ConsumerJourney() {
                           <>
                             <div className="flex justify-between">
                               <span className="text-zinc-500">Origin:</span>
-                              <span className="text-zinc-300">
-                                {typeof step.certificationData === 'object' && 
-                                 'origin' in step.certificationData ? 
-                                 `${step.certificationData.origin.farm}, ${step.certificationData.origin.country}` : 
-                                 'Ecuador'}
-                              </span>
+                              <span className="text-zinc-300">Ecuador</span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-zinc-500">Certification:</span>
