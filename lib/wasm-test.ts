@@ -57,7 +57,7 @@ export async function testWasmInit() {
 
 export async function testCreateDID() {
   try {
-    console.log('🧪 Testing DID creation...');
+    console.log('🧪 Testing DID document creation...');
     
     const iotaIdentity = await import('@iota/identity-wasm/web');
     
@@ -66,35 +66,52 @@ export async function testCreateDID() {
       await iotaIdentity.init();
     }
     
-    // Try to create a client
-    console.log('Creating IOTA client...');
-    const Client = (iotaIdentity as any).Client;
+    console.log('✅ WASM initialized, checking available classes...');
     
-    if (!Client) {
+    // Check what's available in the SDK
+    const availableClasses = Object.keys(iotaIdentity).filter(key => 
+      typeof (iotaIdentity as any)[key] === 'function' || 
+      typeof (iotaIdentity as any)[key] === 'object'
+    );
+    
+    console.log('Available SDK exports:', availableClasses.slice(0, 20).join(', '), '...');
+    
+    // Try to create a DID document (doesn't require network)
+    const IotaDocument = (iotaIdentity as any).IotaDocument;
+    const IotaDID = (iotaIdentity as any).IotaDID;
+    
+    if (!IotaDocument) {
       return {
         success: false,
-        message: 'Client class not found in SDK'
+        message: 'IotaDocument class not found in SDK',
+        availableClasses: availableClasses.slice(0, 30)
       };
     }
     
-    const client = await Client.create({
-      nodes: ['https://api.testnet.shimmer.network'],
-      permanodes: ['https://api.testnet.shimmer.network']
-    });
+    console.log('Creating local DID document...');
     
-    console.log('✅ Client created successfully');
+    // Create a DID document without publishing (local only)
+    const document = new IotaDocument('smr'); // 'smr' for Shimmer network
+    
+    console.log('✅ DID document created locally!');
+    console.log('DID:', document.id().toString());
     
     return {
       success: true,
-      message: 'Client created, ready for DID operations',
-      client
+      message: 'DID document created successfully (local, not published)',
+      did: document.id().toString(),
+      availableClasses: availableClasses.slice(0, 30)
     };
   } catch (error) {
     console.error('❌ DID creation test failed:', error);
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Unknown error',
-      error
+      error: error instanceof Error ? {
+        name: error.name,
+        message: error.message,
+        stack: error.stack?.split('\n').slice(0, 5)
+      } : error
     };
   }
 }
