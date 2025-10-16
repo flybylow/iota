@@ -166,7 +166,7 @@ export function CreateDID() {
           <button
             onClick={handleCreateDID}
             disabled={loading}
-            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-medium py-4 px-8 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm min-h-[48px]"
+            className="bg-blue-600 hover:bg-blue-500 text-white font-medium py-4 px-8 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm min-h-[48px]"
           >
             Create Identity
           </button>
