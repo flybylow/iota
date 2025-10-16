@@ -235,6 +235,28 @@ export async function resolveDID(did: string): Promise<unknown> {
     
     console.log('🔍 Resolving DID:', did);
     
+    // Validate DID format
+    if (!did || typeof did !== 'string') {
+      throw new Error('Invalid DID: must be a non-empty string');
+    }
+    
+    // Check if it's a valid IOTA DID format
+    const iotaDIDRegex = /^did:iota:(smr|rms|iota):0x[0-9a-fA-F]{64}$/;
+    if (!iotaDIDRegex.test(did)) {
+      throw new Error('Invalid IOTA DID format. Expected: did:iota:smr:0x[64 hex chars]');
+    }
+    
+    // Check if DID exists in localStorage (for demo purposes)
+    const savedDIDs = JSON.parse(localStorage.getItem('iota-dids') || '[]');
+    const existsLocally = savedDIDs.some((d: { did: string }) => d.did === did);
+    
+    // For demo: only accept DIDs we created OR the example DID
+    const exampleDID = 'did:iota:smr:0xec6c94cbe765fb6bbd0b8e8753740798e299f3b2e4d43806dd36ec2db2f8e96c';
+    
+    if (!existsLocally && did !== exampleDID) {
+      throw new Error('DID not found on network. In demo mode, you can only verify DIDs you created or the example DID.');
+    }
+    
     // Create mock DID document for demo
     const document = {
       id: did,
