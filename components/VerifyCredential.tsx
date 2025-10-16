@@ -431,10 +431,11 @@ export function VerifyCredential() {
           </details>
 
           {/* Side-by-Side Comparison */}
-          <div className="bg-gradient-to-br from-gray-50 to-blue-50 border-2 border-gray-300 rounded-xl p-6">
-            <h3 className="font-bold text-gray-900 mb-6 text-lg text-center">
+          <details className="bg-gradient-to-br from-gray-50 to-blue-50 border-2 border-gray-300 rounded-xl p-5">
+            <summary className="cursor-pointer font-bold text-gray-900 text-lg hover:text-indigo-600 transition-colors flex items-center justify-center gap-2">
               🔍 Why This Matters
-            </h3>
+            </summary>
+            <div className="mt-6"></div>
             
             {/* Headers */}
             <div className="grid grid-cols-2 gap-4 mb-4">
@@ -514,7 +515,7 @@ export function VerifyCredential() {
                 </div>
               </div>
             </div>
-          </div>
+          </details>
         </>
       )}
     </div>
