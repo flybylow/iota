@@ -229,9 +229,14 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
                     <p className="font-medium mb-2">✅ Origin Verified!</p>
                     <ul className="space-y-1 text-xs text-green-300">
                       <li>• From: {originStakeholder.name}, {originStakeholder.country}</li>
-                      <li>• Certification: EU Organic #EU-ORG-2025-12345</li>
-                      <li>• Harvest: October 1, 2025</li>
-                      <li>• Batch: 2,500 kg Nacional variety</li>
+                      <li>• Certification: {originStakeholder.certifications[0]} #{industryKey.toUpperCase()}-2025-12345</li>
+                      <li>• {industryKey === 'battery' ? 'Mined' : industryKey === 'fashion' ? 'Harvested' : 'Harvested'}: October 1, 2025</li>
+                      <li>• Batch: {
+                        industryKey === 'food-beverage' ? '2,500 kg Premium grade' :
+                        industryKey === 'battery' ? '5,000 kg Lithium carbonate' :
+                        industryKey === 'fashion' ? '3,000 kg Organic cotton' :
+                        '2,000 kg Rare earth minerals'
+                      }</li>
                     </ul>
                   </div>
                 </div>
@@ -259,11 +264,35 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
               <h4 className="text-base font-medium text-white">2. Record Production</h4>
 
               <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4">
-                <p className="text-sm font-medium text-white mb-3">Recipe:</p>
+                <p className="text-sm font-medium text-white mb-3">
+                  {industryKey === 'food-beverage' ? 'Recipe:' : 
+                   industryKey === 'electronics' ? 'Components:' : 
+                   'Materials:'}
+                </p>
                 <ul className="space-y-1.5 text-xs text-zinc-300">
-                  <li>• 70% Cocoa mass (verified from Maria&apos;s Farm ✓)</li>
-                  <li>• 25% Organic cane sugar (France)</li>
-                  <li>• 5% Cocoa butter (Belgium)</li>
+                  {/* Food & Beverage - ingredients */}
+                  {'ingredients' in product && product.ingredients.map((ingredient: any, idx: number) => (
+                    <li key={idx}>
+                      • {ingredient.percentage}% {ingredient.name} 
+                      {idx === 0 ? ` (verified from ${originStakeholder.name} ✓)` : ` (${ingredient.origin})`}
+                    </li>
+                  ))}
+                  
+                  {/* Battery & Fashion - materials */}
+                  {'materials' in product && product.materials.map((material: any, idx: number) => (
+                    <li key={idx}>
+                      • {material.percentage}% {material.name} 
+                      {idx === 0 ? ` (verified from ${originStakeholder.name} ✓)` : ` (${material.origin})`}
+                    </li>
+                  ))}
+                  
+                  {/* Electronics - components */}
+                  {'components' in product && product.components.map((component: any, idx: number) => (
+                    <li key={idx}>
+                      • {component.name} ({component.origin})
+                      {idx === 0 ? ' ✓' : ''}
+                    </li>
+                  ))}
                 </ul>
               </div>
 
@@ -274,15 +303,27 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
                 </div>
                 <div>
                   <p className="text-zinc-400 text-xs mb-1">Units Produced:</p>
-                  <p className="text-white font-mono text-xs">50,000 bars</p>
+                  <p className="text-white font-mono text-xs">
+                    {industryKey === 'food-beverage' ? '50,000 bars' :
+                     industryKey === 'battery' ? '500 units' :
+                     industryKey === 'fashion' ? '10,000 pieces' :
+                     '5,000 units'}
+                  </p>
                 </div>
                 <div>
                   <p className="text-zinc-400 text-xs mb-1">Production Date:</p>
-                  <p className="text-white font-mono text-xs">Oct 15, 2025</p>
+                  <p className="text-white font-mono text-xs">{product.productionDate}</p>
                 </div>
                 <div>
-                  <p className="text-zinc-400 text-xs mb-1">Packaging:</p>
-                  <p className="text-white font-mono text-xs">Compostable PLA</p>
+                  <p className="text-zinc-400 text-xs mb-1">
+                    {industryKey === 'battery' ? 'Certification:' : 'Packaging:'}
+                  </p>
+                  <p className="text-white font-mono text-xs">
+                    {industryKey === 'food-beverage' ? 'Compostable PLA' :
+                     industryKey === 'battery' ? 'EU Battery Passport' :
+                     industryKey === 'fashion' ? 'Recycled cardboard' :
+                     'Minimal eco-packaging'}
+                  </p>
                 </div>
               </div>
 
@@ -315,12 +356,12 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
             </summary>
             <div className="mt-3 space-y-3">
               <p className="text-xs text-zinc-400 leading-relaxed">
-                The factory <strong>MUST verify</strong> the farmer&apos;s certificate before producing. 
+                The manufacturer <strong>MUST verify</strong> the origin certificate before producing. 
                 The production certificate then <strong>references</strong> the origin certificate, 
                 creating an immutable chain of custody.
               </p>
               <p className="text-xs text-blue-400">
-                <strong>For DPP:</strong> This prevents fraud. You can&apos;t claim &quot;organic&quot; chocolate if the organic cocoa certificate doesn&apos;t verify!
+                <strong>For DPP:</strong> This prevents fraud. You can&apos;t claim sustainability credentials if the source materials don&apos;t verify!
               </p>
             </div>
           </details>
@@ -348,7 +389,12 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
               </div>
               <div className="flex justify-between">
                 <span className="text-zinc-400">Units:</span>
-                <span className="text-zinc-200">50,000 bars</span>
+                <span className="text-zinc-200">
+                  {industryKey === 'food-beverage' ? '50,000 bars' :
+                   industryKey === 'battery' ? '500 units' :
+                   industryKey === 'fashion' ? '10,000 pieces' :
+                   '5,000 units'}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-zinc-400">Quality Checks:</span>
