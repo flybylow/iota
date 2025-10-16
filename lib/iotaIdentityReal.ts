@@ -7,6 +7,7 @@
 
 import type { DIDCreationResult, CredentialData, VerificationResult } from '@/types';
 import { IOTA_CONFIG } from './config';
+import { savePrivateKey, loadPrivateKey, hasPrivateKey } from './keyStorage';
 
 // Dynamic imports for WASM (Next.js client-side only)
 let Identity: any = null;
@@ -98,11 +99,15 @@ export async function createDID(): Promise<DIDCreationResult> {
     console.log('💡 To publish this DID, you need testnet tokens from:', IOTA_CONFIG.faucetUrl);
     console.log('💡 In production, this would be published to the blockchain');
     
+    // Store private key securely (for demo - uses encrypted localStorage)
+    await savePrivateKey(didString, privateKey);
+    
     return {
       did: didString,
       document: document.toJSON(),
-      privateKey: Array.from(privateKey), // Store securely in production!
+      privateKey: Array.from(privateKey), // Also return for immediate use
       needsPublishing: true,
+      keyStored: true,
     };
   } catch (error) {
     console.error('❌ Error creating DID:', error);
@@ -165,14 +170,58 @@ export async function issueCredential(
     console.log('✅ Credential created');
     console.log('🔏 Signing credential...');
     
-    // Note: In a real implementation, you need the issuer's private key
-    // For this demo, we create an unsigned credential
-    // In production, you would sign it with: credential.sign(storage, fragment)
+    // Check if we have the issuer's private key
+    const hasKey = hasPrivateKey(issuerDID);
     
-    console.log('💡 In production, this credential would be cryptographically signed');
-    console.log('💡 The signature proves the issuer created this credential');
+    if (!hasKey) {
+      console.warn('⚠️  No private key found for issuer DID');
+      console.warn('⚠️  Returning unsigned credential (for demo only)');
+      console.log('💡 In production, the issuer must have access to their private key');
+      
+      return JSON.stringify({
+        ...credential,
+        proof: {
+          type: 'Unsigned',
+          created: new Date().toISOString(),
+          verificationMethod: `${issuerDID}#key-1`,
+          warning: 'DEMO: Credential not signed - issuer key not available'
+        }
+      });
+    }
     
-    return credential.toJSON();
+    try {
+      // Load the issuer's private key
+      const privateKey = await loadPrivateKey(issuerDID);
+      
+      if (!privateKey) {
+        throw new Error('Failed to load private key');
+      }
+      
+      console.log('✅ Loaded issuer private key');
+      
+      // TODO: Implement actual signing with the SDK
+      // This requires:
+      // 1. Creating a Storage instance with the private key
+      // 2. Using document.sign() or similar method
+      // 3. Returning the signed JWT
+      
+      console.log('💡 Full signing implementation requires SDK Storage setup');
+      console.log('💡 For now, returning credential with key reference');
+      
+      return JSON.stringify({
+        ...credential,
+        proof: {
+          type: 'Ed25519Signature2020',
+          created: new Date().toISOString(),
+          verificationMethod: `${issuerDID}#key-1`,
+          proofPurpose: 'assertionMethod',
+          note: 'DEMO: Signature creation pending full SDK integration'
+        }
+      });
+    } catch (error) {
+      console.error('❌ Error signing credential:', error);
+      throw new Error('Failed to sign credential: ' + (error instanceof Error ? error.message : 'Unknown error'));
+    }
   } catch (error) {
     console.error('❌ Error issuing credential:', error);
     throw error;
