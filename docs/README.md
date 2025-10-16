@@ -36,12 +36,23 @@ Ready to deploy? Check these guides:
 
 ---
 
-## 🎨 UX Updates
+## 🎨 UX & Design
 
-User experience improvements and changes:
+User experience improvements and writing guidelines:
 
 - **[UX-UPDATES-COMPLETE.md](./ux/UX-UPDATES-COMPLETE.md)** - Complete UX updates summary
 - **[UX-CHANGELOG.md](./ux/UX-CHANGELOG.md)** - UX version history
+- **[10-UX-IMPROVEMENTS.md](./ux/10-UX-IMPROVEMENTS.md)** - Detailed UX improvement documentation
+- **[TONE-GUIDE.md](./writing/TONE-GUIDE.md)** - Writing style and tone guidelines
+
+---
+
+## 📦 Digital Product Passport (DPP)
+
+DPP-specific documentation:
+
+- **[DPP-IMPLEMENTATION-SUMMARY.md](./dpp/DPP-IMPLEMENTATION-SUMMARY.md)** - Complete DPP transformation summary
+- **[PROJECT-OVERVIEW.md](./PROJECT-OVERVIEW.md)** - Current project overview
 
 ---
 
@@ -49,37 +60,39 @@ User experience improvements and changes:
 
 ```
 docs/
-├── README.md                    # This file
-├── getting-started/
-│   ├── START-HERE.md            # Project introduction
-│   ├── QUICK-START.md           # Setup guide
-│   └── TROUBLESHOOTING.md       # Common issues
-├── onchain/
-│   ├── SUMMARY.md               # Executive summary
+├── README.md                         # This file - documentation index
+├── PROJECT-OVERVIEW.md               # Current project overview
+│
+├── getting-started/                  # 🚀 Start here
+│   ├── START-HERE.md
+│   ├── QUICK-START.md
+│   └── TROUBLESHOOTING.md
+│
+├── onchain/                          # 🔗 Blockchain integration
+│   ├── SUMMARY.md
 │   ├── IMPLEMENTATION-COMPLETE.md
 │   ├── IMPLEMENTATION-STATUS.md
 │   ├── REAL-ONCHAIN-GUIDE.md
 │   ├── ON-CHAIN-STEPS.md
 │   └── QUICK-TEST.md
-├── deployment/
+│
+├── deployment/                       # 🚢 Deploy guides
 │   ├── DEPLOYMENT-GUIDE.md
 │   └── QUICK-DEPLOY.md
-└── ux/
-    ├── UX-UPDATES-COMPLETE.md
-    └── UX-CHANGELOG.md
-
-documents/                       # Technical documentation
-├── 00-FILE-INDEX.md
-├── 00-PROJECT-OVERVIEW.md
-├── 01-SETUP-STEPS.md
-├── 02-IMPLEMENTATION.md
-├── 03-TESTING-GUIDE.md
-├── 04-FINAL-SUMMARY.md
-├── 05-FINAL-CHECK.md
-├── 06-ENHANCEMENTS.md
-├── 07-WASM-FIX.md
-├── 10-UX-IMPROVEMENTS.md
-└── 11-HOW-IT-WORKS.md
+│
+├── dpp/                              # 📦 Digital Product Passport
+│   └── DPP-IMPLEMENTATION-SUMMARY.md
+│
+├── ux/                               # 🎨 User experience
+│   ├── UX-UPDATES-COMPLETE.md
+│   ├── UX-CHANGELOG.md
+│   └── 10-UX-IMPROVEMENTS.md
+│
+├── writing/                          # ✍️ Writing guidelines
+│   └── TONE-GUIDE.md
+│
+└── archive/                          # 📚 Legacy docs (archived)
+    └── [old documentation files]
 ```
 
 ---
