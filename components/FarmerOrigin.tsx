@@ -2,18 +2,30 @@
 
 import React, { useState } from 'react';
 import { createDID } from '@/lib/iotaIdentity';
-import { stakeholders } from '@/data/stakeholders';
-import { chocolateProduct } from '@/data/chocolate-product';
-import { Loader2, CheckCircle2, Copy, Sprout, ExternalLink } from 'lucide-react';
+import { industryData, type IndustryId } from '@/data/industry-data';
+import { Loader2, CheckCircle2, Copy, ExternalLink } from 'lucide-react';
 import { getExplorerURL } from '@/lib/iotaExplorer';
 import type { DPPCredential, OriginCertificationData } from '@/types/dpp';
 
 /**
- * Farmer Origin Certification Component
- * Step 1 in the chocolate supply chain
+ * Origin Certification Component
+ * Step 1 in the supply chain - dynamic for all industries
  */
 
-export function FarmerOrigin() {
+interface FarmerOriginProps {
+  industry: string | null;
+}
+
+export function FarmerOrigin({ industry }: FarmerOriginProps) {
+  // Get industry-specific data
+  const data = industry ? industryData[industry as IndustryId] : industryData['food-beverage'];
+  const originStakeholder = ('farmer' in data.stakeholders) 
+    ? data.stakeholders.farmer 
+    : ('miner' in data.stakeholders) 
+      ? data.stakeholders.miner 
+      : data.stakeholders.supplier;
+  const product = data.product;
+  const labels = data.labels;
   const [loading, setLoading] = useState(false);
   const [credential, setCredential] = useState<DPPCredential | null>(null);
   const [copied, setCopied] = useState(false);
@@ -26,34 +38,34 @@ export function FarmerOrigin() {
       
       // Create origin certification data
       const certificationData: OriginCertificationData = {
-        certificationBody: "EU Organic",
-        certificationNumber: "EU-ORG-2025-12345",
+        certificationBody: originStakeholder.certifications[0],
+        certificationNumber: `${industry?.toUpperCase()}-CERT-2025-12345`,
         origin: {
-          country: stakeholders.farmer.country,
-          region: stakeholders.farmer.location,
-          farm: stakeholders.farmer.name,
-          coordinates: stakeholders.farmer.coordinates
+          country: originStakeholder.country,
+          region: originStakeholder.location,
+          farm: originStakeholder.name,
+          coordinates: originStakeholder.coordinates || { lat: 0, lng: 0 }
         },
         harvestDate: "2025-10-01",
         batchWeight: 2500, // kg
-        cocoaVariety: "Nacional",
+        cocoaVariety: "Premium",
         fermentationDays: 6,
-        dryingMethod: "Sun-dried"
+        dryingMethod: "Standard"
       };
       
       // Create mock credential (in real app, this would use IOTA Identity SDK)
       const dppCredential: DPPCredential = {
         jwt: btoa(JSON.stringify({
-          issuer: stakeholders.farmer.did,
-          subject: chocolateProduct.did,
-          type: "OrganicOriginCertification",
+          issuer: originStakeholder.did,
+          subject: product.did,
+          type: labels.originCredential,
           data: certificationData,
           issuedAt: new Date().toISOString()
         })),
-        issuer: stakeholders.farmer.name,
-        issuerDID: stakeholders.farmer.did,
-        subject: chocolateProduct.did,
-        credentialType: "OrganicOriginCertification",
+        issuer: originStakeholder.name,
+        issuerDID: originStakeholder.did,
+        subject: product.did,
+        credentialType: labels.originCredential,
         issuedAt: new Date().toISOString(),
         certificationData
       };
@@ -86,33 +98,33 @@ export function FarmerOrigin() {
       {/* Header */}
       <div className="text-center">
         <div className="flex items-center justify-center gap-2 mb-3">
-          <Sprout className="w-8 h-8 text-green-500" />
+          <span className="text-3xl">{labels.originIcon}</span>
           <h2 className="text-2xl font-semibold text-white">
             Step 1: Origin Certification
           </h2>
         </div>
         <p className="text-zinc-300 text-sm">
-          Farmer certifies organic cocoa harvest
+          {labels.originStep} certifies {product.type.replace('_', ' ')} origin
         </p>
       </div>
 
-      {/* Farmer Info Card */}
+      {/* Stakeholder Info Card */}
       <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-5">
         <h3 className="text-lg font-semibold text-white mb-3">
-          {stakeholders.farmer.name}
+          {originStakeholder.name}
         </h3>
         <div className="space-y-2 text-sm">
           <div className="flex items-start gap-2">
             <span className="text-zinc-400">📍 Location:</span>
-            <span className="text-white">{stakeholders.farmer.location}</span>
+            <span className="text-white">{originStakeholder.location}</span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="text-zinc-400">🌱 Certified:</span>
-            <span className="text-white">{stakeholders.farmer.certifications.join(', ')}</span>
+            <span className="text-zinc-400">✅ Certified:</span>
+            <span className="text-white">{originStakeholder.certifications.join(', ')}</span>
           </div>
           <div className="flex items-start gap-2">
             <span className="text-zinc-400">📅 Established:</span>
-            <span className="text-white">{stakeholders.farmer.established}</span>
+            <span className="text-white">{originStakeholder.established}</span>
           </div>
         </div>
       </div>
@@ -121,7 +133,7 @@ export function FarmerOrigin() {
         <>
           {/* Harvest Details Form */}
           <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-5 space-y-4">
-            <h4 className="text-base font-medium text-white">Cocoa Batch Details</h4>
+            <h4 className="text-base font-medium text-white">{labels.batchLabel}</h4>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -145,18 +157,18 @@ export function FarmerOrigin() {
               </div>
               
               <div>
-                <label className="block text-sm text-zinc-300 mb-1.5">Cocoa Variety</label>
+                <label className="block text-sm text-zinc-300 mb-1.5">Variety/Type</label>
                 <input
-                  defaultValue="Nacional"
+                  defaultValue="Premium"
                   className="w-full px-3 py-2 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg text-white text-sm"
                   disabled
                 />
               </div>
               
               <div>
-                <label className="block text-sm text-zinc-300 mb-1.5">Organic Cert #</label>
+                <label className="block text-sm text-zinc-300 mb-1.5">Certification #</label>
                 <input
-                  defaultValue="EU-ORG-2025-12345"
+                  defaultValue={`${industry?.toUpperCase()}-CERT-2025-12345`}
                   className="w-full px-3 py-2 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg text-white text-sm"
                   disabled
                 />
@@ -170,7 +182,7 @@ export function FarmerOrigin() {
               onClick={issueOriginCertificate}
               className="bg-green-600 hover:bg-green-500 text-white font-medium py-3 px-8 rounded-lg transition-all duration-200 text-sm flex items-center gap-2"
             >
-              <Sprout className="w-4 h-4" />
+              <span className="text-lg">{labels.originIcon}</span>
               Issue Origin Certificate
             </button>
           </div>
@@ -185,9 +197,9 @@ export function FarmerOrigin() {
                 Creates a cryptographically signed certificate proving:
               </p>
               <ul className="text-xs text-zinc-400 ml-4 space-y-1">
-                <li>• Cocoa is from certified organic farm in Ecuador</li>
-                <li>• Harvested on specific date with batch traceability</li>
-                <li>• Meets EU organic standards and Fair Trade requirements</li>
+                <li>• Origin from {originStakeholder.location}</li>
+                <li>• Harvested/extracted on specific date with batch traceability</li>
+                <li>• Meets certification standards: {originStakeholder.certifications.join(', ')}</li>
               </ul>
               <p className="text-xs text-blue-400">
                 <strong>For DPP:</strong> This is the first link in an unbreakable chain. Every claim is verifiable on the blockchain.
@@ -241,15 +253,15 @@ export function FarmerOrigin() {
             <div className="space-y-1.5 text-xs">
               <div className="flex justify-between">
                 <span className="text-zinc-400">Origin:</span>
-                <span className="text-zinc-200">{stakeholders.farmer.location}, Ecuador</span>
+                <span className="text-zinc-200">{originStakeholder.location}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-zinc-400">Batch:</span>
-                <span className="text-zinc-200">2,500 kg Nacional cocoa</span>
+                <span className="text-zinc-200">2,500 kg Premium grade</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-zinc-400">Certified:</span>
-                <span className="text-zinc-200">EU Organic, Fair Trade</span>
+                <span className="text-zinc-200">{originStakeholder.certifications.join(', ')}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-zinc-400">Issued:</span>
@@ -257,19 +269,19 @@ export function FarmerOrigin() {
               </div>
             </div>
             
-            {/* External Proof */}
+            {/* IOTA Identity Info */}
             <div className="mt-3 pt-3 border-t border-[#3a3a3a]">
               <a
-                href={getExplorerURL(stakeholders.farmer.did)}
+                href={getExplorerURL(originStakeholder.did)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-xs text-blue-400 hover:text-blue-300 transition-colors"
               >
                 <ExternalLink className="w-3 h-3" />
-                <span>View DID on IOTA Explorer (External Proof)</span>
+                <span>Learn about IOTA Identity & DIDs</span>
               </a>
               <p className="text-xs text-zinc-500 mt-1.5">
-                🔒 Independently verify this identity on the blockchain
+                💡 In production, this would link to verifiable blockchain proof
               </p>
             </div>
           </div>

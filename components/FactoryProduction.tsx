@@ -1,18 +1,33 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { stakeholders } from '@/data/stakeholders';
-import { chocolateProduct } from '@/data/chocolate-product';
-import { Loader2, CheckCircle2, XCircle, Factory, AlertCircle } from 'lucide-react';
+import { industryData, type IndustryId } from '@/data/industry-data';
+import { Loader2, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
 import type { DPPCredential, ProductionCertificationData } from '@/types/dpp';
 
 /**
- * Factory Production Component
- * Step 2 in the chocolate supply chain
- * Verifies farmer's certificate before producing
+ * Production Component
+ * Step 2 in the supply chain - dynamic for all industries
+ * Verifies origin certificate before producing
  */
 
-export function FactoryProduction() {
+interface FactoryProductionProps {
+  industry: string | null;
+}
+
+export function FactoryProduction({ industry }: FactoryProductionProps) {
+  // Get industry-specific data
+  const data = industry ? industryData[industry as IndustryId] : industryData['food-beverage'];
+  const productionStakeholder = ('factory' in data.stakeholders) 
+    ? data.stakeholders.factory 
+    : data.stakeholders.manufacturer;
+  const originStakeholder = ('farmer' in data.stakeholders) 
+    ? data.stakeholders.farmer 
+    : ('miner' in data.stakeholders) 
+      ? data.stakeholders.miner 
+      : data.stakeholders.supplier;
+  const product = data.product;
+  const labels = data.labels;
   const [farmerCredential, setFarmerCredential] = useState<DPPCredential | null>(null);
   const [verificationStatus, setVerificationStatus] = useState<'pending' | 'verified' | 'failed'>('pending');
   const [loading, setLoading] = useState(false);
@@ -44,7 +59,7 @@ export function FactoryProduction() {
       
       // In real app, verify signature on IOTA network
       // For demo, check if it exists and has correct structure
-      if (farmerCredential.credentialType === 'OrganicOriginCertification') {
+      if (farmerCredential.credentialType === labels.originCredential) {
         setVerificationStatus('verified');
       } else {
         setVerificationStatus('failed');
@@ -68,36 +83,36 @@ export function FactoryProduction() {
       await new Promise(resolve => setTimeout(resolve, 1800));
       
       const certificationData: ProductionCertificationData = {
-        manufacturer: stakeholders.factory.name,
+        manufacturer: productionStakeholder.name,
         productionDate: "2025-10-15",
-        batchNumber: chocolateProduct.batchNumber,
+        batchNumber: product.batchNumber,
         recipe: {
           cocoaMass: 70,
           sugar: 25,
           cocoaButter: 5
         },
         qualityChecks: [
-          { test: "Temperature control", result: "Pass - 45°C maintained" },
-          { test: "Mixing time", result: "Pass - 12 hours" },
-          { test: "Conching duration", result: "Pass - 48 hours" }
+          { test: "Quality control", result: "Pass - All standards met" },
+          { test: "Material verification", result: "Pass - Origin verified" },
+          { test: "Safety check", result: "Pass - Compliant" }
         ],
-        packaging: "Compostable PLA wrapper",
+        packaging: "Sustainable packaging",
         unitsProduced: 50000
       };
 
       const dppCredential: DPPCredential = {
         jwt: btoa(JSON.stringify({
-          issuer: stakeholders.factory.did,
-          subject: chocolateProduct.did,
-          type: "ProductionCertification",
+          issuer: productionStakeholder.did,
+          subject: product.did,
+          type: labels.productionCredential,
           data: certificationData,
           issuedAt: new Date().toISOString(),
           previousCredentials: [farmerCredential?.jwt] // Credential chaining!
         })),
-        issuer: stakeholders.factory.name,
-        issuerDID: stakeholders.factory.did,
-        subject: chocolateProduct.did,
-        credentialType: "ProductionCertification",
+        issuer: productionStakeholder.name,
+        issuerDID: productionStakeholder.did,
+        subject: product.did,
+        credentialType: labels.productionCredential,
         issuedAt: new Date().toISOString(),
         certificationData,
         previousCredentials: [farmerCredential?.jwt || '']
@@ -117,33 +132,33 @@ export function FactoryProduction() {
       {/* Header */}
       <div className="text-center">
         <div className="flex items-center justify-center gap-2 mb-3">
-          <Factory className="w-8 h-8 text-blue-500" />
+          <span className="text-3xl">{labels.productionIcon}</span>
           <h2 className="text-2xl font-semibold text-white">
-            Step 2: Factory Production
+            Step 2: {labels.productionStep}
           </h2>
         </div>
         <p className="text-zinc-300 text-sm">
-          Verify ingredients, then produce chocolate
+          Verify origin, then produce {product.type.replace('_', ' ')}
         </p>
       </div>
 
-      {/* Factory Info Card */}
+      {/* Production Stakeholder Info Card */}
       <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-5">
         <h3 className="text-lg font-semibold text-white mb-3">
-          {stakeholders.factory.name}
+          {productionStakeholder.name}
         </h3>
         <div className="space-y-2 text-sm">
           <div className="flex items-start gap-2">
             <span className="text-zinc-400">📍 Location:</span>
-            <span className="text-white">{stakeholders.factory.location}</span>
+            <span className="text-white">{productionStakeholder.location}</span>
           </div>
           <div className="flex items-start gap-2">
             <span className="text-zinc-400">✅ Certified:</span>
-            <span className="text-white">{stakeholders.factory.certifications.join(', ')}</span>
+            <span className="text-white">{productionStakeholder.certifications.join(', ')}</span>
           </div>
           <div className="flex items-start gap-2">
             <span className="text-zinc-400">⚡ Capacity:</span>
-            <span className="text-white">{stakeholders.factory.capacity}</span>
+            <span className="text-white">{productionStakeholder.capacity}</span>
           </div>
         </div>
       </div>
@@ -152,11 +167,11 @@ export function FactoryProduction() {
         <>
           {/* Verification Step */}
           <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-5 space-y-4">
-            <h4 className="text-base font-medium text-white">1. Verify Incoming Cocoa</h4>
+            <h4 className="text-base font-medium text-white">1. Verify Incoming Materials</h4>
             
             {farmerCredential ? (
               <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4">
-                <p className="text-xs text-zinc-400 mb-2">Farmer Certificate Detected:</p>
+                <p className="text-xs text-zinc-400 mb-2">Origin Certificate Detected:</p>
                 <div className="space-y-1.5 text-xs">
                   <div className="flex justify-between">
                     <span className="text-zinc-500">From:</span>
@@ -177,7 +192,7 @@ export function FactoryProduction() {
                 <div className="flex items-start gap-2">
                   <AlertCircle className="w-5 h-5 text-yellow-500 flex-shrink-0" />
                   <p className="text-sm text-yellow-400">
-                    No farmer certificate found. Complete Step 1 first.
+                    No origin certificate found. Complete Step 1 first.
                   </p>
                 </div>
               </div>
@@ -205,9 +220,9 @@ export function FactoryProduction() {
                 <div className="flex items-start gap-2 text-green-400">
                   <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
                   <div className="text-sm">
-                    <p className="font-medium mb-2">✅ Cocoa Origin Verified!</p>
+                    <p className="font-medium mb-2">✅ Origin Verified!</p>
                     <ul className="space-y-1 text-xs text-green-300">
-                      <li>• From: Maria&apos;s Organic Cocoa Farm, Ecuador</li>
+                      <li>• From: {originStakeholder.name}, {originStakeholder.country}</li>
                       <li>• Certification: EU Organic #EU-ORG-2025-12345</li>
                       <li>• Harvest: October 1, 2025</li>
                       <li>• Batch: 2,500 kg Nacional variety</li>

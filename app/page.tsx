@@ -5,7 +5,7 @@ import { FarmerOrigin } from '@/components/FarmerOrigin';
 import { FactoryProduction } from '@/components/FactoryProduction';
 import { ConsumerJourney } from '@/components/ConsumerJourney';
 import { IndustrySelector } from '@/components/IndustrySelector';
-import { ExternalLink } from 'lucide-react';
+import { Sprout, Factory, Shield, ExternalLink } from 'lucide-react';
 
 /**
  * Digital Product Passport Demo - Chocolate Supply Chain
@@ -30,18 +30,21 @@ export default function Home() {
       id: 'farmer' as TabType,
       label: '🌱 Farmer',
       description: 'Origin',
+      icon: Sprout,
       color: 'green',
     },
     {
       id: 'factory' as TabType,
       label: '🏭 Factory',
       description: 'Production',
+      icon: Factory,
       color: 'blue',
     },
     {
       id: 'consumer' as TabType,
       label: '✅ Consumer',
       description: 'Verification',
+      icon: Shield,
       color: 'purple',
     },
   ];
@@ -60,7 +63,7 @@ export default function Home() {
               }}
               className="text-2xl sm:text-3xl font-bold text-white cursor-pointer hover:text-blue-400 transition-colors"
             >
-              🍫 Digital Product Passport Demo
+              👛 Digital Product Passport Demo
             </h1>
             <p className="text-sm sm:text-base text-zinc-300 max-w-2xl mx-auto">
               See how blockchain-powered identities enable transparent, verifiable supply chains
@@ -124,23 +127,11 @@ export default function Home() {
           selectedIndustry={selectedIndustry}
         />
 
-        {selectedIndustry ? (
+        {selectedIndustry && (
           <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-5 sm:p-8">
-            {activeTab === 'farmer' && <FarmerOrigin />}
-            {activeTab === 'factory' && <FactoryProduction />}
-            {activeTab === 'consumer' && <ConsumerJourney />}
-          </div>
-        ) : (
-          <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-8 sm:p-12">
-            <div className="text-center space-y-4 max-w-2xl mx-auto">
-              <div className="text-6xl mb-4">🍫</div>
-              <h3 className="text-lg font-semibold text-white">
-                Select an Industry to Begin
-              </h3>
-              <p className="text-sm text-zinc-400 leading-relaxed">
-                Choose an industry above to explore the interactive demo.
-              </p>
-            </div>
+            {activeTab === 'farmer' && <FarmerOrigin industry={selectedIndustry} />}
+            {activeTab === 'factory' && <FactoryProduction industry={selectedIndustry} />}
+            {activeTab === 'consumer' && <ConsumerJourney industry={selectedIndustry} />}
           </div>
         )}
       </main>
@@ -154,9 +145,9 @@ export default function Home() {
             </h3>
             <p className="text-sm text-zinc-400 text-center max-w-2xl mx-auto mb-4">
               This demo shows real-world DPP implementation for supply chain transparency, 
-              product authentication, and regulatory compliance using W3C DID standards and IOTA.
+              product authentication, and regulatory compliance.
             </p>
-            <div className="flex flex-wrap justify-center items-stretch gap-3 mt-4">
+            <div className="flex flex-wrap justify-center items-stretch gap-4 mt-4">
               <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg px-4 py-3 flex items-center gap-2">
                 <p className="text-sm font-medium text-white">⚡ Fast</p>
                 <span className="text-zinc-600">•</span>
@@ -173,17 +164,17 @@ export default function Home() {
                 <p className="text-xs text-zinc-400">W3C standards</p>
               </div>
               <a
-                href="https://explorer.shimmer.network/testnet"
+                href="https://wiki.iota.org/identity.rs/introduction/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#2a2a2a] border border-blue-500/20 rounded-lg px-4 py-3 flex items-center gap-2 hover:border-blue-500/40 transition-colors group"
+                className="bg-[#2a2a2a] border border-blue-500/20 rounded-lg px-4 py-3 flex items-center gap-2 hover:border-blue-500/40 transition-colors group no-underline"
               >
                 <div className="flex items-center gap-1.5">
                   <p className="text-sm font-medium text-blue-400 group-hover:text-blue-300">🔒 Verifiable</p>
                   <ExternalLink className="w-3 h-3 text-blue-400 group-hover:text-blue-300" />
                 </div>
                 <span className="text-zinc-600">•</span>
-                <p className="text-xs text-zinc-400">IOTA Explorer</p>
+                <p className="text-xs text-zinc-400">IOTA Identity</p>
               </a>
             </div>
           </div>

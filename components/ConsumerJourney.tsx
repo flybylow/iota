@@ -1,17 +1,26 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, Shield, Sprout, Factory, QrCode, ExternalLink } from 'lucide-react';
+import { CheckCircle2, Shield, QrCode, ExternalLink } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { getExplorerURL } from '@/lib/iotaExplorer';
+import { industryData, type IndustryId } from '@/data/industry-data';
 import type { DPPCredential } from '@/types/dpp';
 
 /**
  * Consumer Journey Component
- * Step 3: Consumer scans QR code and verifies complete supply chain
+ * Step 3: Consumer scans QR code and verifies complete supply chain - dynamic for all industries
  */
 
-export function ConsumerJourney() {
+interface ConsumerJourneyProps {
+  industry: string | null;
+}
+
+export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
+  // Get industry-specific data
+  const data = industry ? industryData[industry as IndustryId] : industryData['food-beverage'];
+  const product = data.product;
+  const labels = data.labels;
   const [journey, setJourney] = useState<DPPCredential[]>([]);
   const [loading, setLoading] = useState(false);
   const [verified, setVerified] = useState(false);
@@ -97,8 +106,8 @@ export function ConsumerJourney() {
             <div className="text-center space-y-4">
               <div className="bg-[#1a1a1a] border-2 border-dashed border-[#3a3a3a] rounded-lg p-8 mx-auto max-w-xs">
                 <QrCode className="w-24 h-24 text-zinc-600 mx-auto mb-3" />
-                <p className="text-sm text-zinc-400">QR Code on Chocolate Bar</p>
-                <p className="text-xs text-zinc-500 mt-2">Batch: CH-2025-001</p>
+                <p className="text-sm text-zinc-400">QR Code on {product.name}</p>
+                <p className="text-xs text-zinc-500 mt-2">Batch: {product.batchNumber}</p>
               </div>
               
               <p className="text-sm text-zinc-400">
