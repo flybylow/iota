@@ -45,11 +45,6 @@ body {
   transform: translateY(-1px);
 }
 
-/* Button text color enforcement */
-button {
-  color: inherit;
-}
-
 /* Mobile Optimizations */
 @media (max-width: 640px) {
   button {
