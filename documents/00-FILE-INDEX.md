@@ -45,6 +45,7 @@
 | `documents/03-TESTING-GUIDE.md` | Testing scenarios | Testers/QA |
 | `documents/04-FINAL-SUMMARY.md` | Project completion summary | All |
 | `documents/10-UX-IMPROVEMENTS.md` | UX refresh documentation | Designers/Devs |
+| `documents/11-HOW-IT-WORKS.md` | ⭐ Mock data explanation & migration | Developers |
 | `UX-CHANGELOG.md` | UX version history | All |
 
 ---

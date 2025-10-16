@@ -16,8 +16,12 @@ interface FactoryProductionProps {
 }
 
 export function FactoryProduction({ industry }: FactoryProductionProps) {
-  // Get industry-specific data
-  const data = industry ? industryData[industry as IndustryId] : industryData['food-beverage'];
+  // Get industry-specific data with safety check
+  const industryKey = (industry && industry in industryData) 
+    ? industry as IndustryId 
+    : 'food-beverage';
+  const data = industryData[industryKey];
+  
   const productionStakeholder = ('factory' in data.stakeholders) 
     ? data.stakeholders.factory 
     : data.stakeholders.manufacturer;

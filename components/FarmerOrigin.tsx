@@ -17,8 +17,12 @@ interface FarmerOriginProps {
 }
 
 export function FarmerOrigin({ industry }: FarmerOriginProps) {
-  // Get industry-specific data
-  const data = industry ? industryData[industry as IndustryId] : industryData['food-beverage'];
+  // Get industry-specific data with safety check
+  const industryKey = (industry && industry in industryData) 
+    ? industry as IndustryId 
+    : 'food-beverage';
+  const data = industryData[industryKey];
+  
   const originStakeholder = ('farmer' in data.stakeholders) 
     ? data.stakeholders.farmer 
     : ('miner' in data.stakeholders) 
