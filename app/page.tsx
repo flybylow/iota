@@ -89,7 +89,10 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t border-[#27272a] mt-16">
-        <div className="max-w-5xl mx-auto px-6 py-6">
+        <div className="max-w-5xl mx-auto px-6 py-6 space-y-1">
+          <p className="text-center text-xs text-zinc-500">
+            Takes ~5 seconds • Free on testnet
+          </p>
           <p className="text-center text-xs text-zinc-600">
             Decentralized Identity Demo • Built with Next.js & IOTA
           </p>
