@@ -99,7 +99,7 @@ export function VerifyCredential() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
+      <div className="text-center">
         <h2 className="text-2xl font-semibold text-white mb-2">
           Verify a Digital Identity
         </h2>
@@ -149,33 +149,34 @@ export function VerifyCredential() {
 
       {/* Input Form */}
       {!loading && !result && (
-        <form onSubmit={handleVerify} className="space-y-6">
-          <div className="space-y-3">
-            <label className="block text-sm font-medium text-zinc-300">
-              Enter a DID to verify:
-            </label>
-            <input
-              type="text"
-              value={didInput}
-              onChange={(e) => setDidInput(e.target.value)}
-              placeholder="did:iota:smr:0x..."
-              className="w-full px-4 py-3.5 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:bg-[#252525] transition-colors text-sm"
-            />
-          </div>
+        <div className="max-w-2xl mx-auto">
+          <form onSubmit={handleVerify} className="space-y-6">
+            <div className="space-y-3">
+              <label className="block text-sm font-medium text-zinc-300">
+                Enter a DID to verify:
+              </label>
+              <input
+                type="text"
+                value={didInput}
+                onChange={(e) => setDidInput(e.target.value)}
+                placeholder="did:iota:smr:0x..."
+                className="w-full px-4 py-3.5 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:bg-[#252525] transition-colors text-sm"
+              />
+            </div>
 
-          <div className="flex flex-col sm:flex-row gap-3">
-            {savedDIDs.length > 0 && (
+            <div className="flex flex-col sm:flex-row gap-3">
+              {savedDIDs.length > 0 && (
+                <button
+                  type="button"
+                  onClick={loadMyIdentity}
+                  className="flex-1 px-4 py-2.5 bg-[#3a3a3a] border border-[#4a4a4a] text-zinc-100 text-sm rounded-lg hover:bg-[#4a4a4a] hover:border-blue-400 transition-colors"
+                >
+                  Use My Identity
+                </button>
+              )}
               <button
                 type="button"
-                onClick={loadMyIdentity}
-                className="flex-1 px-4 py-2.5 bg-[#3a3a3a] border border-[#4a4a4a] text-zinc-100 text-sm rounded-lg hover:bg-[#4a4a4a] hover:border-blue-400 transition-colors"
-              >
-                Use My Identity
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={loadExampleDID}
+                onClick={loadExampleDID}
               className="flex-1 px-4 py-2.5 bg-[#3a3a3a] border border-[#4a4a4a] text-zinc-100 text-sm rounded-lg hover:bg-[#4a4a4a] hover:border-blue-400 transition-colors"
             >
               Use Example
@@ -191,6 +192,7 @@ export function VerifyCredential() {
             Verify Identity
           </button>
         </form>
+        </div>
       )}
 
       {/* Success Result */}
@@ -295,12 +297,12 @@ export function VerifyCredential() {
 
       {/* Expandable Sections */}
       {!loading && (
-        <>
-          <details className="text-sm">
+        <div className="max-w-2xl mx-auto space-y-4">
+          <details className="text-sm text-center">
             <summary className="cursor-pointer text-blue-400 hover:text-blue-300 underline">
               How does verification work?
             </summary>
-            <div className="mt-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-4">
+            <div className="mt-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-4 text-left">
               <p className="text-zinc-400 text-xs mb-3">The verification process:</p>
               <ol className="ml-4 space-y-1 list-decimal text-xs text-zinc-400">
                 <li>DID is published with public key</li>
@@ -379,7 +381,7 @@ export function VerifyCredential() {
               </div>
             </div>
           </details>
-        </>
+        </div>
       )}
     </div>
   );
