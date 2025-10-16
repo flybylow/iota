@@ -57,53 +57,48 @@ export async function createDID(): Promise<DIDCreationResult> {
     
     console.log('📝 Creating new DID on Shimmer Testnet...');
     
-    // Create a new DID document with Ed25519 keys
-    const {
-      IotaDocument,
-      MethodScope,
-      KeyType,
-    } = Identity;
+    // Create a new DID document with the actual SDK v1.7 API
+    const { IotaDocument } = Identity;
     
-    // Generate a new private key
+    if (!IotaDocument) {
+      throw new Error('IotaDocument class not found in SDK');
+    }
+    
+    // Generate a new private key (for storage)
     const privateKey = new Uint8Array(32);
     crypto.getRandomValues(privateKey);
     
-    // Create a new DID document
-    const document = new IotaDocument(IOTA_CONFIG.network);
+    // Create a new DID document (local, not published yet)
+    // Use 'smr' for Shimmer network
+    const document = new IotaDocument('smr');
     
-    // Generate a verification method (public key)
-    const fragment = await document.generateMethod(
-      Storage.new(),
-      KeyType.Ed25519,
-      JwsAlgorithm.EdDSA,
-      '#key-1',
-      MethodScope.VerificationMethod()
-    );
-    
-    console.log('🔐 Generated verification method:', fragment);
+    console.log('✅ DID document created locally');
     
     // Get the DID string
     const didString = document.id().toString();
     
     console.log('✅ DID created:', didString);
-    console.log('📤 Publishing to Shimmer Testnet...');
+    console.log('📤 Note: DID is created locally, not yet published to blockchain');
     
-    // Note: Publishing requires an Alias Output with funds
+    // Note: Publishing requires an Alias Output with funds and proper SDK setup
     // For testnet, users need to get tokens from faucet first
-    // For this demo, we'll create the document but note it needs publishing
+    // For this demo, we create the document locally
     
-    console.log('💡 To publish this DID, you need testnet tokens from:', IOTA_CONFIG.faucetUrl);
-    console.log('💡 In production, this would be published to the blockchain');
+    console.log('💡 To publish this DID to blockchain, you need:');
+    console.log('   1. Testnet tokens from:', IOTA_CONFIG.faucetUrl);
+    console.log('   2. IOTA Client/Wallet integration');
+    console.log('   3. Transaction signing capabilities');
     
     // Store private key securely (for demo - uses encrypted localStorage)
     await savePrivateKey(didString, privateKey);
     
     return {
       did: didString,
-      document: document.toJSON(),
+      document: document.toJSON ? document.toJSON() : document,
       privateKey: Array.from(privateKey), // Also return for immediate use
       needsPublishing: true,
       keyStored: true,
+      note: 'DID created locally. Publishing to blockchain requires testnet tokens and wallet integration.'
     };
   } catch (error) {
     console.error('❌ Error creating DID:', error);
@@ -133,11 +128,8 @@ export async function issueCredential(
     console.log('Issuer:', issuerDID);
     console.log('Holder:', holderDID);
     
-    const {
-      Credential,
-      Timestamp,
-      Duration,
-    } = Identity;
+    // Check if SDK classes are available
+    const { Credential, Timestamp, Duration } = Identity;
     
     // Create credential subject
     const credentialSubject = {
@@ -146,18 +138,22 @@ export async function issueCredential(
     };
     
     // Set issuance and expiration dates
-    const issuanceDate = Timestamp.nowUTC();
-    const expirationDate = issuanceDate.checkedAdd(Duration.years(1));
+    const now = new Date();
+    const oneYearLater = new Date(now);
+    oneYearLater.setFullYear(now.getFullYear() + 1);
     
-    // Build the credential
-    const credential = new Credential({
+    // Build the credential (simplified for demo)
+    const credentialData = {
+      '@context': 'https://www.w3.org/2018/credentials/v1',
       id: `${issuerDID}#credential-${Date.now()}`,
-      type: 'VerifiableCredential',
+      type: ['VerifiableCredential'],
       issuer: issuerDID,
-      issuanceDate: issuanceDate,
-      expirationDate: expirationDate,
+      issuanceDate: now.toISOString(),
+      expirationDate: oneYearLater.toISOString(),
       credentialSubject: credentialSubject,
-    });
+    };
+    
+    console.log('📄 Credential structure created:', credentialData);
     
     console.log('✅ Credential created');
     console.log('🔏 Signing credential...');
@@ -171,7 +167,7 @@ export async function issueCredential(
       console.log('💡 In production, the issuer must have access to their private key');
       
       return JSON.stringify({
-        ...credential,
+        ...credentialData,
         proof: {
           type: 'Unsigned',
           created: new Date().toISOString(),
@@ -201,13 +197,14 @@ export async function issueCredential(
       console.log('💡 For now, returning credential with key reference');
       
       return JSON.stringify({
-        ...credential,
+        ...credentialData,
         proof: {
           type: 'Ed25519Signature2020',
           created: new Date().toISOString(),
           verificationMethod: `${issuerDID}#key-1`,
           proofPurpose: 'assertionMethod',
-          note: 'DEMO: Signature creation pending full SDK integration'
+          note: 'DEMO: Signature creation pending full SDK integration',
+          keyAvailable: true
         }
       });
     } catch (error) {
@@ -238,60 +235,61 @@ export async function verifyCredential(credentialJWT: string): Promise<Verificat
     
     console.log('🔍 Verifying credential on-chain...');
     
-    const {
-      Credential,
-      IotaIdentityClient,
-      CredentialValidator,
-      FailFast,
-    } = Identity;
-    
-    // Create client to interact with the IOTA node
-    const client = new IotaIdentityClient(IOTA_CONFIG.apiEndpoint);
-    
     // Parse the credential
-    const credential = Credential.fromJSON(JSON.parse(credentialJWT));
-    
-    console.log('📥 Credential parsed');
-    console.log('Issuer:', credential.issuer().toString());
-    
-    // Fetch the issuer's DID document from the blockchain
-    console.log('🔍 Resolving issuer DID from blockchain...');
-    const issuerDID = credential.issuer().toString();
-    
+    let credential;
     try {
-      const issuerDoc = await client.resolveDid(issuerDID);
-      console.log('✅ Issuer DID resolved from blockchain');
-      
-      // Verify the credential
-      const validator = new CredentialValidator();
-      const validationResult = validator.validate(
-        credential,
-        issuerDoc,
-        CredentialValidator.ValidationOptions.default(),
-        FailFast.FirstError
-      );
-      
-      if (validationResult.isOk()) {
-        console.log('✅ Credential is valid!');
-        return {
-          isValid: true,
-          credential: credential.toJSON(),
-          onChain: true,
-        };
-      } else {
-        console.log('❌ Credential validation failed:', validationResult.toString());
-        return {
-          isValid: false,
-          error: 'Credential validation failed: ' + validationResult.toString(),
-        };
-      }
-    } catch (resolveError) {
-      console.error('❌ Failed to resolve issuer DID from blockchain:', resolveError);
+      credential = JSON.parse(credentialJWT);
+      console.log('📥 Credential parsed');
+      console.log('Issuer:', credential.issuer);
+    } catch (parseError) {
+      console.error('❌ Failed to parse credential:', parseError);
       return {
         isValid: false,
-        error: 'Could not resolve issuer DID from blockchain. The DID may not be published yet.',
+        error: 'Invalid credential format: ' + (parseError instanceof Error ? parseError.message : 'Unknown error'),
       };
     }
+    
+    // Basic validation checks (structure)
+    const hasRequiredFields = 
+      credential.issuer &&
+      credential.credentialSubject &&
+      credential.issuanceDate;
+    
+    if (!hasRequiredFields) {
+      console.log('❌ Credential missing required fields');
+      return {
+        isValid: false,
+        error: 'Credential missing required W3C fields (issuer, credentialSubject, issuanceDate)',
+      };
+    }
+    
+    console.log('✅ Credential structure is valid');
+    console.log('📅 Issuance Date:', credential.issuanceDate);
+    console.log('📅 Expiration Date:', credential.expirationDate || 'None');
+    
+    // Check if expired
+    if (credential.expirationDate) {
+      const expirationDate = new Date(credential.expirationDate);
+      const now = new Date();
+      if (expirationDate < now) {
+        console.log('❌ Credential has expired');
+        return {
+          isValid: false,
+          error: 'Credential expired on ' + credential.expirationDate,
+        };
+      }
+    }
+    
+    console.log('✅ Credential is valid (structurally)');
+    console.log('💡 Note: Full cryptographic verification requires on-chain DID resolution');
+    console.log('💡 To enable full verification, DIDs must be published to blockchain');
+    
+    return {
+      isValid: true,
+      credential: credential,
+      onChain: false,
+      note: 'Structural validation passed. Full cryptographic verification requires published DIDs.',
+    };
   } catch (error) {
     console.error('❌ Error verifying credential:', error);
     return {
@@ -312,22 +310,27 @@ export async function resolveDID(did: string): Promise<any> {
   try {
     await initWasm();
     
-    console.log('🔍 Resolving DID from blockchain:', did);
+    console.log('🔍 Attempting to resolve DID:', did);
+    console.log('💡 Note: This would query the blockchain in production');
     
-    const { IotaIdentityClient } = Identity;
+    // For now, we can't resolve from blockchain without proper client setup
+    // In SDK v1.7, the Client/IotaIdentityClient API is different than documented
     
-    // Create client
-    const client = new IotaIdentityClient(IOTA_CONFIG.apiEndpoint);
+    console.warn('⚠️  DID resolution from blockchain requires:');
+    console.warn('   1. Proper IOTA Client setup');
+    console.warn('   2. DID to be published on-chain');
+    console.warn('   3. Network connectivity to Shimmer testnet');
     
-    // Resolve the DID from the blockchain
-    const document = await client.resolveDid(did);
-    
-    console.log('✅ DID resolved from blockchain');
-    
-    return document.toJSON();
+    // Return a mock resolution for demo purposes
+    return {
+      did: did,
+      note: 'Mock resolution - real blockchain resolution requires full client integration',
+      requiresBlockchainPublishing: true,
+      faucetUrl: IOTA_CONFIG.faucetUrl,
+    };
   } catch (error) {
     console.error('❌ Error resolving DID:', error);
-    throw new Error('Failed to resolve DID from blockchain. The DID may not exist or the network may be unavailable.');
+    throw new Error('DID resolution not fully implemented. Requires IOTA Client integration.');
   }
 }
 
