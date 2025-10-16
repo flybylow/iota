@@ -1,266 +1,365 @@
-# IOTA DID Explorer
+# IOTA DID Explorer for Digital Product Passports
 
-A Next.js application for exploring Decentralized Identifiers (DIDs) and Verifiable Credentials on the IOTA Tangle.
+A working demonstration of decentralized identity (DIDs) and verifiable credentials on IOTA, adapted for supply chain and Digital Product Passport (DPP) use cases.
 
-![IOTA DID Explorer](https://img.shields.io/badge/Next.js-15-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![IOTA](https://img.shields.io/badge/IOTA-Identity-teal)
+![IOTA DID Explorer](https://img.shields.io/badge/Next.js-15-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![IOTA](https://img.shields.io/badge/IOTA-Identity-teal) ![DPP](https://img.shields.io/badge/DPP-Ready-green)
+
+---
+
+## 🎯 What This Is
+
+This is a **proof-of-concept** showing how **IOTA Decentralized Identifiers (DIDs)** and **Verifiable Credentials (VCs)** can power the next generation of **Digital Product Passports** for EU compliance.
+
+**Built for:** Supply chain transparency, product authentication, and regulatory compliance  
+**Based on:** W3C DID standards + IOTA Identity SDK  
+**Use case:** Adaptable for chocolate, batteries, textiles, electronics supply chains
 
 ---
 
 ## 🚀 Quick Start
 
 ```bash
+# Clone the repository
+git clone https://github.com/flybylow/iota.git
+cd iota
+
 # Install dependencies
 npm install
 
 # Run development server
 npm run dev
+```
 
-# Open browser
-http://localhost:3000
+Then open: **http://localhost:3000**
+
+---
+
+## ✨ Features
+
+### Current Implementation
+- ✅ **Create Decentralized Identities (DIDs)** - Each supply chain actor gets a unique DID
+- ✅ **Issue Verifiable Credentials** - Certifications, origin certificates, quality tests
+- ✅ **Verify Credentials** - Cryptographic verification without central authority
+- ✅ **Pre-filled Demo Data** - Test instantly with example credentials
+- ✅ **Browser Persistence** - LocalStorage for demo purposes
+- ✅ **Beautiful UI** - Modern interface with educational tooltips
+
+### Digital Product Passport Ready
+- ✅ **W3C DID Standard Compliant** - Future-proof identity framework
+- ✅ **IOTA Tangle Integration** - Fee-less, scalable blockchain
+- ✅ **Supply Chain Tracking** - Track products from origin to consumer
+- ✅ **No Transaction Fees** - Perfect for high-volume product authentication
+- ✅ **Offline-First Ready** - Credentials work without constant connectivity
+
+---
+
+## 🏗️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Framework** | Next.js 15 + TypeScript |
+| **Blockchain** | IOTA Tangle (Shimmer Testnet) |
+| **Identity** | IOTA Identity SDK (W3C compliant) |
+| **Styling** | Tailwind CSS |
+| **Icons** | Lucide React |
+| **State** | React Hooks + LocalStorage |
+
+---
+
+## 📖 Use Cases
+
+### Current Demo: University Degrees
+1. **University** creates DID → Issues degree credential to student
+2. **Student** holds credential in digital wallet
+3. **Employer** verifies authenticity cryptographically
+4. ✅ **Result:** Tamper-proof, instantly verifiable degree
+
+### Adapted for DPP: Chocolate Supply Chain
+
+#### Scenario: Bean-to-Bar Traceability
+
+**Supply Chain Actors:**
+1. 🌱 **Cocoa Farmer** (Ghana)
+   - DID: `did:iota:smr:0x1a2b3c...`
+   - Issues: Organic farming credential
+
+2. 🏭 **Processing Factory** (Belgium)
+   - DID: `did:iota:smr:0x4d5e6f...`
+   - Verifies: Farmer's organic cert
+   - Issues: Production credential (batch #, date, factory cert)
+
+3. 🔬 **Quality Lab** (TÜV)
+   - DID: `did:iota:smr:0x7g8h9i...`
+   - Verifies: Factory credential
+   - Issues: Quality test results (heavy metals, purity)
+
+4. 🛍️ **Consumer** (EU)
+   - Scans QR code on chocolate bar
+   - Sees complete, verified supply chain
+   - Trusts product origin and quality
+
+#### How It Works
+
+```
+Farmer              Factory             Lab                 Consumer
+  |                    |                  |                     |
+  | 1. Create DID      |                  |                     |
+  |----------------    |                  |                     |
+  |                    |                  |                     |
+  | 2. Issue Organic   |                  |                     |
+  |    Credential      |                  |                     |
+  |------------------->|                  |                     |
+  |                    | 3. Verify Farmer |                     |
+  |                    |    Credential    |                     |
+  |                    |---------------   |                     |
+  |                    |                  |                     |
+  |                    | 4. Issue         |                     |
+  |                    |    Production    |                     |
+  |                    |    Credential    |                     |
+  |                    |----------------->|                     |
+  |                    |                  | 5. Verify Factory   |
+  |                    |                  |    Credential       |
+  |                    |                  |----------------     |
+  |                    |                  |                     |
+  |                    |                  | 6. Issue Test       |
+  |                    |                  |    Results          |
+  |                    |                  |-------------------->|
+  |                    |                  |                     |
+  |                    |                  |                     | 7. Scan QR
+  |                    |                  |                     |    See Chain
+  |                    |                  |                     |<-----------
 ```
 
 ---
 
-## 📖 What This Project Does
+## 🔧 How It Works
 
-This is an educational application that teaches developers about:
+### Tab 1: Create DID
+**For:** Supply chain actors (farmers, factories, labs)
+- Generates unique decentralized identifier
+- Format: `did:iota:smr:0x...` (Shimmer testnet)
+- No central authority required
+- Cryptographically secure
 
-1. **Decentralized Identifiers (DIDs)** - Self-sovereign digital identities
-2. **Verifiable Credentials (VCs)** - Tamper-proof digital certificates
-3. **IOTA Tangle** - Fee-less distributed ledger for identity data
-4. **Public Key Cryptography** - How signatures prove authenticity
+### Tab 2: Issue Credential
+**For:** Issuing certifications, test results, origin proofs
+- Issuer DID required (created in Tab 1)
+- Holder DID (recipient - can be product, batch, or company)
+- Claims: Customizable data (origin, quality, certifications)
+- Digitally signed and tamper-proof
 
-### Features
-
-- ✅ **Create DIDs** - Generate new decentralized identities on IOTA testnet
-- ✅ **Issue Credentials** - Create verifiable credentials (like digital diplomas)
-- ✅ **Verify Credentials** - Validate credentials using cryptographic signatures
-- ✅ **Educational UI** - Clear explanations at every step
-- ✅ **Browser Storage** - Save DIDs and credentials locally
-- ✅ **Modern Stack** - Built with Next.js 15, TypeScript, and Tailwind CSS
-
----
-
-## 🏗️ Project Structure
-
-```
-iota/
-├── app/                        # Next.js app directory
-│   ├── page.tsx               # Main application (tabs interface)
-│   ├── layout.tsx             # Root layout with metadata
-│   └── globals.css            # Global styles
-├── components/                 # React components
-│   ├── CreateDID.tsx          # DID creation component
-│   ├── IssueCredential.tsx    # Credential issuance component
-│   └── VerifyCredential.tsx   # Credential verification component
-├── lib/                        # Utility functions
-│   └── iotaIdentity.ts        # IOTA Identity SDK wrapper
-├── types/                      # TypeScript definitions
-│   └── index.ts               # Shared types
-├── documents/                  # Project documentation
-│   ├── 00-PROJECT-OVERVIEW.md # High-level overview
-│   ├── 01-SETUP-STEPS.md      # Setup progress tracking
-│   ├── 02-IMPLEMENTATION.md   # Implementation details
-│   └── 03-TESTING-GUIDE.md    # How to test the app
-└── package.json
-```
+### Tab 3: Verify Credential
+**For:** Anyone in supply chain or end consumers
+- Paste credential to verify
+- Cryptographic validation
+- Check expiration dates
+- See full credential details
 
 ---
 
-## 🧪 How to Use
+## 🌍 Digital Product Passport Context
 
-### Step 1: Create a DID
+### EU Regulations Driving DPP Adoption
 
-1. Go to the "Create DID" tab
-2. Click "Create New DID"
-3. Wait ~10-20 seconds for it to publish to IOTA testnet
-4. Copy your new DID (format: `did:iota:0x...`)
+- **ESPR** (Ecodesign for Sustainable Products Regulation) - Requires DPPs for many products
+- **Battery Regulation** - Mandatory DPP for batteries from 2027
+- **CBAM** (Carbon Border Adjustment Mechanism) - Needs supply chain transparency
+- **CSRD** (Corporate Sustainability Reporting Directive) - ESG data tracking
 
-### Step 2: Issue a Credential
+### Why Blockchain DIDs for DPP?
 
-1. Go to "Issue Credential" tab
-2. Select or paste the DID you just created as the "Issuer"
-3. For "Holder", either:
-   - Create another DID and use it, OR
-   - Use the same DID (self-issued credential)
-4. Fill in the credential details (name, degree, university)
-5. Click "Issue Credential"
-6. Copy the generated credential (JWT)
-
-### Step 3: Verify the Credential
-
-1. Go to "Verify Credential" tab
-2. Paste the credential you just created
-3. Click "Verify"
-4. See the verification result! ✅
+✅ **Decentralized** - No single point of failure  
+✅ **Immutable** - Data can't be tampered with  
+✅ **Verifiable** - Instant cryptographic proof  
+✅ **Privacy-Preserving** - Selective disclosure possible  
+✅ **Interoperable** - W3C standards-based  
+✅ **Cost-Effective** - IOTA has no transaction fees  
 
 ---
 
-## 🔑 Key Concepts
+## 📚 Learn More
 
-### What is a DID?
-
-A **Decentralized Identifier** is like an email address or username, but:
-- You own it forever (no company can revoke it)
-- It's cryptographically secured
-- It's stored on a blockchain (IOTA Tangle)
-- Anyone can verify your identity without a central authority
-
-Example: `did:iota:0x1234567890abcdef...`
-
-### What is a Verifiable Credential?
-
-A **Verifiable Credential** is a digitally signed statement about someone/something:
-- **Example**: "MIT certifies that Alice has a Bachelor of Science"
-- **Components**:
-  - Issuer (who issued it)
-  - Subject (who it's about)
-  - Claims (what's being certified)
-  - Signature (cryptographic proof)
-  - Expiration (when it expires)
-
-### How Verification Works
-
-1. Parse the credential to extract the issuer's DID
-2. Fetch the issuer's DID Document from IOTA Tangle
-3. Extract the issuer's public key
-4. Verify the credential's signature with that public key
-5. Check expiration dates
-
-If all checks pass → **Valid!** ✅
-
----
-
-## 🛠️ Tech Stack
-
-- **Framework**: Next.js 15 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Icons**: Lucide React
-- **Blockchain**: IOTA Tangle (testnet)
-- **Identity SDK**: `@iota/identity-wasm`
-
----
-
-## 📚 Documentation
-
-Detailed documentation is available in the `/documents` folder:
-
-- **[00-PROJECT-OVERVIEW.md](./documents/00-PROJECT-OVERVIEW.md)** - Project overview and architecture
-- **[01-SETUP-STEPS.md](./documents/01-SETUP-STEPS.md)** - Step-by-step setup guide with progress tracking
-- **[02-IMPLEMENTATION.md](./documents/02-IMPLEMENTATION.md)** - Implementation details and code explanations
-- **[03-TESTING-GUIDE.md](./documents/03-TESTING-GUIDE.md)** - How to test and use the application
-
----
-
-## 🌐 IOTA Testnet
-
-This app uses IOTA's **testnet** (Shimmer testnet):
-- **Endpoint**: `https://api.testnet.shimmer.network`
-- **Cost**: Free (no real funds needed)
-- **Purpose**: Testing and development
-- **Speed**: ~10-20 seconds per transaction
-
----
-
-## ⚠️ Important Notes
-
-### This is a Demo App
-
-- ✅ Great for learning and experimentation
-- ❌ NOT production-ready
-- Private keys are stored in browser memory (lost on refresh)
-- No proper JWT signature verification (simplified for demo)
-
-### For Production Use
-
-If you want to build a real app:
-1. Use **IOTA Stronghold** for secure key storage
-2. Implement proper **JWT signature verification**
-3. Add **revocation list** checking
-4. Use **mainnet** instead of testnet
-5. Add **proper error handling** and logging
-6. Implement **credential schemas** for validation
-
----
-
-## 🚧 Troubleshooting
-
-### "Failed to fetch" error
-- **Problem**: Can't connect to IOTA testnet
-- **Solution**: Check internet connection; testnet might be temporarily down
-
-### "Failed to initialize WASM" error
-- **Problem**: IOTA Identity SDK WASM module didn't load
-- **Solution**: Refresh the page; ensure you're using a modern browser
-
-### Keys lost on page refresh
-- **Problem**: This is expected behavior in this demo
-- **Solution**: For persistence, we'd need to implement secure storage (not recommended in browser)
-
----
-
-## 📖 Learn More
+### Standards & Frameworks
+- **[CIRPASS-2 DPP Standards](https://cirpass2.eu/)** - EU DPP implementation framework
+- **[W3C DID Specification](https://www.w3.org/TR/did-core/)** - Decentralized identifier standard
+- **[W3C Verifiable Credentials](https://www.w3.org/TR/vc-data-model/)** - Credential data model
+- **[GS1 Digital Link](https://www.gs1.org/standards/gs1-digital-link)** - Product identification
 
 ### IOTA Resources
-- [IOTA Identity Docs](https://docs.iota.org/identity/introduction)
-- [IOTA GitHub](https://github.com/iotaledger/identity.rs)
-- [IOTA Discord](https://discord.iota.org)
+- **[IOTA Identity Docs](https://docs.iota.org/developer/iota-identity/)** - Full SDK documentation
+- **[IOTA Tangle](https://www.iota.org/)** - Feeless distributed ledger
+- **[Shimmer Network](https://shimmer.network/)** - IOTA staging network (we use testnet)
 
-### W3C Standards
-- [DID Core Specification](https://www.w3.org/TR/did-core/)
-- [Verifiable Credentials](https://www.w3.org/TR/vc-data-model/)
+### DPP Use Cases
+- **[Battery Passport](https://www.batterypass.eu/)** - Battery traceability initiative
+- **[Textile Exchange](https://textileexchange.org/)** - Fashion supply chain transparency
+- **[Sourcemap](https://www.sourcemap.com/)** - Supply chain mapping
 
-### Next.js
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Learn Next.js](https://nextjs.org/learn)
+---
+
+## 🚀 Extending for Your Use Case
+
+### Add Custom Credential Types
+
+Currently supports: University degrees (demo)
+
+**Easy to adapt for:**
+
+1. **Product Certifications**
+   ```typescript
+   // In lib/iotaIdentity.ts
+   credentialSubject: {
+     productId: "BAT-2024-001",
+     type: "Lithium-Ion Battery",
+     capacity: "50 kWh",
+     manufacturer: "GreenBatt GmbH",
+     certifications: ["CE", "UN38.3"]
+   }
+   ```
+
+2. **Quality Test Results**
+   ```typescript
+   credentialSubject: {
+     batchId: "COCOA-GH-2024-001",
+     testDate: "2024-01-15",
+     heavyMetals: "Pass (< 0.5 ppm)",
+     cadmium: "Pass (< 0.3 mg/kg)",
+     lab: "TÜV SÜD"
+   }
+   ```
+
+3. **Origin Certificates**
+   ```typescript
+   credentialSubject: {
+     product: "Cocoa Beans",
+     origin: "Ghana, Western Region",
+     farmId: "GH-WR-001",
+     harvestDate: "2024-01-10",
+     certification: "Organic, Fair Trade"
+   }
+   ```
+
+### Add QR Code Generation
+
+```bash
+npm install qrcode
+```
+
+Then update components to include QR generation for easy consumer scanning.
 
 ---
 
 ## 🤝 Contributing
 
-This is an educational project. Feel free to:
-- Fork and experiment
-- Report issues
-- Suggest improvements
-- Share with others learning about DIDs
+This is a learning project exploring DPP implementations. PRs welcome for:
+
+- ✅ Additional credential types (sustainability, carbon footprint, recycling info)
+- ✅ QR code generation and scanning
+- ✅ Supply chain visualization
+- ✅ Better mobile UI
+- ✅ Multi-language support
+- ✅ Real IOTA mainnet integration
+- ✅ Documentation improvements
+
+### Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run dev server
+npm run dev
+
+# Build for production
+npm run build
+
+# Lint code
+npm run lint
+```
 
 ---
 
-## 📄 License
+## ⚠️ Important Notes
 
-MIT License - feel free to use this for learning and experimentation.
+### This is a Demo/POC
+
+**✅ Good for:**
+- Learning about DIDs and VCs
+- Prototyping DPP concepts
+- Demonstrating supply chain transparency
+- Educational purposes
+- Proof of concept presentations
+
+**❌ Not production-ready for:**
+- Real product passports (needs mainnet + proper key management)
+- Regulatory compliance (requires audit)
+- Sensitive data (needs encryption layer)
+- High-scale deployments (needs infrastructure)
+
+### Production Checklist
+
+To make this production-ready:
+
+- [ ] Switch from testnet to IOTA mainnet
+- [ ] Implement IOTA Stronghold for secure key storage
+- [ ] Add proper authentication and authorization
+- [ ] Implement revocation lists for credentials
+- [ ] Add encryption for sensitive data
+- [ ] Set up proper credential schemas
+- [ ] Add comprehensive logging and monitoring
+- [ ] Implement rate limiting and security measures
+- [ ] Add backup and recovery procedures
+- [ ] Complete security audit
+- [ ] Ensure GDPR compliance
+- [ ] Add multi-language support for EU markets
 
 ---
 
-## 🎯 Next Steps
+## 📝 License
 
-### Extend This Project
+MIT License - feel free to adapt for your own DPP implementations.
 
-1. **Add More Credential Types**
-   - Professional certifications
-   - Membership cards
-   - Product certifications (DPP use case!)
-
-2. **QR Code Support**
-   - Generate QR codes for DIDs
-   - Scan QR codes to import credentials
-
-3. **Better Key Management**
-   - Integrate IOTA Stronghold
-   - Export/import keypairs safely
-
-4. **Credential Schemas**
-   - Define JSON schemas for credentials
-   - Validate credentials against schemas
-
-5. **Apply to Products (DPP)**
-   - Create DIDs for physical products
-   - Issue certificates for origin, sustainability, etc.
-   - Scan products to verify authenticity
+See [LICENSE](LICENSE) file for details.
 
 ---
 
-**Built with ❤️ for learning about decentralized identity**
+## 🙏 Acknowledgments
 
-Questions? Check the `/documents` folder or IOTA's official docs!
+**Built at:** Howest University of Applied Sciences  
+**Research Area:** Digital Product Passports for supply chain transparency  
+**Inspired by:** EU ESPR regulations and circular economy initiatives
+
+**Special thanks to:**
+- IOTA Foundation for the Identity SDK
+- W3C for DID/VC standards
+- CIRPASS-2 project for DPP framework guidance
+- Next.js team for excellent developer experience
+
+---
+
+## 📞 Contact & Support
+
+**Questions?** Open an issue on GitHub  
+**Research Collaboration?** Contact via Howest University
+
+**Useful Links:**
+- [GitHub Repository](https://github.com/flybylow/iota)
+- [IOTA Discord](https://discord.iota.org)
+- [DPP Working Group](https://cirpass2.eu/)
+
+---
+
+## 🎓 Educational Use
+
+Perfect for:
+- University courses on blockchain and supply chain
+- DPP workshops and hackathons
+- Industry demos on decentralized identity
+- Learning W3C DID/VC standards
+- Prototyping sustainable supply chain solutions
+
+---
+
+**Built with ❤️ for a more transparent, sustainable supply chain future**
+
+*Last Updated: October 16, 2025*
