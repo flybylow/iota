@@ -5,7 +5,7 @@ import { FarmerOrigin } from '@/components/FarmerOrigin';
 import { FactoryProduction } from '@/components/FactoryProduction';
 import { ConsumerJourney } from '@/components/ConsumerJourney';
 import { IndustrySelector } from '@/components/IndustrySelector';
-import { Sprout, Factory, Shield, ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 
 /**
  * Digital Product Passport Demo - Chocolate Supply Chain
@@ -30,21 +30,18 @@ export default function Home() {
       id: 'farmer' as TabType,
       label: '🌱 Farmer',
       description: 'Origin',
-      icon: Sprout,
       color: 'green',
     },
     {
       id: 'factory' as TabType,
       label: '🏭 Factory',
       description: 'Production',
-      icon: Factory,
       color: 'blue',
     },
     {
       id: 'consumer' as TabType,
       label: '✅ Consumer',
       description: 'Verification',
-      icon: Shield,
       color: 'purple',
     },
   ];
@@ -55,7 +52,14 @@ export default function Home() {
       <header className="bg-[#1a1a1a] border-b border-[#27272a]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
           <div className="text-center space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-bold text-white">
+            <h1 
+              onClick={() => {
+                setActiveTab('farmer');
+                setSelectedIndustry(null);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="text-2xl sm:text-3xl font-bold text-white cursor-pointer hover:text-blue-400 transition-colors"
+            >
               🍫 Digital Product Passport Demo
             </h1>
             <p className="text-sm sm:text-base text-zinc-300 max-w-2xl mx-auto">
@@ -101,37 +105,6 @@ export default function Home() {
               </React.Fragment>
             ))}
           </div>
-        </div>
-      </div>
-
-      {/* Tab Navigation */}
-      <div className="bg-[#1a1a1a] border-b border-[#27272a]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <nav className="flex gap-1 sm:gap-2 justify-center">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`
-                    flex items-center gap-2 px-3 sm:px-5 py-3.5 text-xs sm:text-sm transition-all font-medium
-                    border-b-2
-                    ${isActive
-                      ? 'text-white border-' + tab.color + '-500'
-                      : 'text-zinc-400 border-transparent hover:text-zinc-200'
-                    }
-                  `}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span className="hidden sm:inline">{tab.label}</span>
-                  <span className="sm:hidden">{tab.label.split(' ')[0]}</span>
-                </button>
-              );
-            })}
-          </nav>
         </div>
       </div>
 

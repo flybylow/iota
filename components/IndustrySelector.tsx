@@ -82,63 +82,43 @@ export function IndustrySelector({ onSelectIndustry, selectedIndustry }: Industr
   }
 
   return (
-    <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-6 mb-8">
-      <div className="text-center mb-6">
-        <h2 className="text-xl font-semibold text-white mb-2">
+    <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-5 mb-6">
+      <div className="mb-4">
+        <h2 className="text-base font-semibold text-white mb-1">
           Choose Your Industry
         </h2>
-        <p className="text-sm text-zinc-400">
-          See how Digital Product Passports work for your sector
+        <p className="text-xs text-zinc-400">
+          This demo uses chocolate, but applies to all sectors
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {industries.map((industry) => {
-          const Icon = industry.icon;
-          
-          return (
-            <button
-              key={industry.id}
-              onClick={() => onSelectIndustry(industry.id)}
-              className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-5 text-left hover:border-blue-500/40 transition-all hover:bg-[#2f2f2f] group"
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-3">
-                  <span className="text-3xl">{industry.emoji}</span>
-                  <div>
-                    <h3 className="text-base font-semibold text-white group-hover:text-blue-400 transition-colors">
-                      {industry.name}
-                    </h3>
-                    <p className="text-xs text-zinc-500 mt-0.5">{industry.examples}</p>
-                  </div>
-                </div>
-                <ChevronRight className="w-5 h-5 text-zinc-600 group-hover:text-blue-400 transition-colors" />
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <span className={`
-                    text-xs px-2 py-1 rounded-full
-                    ${industry.id === 'battery' ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 
-                      'bg-blue-500/10 text-blue-400 border border-blue-500/20'}
-                  `}>
+      <div className="space-y-2">
+        {industries.map((industry) => (
+          <label
+            key={industry.id}
+            className="flex items-center gap-3 p-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg cursor-pointer hover:bg-[#2f2f2f] hover:border-blue-500/30 transition-colors group"
+          >
+            <input
+              type="radio"
+              name="industry"
+              value={industry.id}
+              onChange={() => onSelectIndustry(industry.id)}
+              className="w-4 h-4 text-blue-600"
+            />
+            <span className="text-xl">{industry.emoji}</span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-white">{industry.name}</span>
+                {industry.id === 'battery' && (
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
                     {industry.urgency}
                   </span>
-                </div>
-                
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  {industry.description}
-                </p>
+                )}
               </div>
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="mt-5 pt-5 border-t border-[#27272a]">
-        <p className="text-xs text-zinc-500 text-center">
-          This demo uses chocolate as an example, but the same patterns apply to all industries
-        </p>
+              <p className="text-xs text-zinc-500">{industry.examples}</p>
+            </div>
+          </label>
+        ))}
       </div>
     </div>
   );
