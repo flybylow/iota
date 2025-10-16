@@ -2,9 +2,8 @@
 
 import React, { useState } from 'react';
 import { CreateDID } from '@/components/CreateDID';
-import { IssueCredential } from '@/components/IssueCredential';
 import { VerifyCredential } from '@/components/VerifyCredential';
-import { KeyRound, Award, ShieldCheck } from 'lucide-react';
+import { KeyRound, ShieldCheck } from 'lucide-react';
 
 /**
  * Main Application Page
@@ -16,7 +15,7 @@ import { KeyRound, Award, ShieldCheck } from 'lucide-react';
  * 3. Verify a credential
  */
 
-type TabType = 'create' | 'issue' | 'verify';
+type TabType = 'create' | 'verify';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabType>('create');
@@ -24,19 +23,13 @@ export default function Home() {
   const tabs = [
     {
       id: 'create' as TabType,
-      label: '1. Create DID',
+      label: 'Step 1: Create Identity',
       icon: KeyRound,
       color: 'blue',
     },
     {
-      id: 'issue' as TabType,
-      label: '2. Issue Credential',
-      icon: Award,
-      color: 'purple',
-    },
-    {
       id: 'verify' as TabType,
-      label: '3. Verify Credential',
+      label: 'Step 2: Verify Identity',
       icon: ShieldCheck,
       color: 'indigo',
     },
@@ -96,8 +89,7 @@ export default function Home() {
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-xl shadow-lg p-8">
-          {activeTab === 'create' && <CreateDID />}
-          {activeTab === 'issue' && <IssueCredential />}
+          {activeTab === 'create' && <CreateDID onSuccess={() => setActiveTab('verify')} />}
           {activeTab === 'verify' && <VerifyCredential />}
         </div>
       </main>
@@ -107,11 +99,10 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="text-center space-y-2">
             <p className="text-sm text-gray-600">
-              💡 <strong>Tip:</strong> Go through the tabs in order to see the full flow!
+              💡 <strong>Quick Demo:</strong> Create an identity, then verify it - takes 60 seconds!
             </p>
             <p className="text-xs text-gray-500">
-              Built with Next.js, TypeScript, and IOTA Identity SDK • 
-              Using IOTA Testnet (free to use)
+              Decentralized Identity Demo • Built with Next.js & IOTA • No blockchain fees on testnet
             </p>
           </div>
         </div>

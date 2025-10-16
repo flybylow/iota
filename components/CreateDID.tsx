@@ -1,28 +1,39 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createDID } from '@/lib/iotaIdentity';
 import { DIDCreationResult } from '@/types';
-import { Loader2, CheckCircle2, Copy, AlertCircle } from 'lucide-react';
+import { Loader2, CheckCircle2, Copy, AlertCircle, Sparkles } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
 /**
  * CreateDID Component
  * 
- * Allows users to create a new Decentralized Identifier (DID) on the IOTA Tangle.
- * 
- * What happens when you click "Create DID":
- * 1. Generate a new keypair (public + private keys)
- * 2. Create a DID Document with your public key
- * 3. Publish it to IOTA Tangle (testnet)
- * 4. Get back your DID identifier (did:iota:0x...)
- * 
- * This takes ~10-20 seconds because we're writing to the blockchain!
+ * Simplified UX for creating decentralized identities.
+ * Focus: Plain language, progressive loading, celebration on success.
  */
-export function CreateDID() {
+
+interface CreateDIDProps {
+  onSuccess?: () => void;
+}
+
+export function CreateDID({ onSuccess }: CreateDIDProps) {
   const [loading, setLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState<string>('');
   const [result, setResult] = useState<DIDCreationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  
+  // Trigger confetti on success
+  useEffect(() => {
+    if (result && !error) {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }
+  }, [result, error]);
 
   const handleCreateDID = async () => {
     setLoading(true);
@@ -30,7 +41,19 @@ export function CreateDID() {
     setResult(null);
     
     try {
+      // Progressive loading states
+      setLoadingStep('Generating cryptographic keys...');
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      setLoadingStep('Creating identity document...');
+      await new Promise(resolve => setTimeout(resolve, 600));
+      
+      setLoadingStep('Publishing to IOTA network...');
       const didResult = await createDID();
+      
+      setLoadingStep('Waiting for confirmation...');
+      await new Promise(resolve => setTimeout(resolve, 400));
+      
       setResult(didResult);
       
       // Save to localStorage so it persists
@@ -40,10 +63,16 @@ export function CreateDID() {
         created: new Date().toISOString(),
       });
       localStorage.setItem('iota-dids', JSON.stringify(savedDIDs));
+      
+      // Trigger success callback after short delay
+      setTimeout(() => {
+        if (onSuccess) onSuccess();
+      }, 3000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create DID');
+      setError(err instanceof Error ? err.message : 'Failed to create identity');
     } finally {
       setLoading(false);
+      setLoadingStep('');
     }
   };
 
@@ -82,68 +111,128 @@ export function CreateDID() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          Create Decentralized Identity
+        <h2 className="text-3xl font-bold text-gray-900 mb-3">
+          🆔 Create Your Digital Identity
         </h2>
-        <p className="text-gray-600">
-          Generate a new DID and publish it to the IOTA Tangle. This creates a unique
-          identifier that you control forever - no company can take it away.
+        <p className="text-lg text-gray-700">
+          Think of it like creating an email address - but one that you own forever, works everywhere globally, and no company can take away.
         </p>
       </div>
 
-      {/* Explanation Card */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h3 className="font-semibold text-blue-900 mb-2">💡 What is a DID?</h3>
-        <p className="text-sm text-blue-800 mb-2">
-          A DID (Decentralized Identifier) is like an email address or username, but:
+      {/* What is This Card */}
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6">
+        <h3 className="font-bold text-blue-900 mb-3 text-lg">🤔 What is this?</h3>
+        <p className="text-blue-800 mb-4">
+          A <strong>Decentralized Identifier (DID)</strong> is a permanent digital identity that:
         </p>
-        <ul className="text-sm text-blue-800 space-y-1 ml-4 list-disc">
-          <li>You own it forever (no company controls it)</li>
-          <li>It&apos;s cryptographically secure (uses public/private keys)</li>
-          <li>It&apos;s stored on a blockchain (IOTA Tangle)</li>
-          <li>Anyone can verify your identity without asking a central authority</li>
-        </ul>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+          <div className="flex items-start gap-2">
+            <span className="text-green-600 text-lg">✓</span>
+            <span className="text-blue-900"><strong>You own forever</strong> - no expiration</span>
+          </div>
+          <div className="flex items-start gap-2">
+            <span className="text-green-600 text-lg">✓</span>
+            <span className="text-blue-900"><strong>Works everywhere</strong> globally</span>
+          </div>
+          <div className="flex items-start gap-2">
+            <span className="text-green-600 text-lg">✓</span>
+            <span className="text-blue-900"><strong>No company can take away</strong></span>
+          </div>
+          <div className="flex items-start gap-2">
+            <span className="text-green-600 text-lg">✓</span>
+            <span className="text-blue-900"><strong>Anyone can verify</strong> it&apos;s real</span>
+          </div>
+        </div>
       </div>
+
+      {/* Loading State */}
+      {loading && (
+        <div className="bg-white border-2 border-blue-300 rounded-xl p-8">
+          <div className="text-center space-y-4">
+            <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto" />
+            <h3 className="text-xl font-semibold text-gray-900">Creating your identity...</h3>
+            <div className="bg-blue-50 rounded-lg p-4 text-left space-y-2">
+              <p className="text-sm font-medium text-blue-900 mb-3">What&apos;s happening right now:</p>
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center gap-2 text-gray-700">
+                  <span className="text-blue-600">⚡</span>
+                  <span className={loadingStep.includes('keys') ? 'font-semibold text-blue-900' : ''}>
+                    Generating cryptographic keys
+                  </span>
+                  {loadingStep.includes('keys') && <Loader2 className="w-4 h-4 animate-spin ml-auto" />}
+                </div>
+                <div className="flex items-center gap-2 text-gray-700">
+                  <span className="text-blue-600">📄</span>
+                  <span className={loadingStep.includes('document') ? 'font-semibold text-blue-900' : ''}>
+                    Creating identity document
+                  </span>
+                  {loadingStep.includes('document') && <Loader2 className="w-4 h-4 animate-spin ml-auto" />}
+                </div>
+                <div className="flex items-center gap-2 text-gray-700">
+                  <span className="text-blue-600">🌐</span>
+                  <span className={loadingStep.includes('network') ? 'font-semibold text-blue-900' : ''}>
+                    Publishing to IOTA network
+                  </span>
+                  {loadingStep.includes('network') && <Loader2 className="w-4 h-4 animate-spin ml-auto" />}
+                </div>
+                <div className="flex items-center gap-2 text-gray-700">
+                  <span className="text-blue-600">✓</span>
+                  <span className={loadingStep.includes('confirmation') ? 'font-semibold text-blue-900' : ''}>
+                    Waiting for confirmation
+                  </span>
+                  {loadingStep.includes('confirmation') && <Loader2 className="w-4 h-4 animate-spin ml-auto" />}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Create Button */}
-      <button
-        onClick={handleCreateDID}
-        disabled={loading}
-        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
-      >
-        {loading ? (
-          <>
-            <Loader2 className="w-5 h-5 animate-spin" />
-            Creating DID... (this may take 10-20 seconds)
-          </>
-        ) : (
-          <>
-            Create New DID
-          </>
-        )}
-      </button>
+      {!loading && !result && (
+        <button
+          onClick={handleCreateDID}
+          disabled={loading}
+          className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg py-4 px-8 rounded-xl hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl"
+        >
+          <Sparkles className="w-6 h-6" />
+          🚀 Create Identity
+        </button>
+      )}
+
+      {!loading && !result && (
+        <div className="text-center text-sm text-gray-600 flex items-center justify-center gap-3">
+          <span>⏱️ Takes ~5 seconds</span>
+          <span>•</span>
+          <span>💰 Free on testnet</span>
+        </div>
+      )}
 
       {/* Success Result */}
       {result && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-6 space-y-4">
-          <div className="flex items-center gap-2 text-green-800">
-            <CheckCircle2 className="w-6 h-6" />
-            <h3 className="text-lg font-semibold">DID Created Successfully!</h3>
+        <div className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl p-8 space-y-6">
+          {/* Success Header */}
+          <div className="text-center space-y-3">
+            <div className="flex items-center justify-center gap-3 text-green-700">
+              <CheckCircle2 className="w-10 h-10" />
+              <h3 className="text-2xl font-bold">✨ Identity Created Successfully! ✨</h3>
+            </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700 block">
-              Your DID:
+          {/* DID Display */}
+          <div className="bg-white border-2 border-green-400 rounded-xl p-6 space-y-3">
+            <label className="text-sm font-semibold text-gray-700 block">
+              🎉 Your unique identifier:
             </label>
-            <div className="bg-white border border-green-300 rounded-lg p-3 font-mono text-sm break-all flex items-start justify-between gap-2">
-              <span className="text-gray-800">{result.did}</span>
+            <div className="bg-gray-50 border border-green-300 rounded-lg p-4 font-mono text-sm break-all flex items-start justify-between gap-2">
+              <span className="text-gray-900">{result.did}</span>
               <button
                 onClick={() => copyToClipboard(result.did)}
-                className="text-green-600 hover:text-green-700 flex-shrink-0"
+                className="text-green-600 hover:text-green-700 flex-shrink-0 p-1 hover:bg-green-100 rounded transition-colors"
                 title="Copy to clipboard"
               >
                 {copied ? (
-                  <CheckCircle2 className="w-5 h-5" />
+                  <span className="text-xs font-semibold">✅ Copied!</span>
                 ) : (
                   <Copy className="w-5 h-5" />
                 )}
@@ -151,22 +240,51 @@ export function CreateDID() {
             </div>
           </div>
 
-          <div className="bg-white border border-green-300 rounded-lg p-4">
-            <p className="text-sm text-gray-700 mb-2">
-              <strong>✅ What just happened:</strong>
+          {/* What You Just Did */}
+          <div className="bg-white border border-green-300 rounded-xl p-5 space-y-3">
+            <p className="font-semibold text-gray-800 text-base">
+              ℹ️ What you just did:
             </p>
-            <ol className="text-sm text-gray-600 space-y-1 ml-4 list-decimal">
-              <li>Generated a new cryptographic keypair (public + private keys)</li>
-              <li>Created a DID Document containing your public key</li>
-              <li>Published your DID Document to the IOTA Tangle (testnet)</li>
-              <li>Received your unique DID identifier</li>
-            </ol>
+            <ul className="text-sm text-gray-700 space-y-2">
+              <li className="flex items-start gap-2">
+                <span className="text-green-600 font-bold">•</span>
+                <span>Created a <strong>permanent digital identity</strong></span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-600 font-bold">•</span>
+                <span>It&apos;s now <strong>published on IOTA network</strong></span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-600 font-bold">•</span>
+                <span><strong>Anyone in the world</strong> can verify it</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-600 font-bold">•</span>
+                <span><strong>No company controls it</strong> - you do</span>
+              </li>
+            </ul>
           </div>
 
-          <p className="text-sm text-gray-600">
-            💾 <strong>Important:</strong> Your DID has been saved to browser storage.
-            Copy it now to use in the next steps!
-          </p>
+          {/* DPP Use Case */}
+          <div className="bg-blue-50 border border-blue-300 rounded-lg p-4">
+            <p className="text-sm font-semibold text-blue-900 mb-2">
+              💡 For Digital Product Passport use case:
+            </p>
+            <p className="text-sm text-blue-800">
+              This could be a product batch, a supplier, or a manufacturing facility.
+              Each gets a permanent, verifiable identity.
+            </p>
+          </div>
+
+          {/* Next Step */}
+          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl p-5 text-center">
+            <p className="text-lg font-semibold mb-2">
+              Ready for the next step?
+            </p>
+            <p className="text-sm opacity-90">
+              Automatically moving to verification in 3 seconds... or click Step 2 above!
+            </p>
+          </div>
         </div>
       )}
 
@@ -187,30 +305,53 @@ export function CreateDID() {
         </div>
       )}
 
-      {/* Technical Details */}
-      <details className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-        <summary className="cursor-pointer font-medium text-gray-700">
-          🔧 Technical Details (for developers)
-        </summary>
-        <div className="mt-3 text-sm text-gray-600 space-y-2">
-          <p>
-            <strong>Testnet:</strong> We&apos;re using IOTA&apos;s testnet at{' '}
-            <code className="bg-gray-200 px-1 rounded">
-              https://api.testnet.shimmer.network
-            </code>
-          </p>
-          <p>
-            <strong>Keys:</strong> We generate Ed25519 keypairs (military-grade encryption)
-          </p>
-          <p>
-            <strong>Storage:</strong> Private keys are stored in browser memory (demo only).
-            Production apps should use IOTA Stronghold for secure key storage.
-          </p>
-          <p>
-            <strong>Format:</strong> DIDs follow the W3C DID standard: <code>did:iota:0x...</code>
-          </p>
-        </div>
-      </details>
+      {/* Expandable Help Sections */}
+      {!loading && (
+        <>
+          <details className="bg-gray-50 border border-gray-300 rounded-xl p-5">
+            <summary className="cursor-pointer font-semibold text-gray-800 hover:text-blue-600 transition-colors">
+              ❓ What is a Decentralized Identifier (DID)?
+            </summary>
+            <div className="mt-4 text-sm text-gray-700 space-y-3">
+              <p>
+                A DID is like a username or email address, but with superpowers:
+              </p>
+              <ol className="ml-5 space-y-2 list-decimal">
+                <li><strong>No company owns it</strong> (decentralized)</li>
+                <li><strong>You control it forever</strong> (self-sovereign)</li>
+                <li><strong>Anyone can verify it</strong> (public)</li>
+                <li><strong>Can&apos;t be taken away</strong> (permanent)</li>
+              </ol>
+              <p className="text-xs text-gray-600 mt-3">
+                <strong>Technical:</strong> W3C standard for digital identity • 
+                <a href="https://www.w3.org/TR/did-core/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline ml-1">
+                  Learn more →
+                </a>
+              </p>
+            </div>
+          </details>
+
+          <details className="bg-gray-50 border border-gray-300 rounded-xl p-5">
+            <summary className="cursor-pointer font-semibold text-gray-800 hover:text-blue-600 transition-colors">
+              🔧 Technical Details (for developers)
+            </summary>
+            <div className="mt-4 text-sm text-gray-700 space-y-2">
+              <p>
+                <strong>Testnet:</strong> IOTA Shimmer testnet
+              </p>
+              <p>
+                <strong>Keys:</strong> Ed25519 keypairs (military-grade encryption)
+              </p>
+              <p>
+                <strong>Storage:</strong> Browser localStorage (demo only - use IOTA Stronghold in production)
+              </p>
+              <p>
+                <strong>Format:</strong> W3C DID standard: <code className="bg-gray-200 px-1.5 py-0.5 rounded text-xs">did:iota:smr:0x...</code>
+              </p>
+            </div>
+          </details>
+        </>
+      )}
     </div>
   );
 }

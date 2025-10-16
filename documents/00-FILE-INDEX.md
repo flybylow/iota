@@ -44,6 +44,8 @@
 | `documents/02-IMPLEMENTATION.md` | Technical deep dive | Developers |
 | `documents/03-TESTING-GUIDE.md` | Testing scenarios | Testers/QA |
 | `documents/04-FINAL-SUMMARY.md` | Project completion summary | All |
+| `documents/10-UX-IMPROVEMENTS.md` | UX refresh documentation | Designers/Devs |
+| `UX-CHANGELOG.md` | UX version history | All |
 
 ---
 
