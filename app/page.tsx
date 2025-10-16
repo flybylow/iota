@@ -127,7 +127,7 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <main className="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         {selectedIndustry && (
           <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-5 sm:p-8">
             {activeTab === 'farmer' && <FarmerOrigin industry={selectedIndustry} />}
