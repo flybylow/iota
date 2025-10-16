@@ -170,7 +170,7 @@ export function CreateDID() {
           >
             Create Identity
           </button>
-          <div className="text-xs text-zinc-500">
+          <div className="text-xs text-zinc-500 px-2">
             Takes ~5 seconds • Free on testnet
           </div>
         </>
