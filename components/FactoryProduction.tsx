@@ -203,20 +203,22 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
             )}
 
             {verificationStatus === 'pending' && farmerCredential && (
-              <button
-                onClick={verifyFarmerCertificate}
-                disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 text-sm"
-              >
-                {loading ? (
-                  <div className="flex items-center justify-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Verifying on IOTA network...
-                  </div>
-                ) : (
-                  'Verify Certificate'
-                )}
-              </button>
+              <div className="flex justify-center">
+                <button
+                  onClick={verifyFarmerCertificate}
+                  disabled={loading}
+                  className="bg-blue-600 hover:bg-blue-500 text-white font-medium py-3 px-8 rounded-full transition-all duration-200 disabled:opacity-50 text-sm shadow-lg"
+                >
+                  {loading ? (
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Verifying on IOTA network...
+                    </div>
+                  ) : (
+                    'Verify Certificate'
+                  )}
+                </button>
+              </div>
             )}
 
             {verificationStatus === 'verified' && (
@@ -284,23 +286,25 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
                 </div>
               </div>
 
-              <button
-                onClick={issueProductionCertificate}
-                disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 text-sm flex items-center justify-center gap-2"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Issuing Production Certificate...
-                  </>
-                ) : (
-                  <>
-                    <Factory className="w-4 h-4" />
-                    Issue Production Certificate
-                  </>
-                )}
-              </button>
+              <div className="flex justify-center">
+                <button
+                  onClick={issueProductionCertificate}
+                  disabled={loading}
+                  className="bg-blue-600 hover:bg-blue-500 text-white font-medium py-3 px-8 rounded-full transition-all duration-200 disabled:opacity-50 text-sm flex items-center gap-2 shadow-lg"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Issuing Production Certificate...
+                    </>
+                  ) : (
+                    <>
+                      <Factory className="w-4 h-4" />
+                      Issue Production Certificate
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           )}
 

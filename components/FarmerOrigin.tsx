@@ -184,7 +184,7 @@ export function FarmerOrigin({ industry }: FarmerOriginProps) {
           <div className="flex justify-center">
             <button
               onClick={issueOriginCertificate}
-              className="bg-green-600 hover:bg-green-500 text-white font-medium py-3 px-8 rounded-lg transition-all duration-200 text-sm flex items-center gap-2"
+              className="bg-green-600 hover:bg-green-500 text-white font-medium py-3 px-8 rounded-full transition-all duration-200 text-sm flex items-center gap-2 shadow-lg"
             >
               <span className="text-lg">{labels.originIcon}</span>
               Issue Origin Certificate

@@ -120,7 +120,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
               
               <button
                 onClick={scanAndVerify}
-                className="bg-purple-600 hover:bg-purple-500 text-white font-medium py-3 px-8 rounded-lg transition-all duration-200 text-sm inline-flex items-center gap-2"
+                className="bg-purple-600 hover:bg-purple-500 text-white font-medium py-3 px-8 rounded-full transition-all duration-200 text-sm inline-flex items-center gap-2 shadow-lg"
               >
                 <QrCode className="w-4 h-4" />
                 Simulate QR Scan & Verify
