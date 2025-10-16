@@ -112,7 +112,9 @@ export default function Home() {
                       w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center
                       border-2 transition-all cursor-pointer
                       ${activeTab === tab.id 
-                        ? 'bg-' + tab.color + '-500/20 border-' + tab.color + '-500 scale-110' 
+                        ? tab.color === 'green' ? 'bg-green-500/20 border-green-500 scale-110'
+                          : tab.color === 'blue' ? 'bg-blue-500/20 border-blue-500 scale-110'
+                          : 'bg-purple-500/20 border-purple-500 scale-110'
                         : 'bg-[#2a2a2a] border-[#3a3a3a] hover:border-blue-500/50 hover:bg-[#2f2f2f]'
                       }
                     `}

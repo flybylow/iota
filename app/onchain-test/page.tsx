@@ -12,14 +12,16 @@ export default function OnChainTestPage() {
   const [result, setResult] = useState<any>(null);
 
   const testWasmInit = async () => {
+    if (typeof window === 'undefined') return;
+    
     setLoading(true);
     setStatus('Initializing WASM...');
     setResult(null);
 
     try {
-      const { initSimpleWasm } = await import('@/lib/simpleWasm');
+      const wasmModule = await import('@/lib/simpleWasm');
       
-      const Identity = await initSimpleWasm();
+      const Identity = await wasmModule.initSimpleWasm();
       
       setStatus('✅ WASM Initialized Successfully!');
       setResult({
@@ -41,14 +43,16 @@ export default function OnChainTestPage() {
   };
 
   const testCreateDID = async () => {
+    if (typeof window === 'undefined') return;
+    
     setLoading(true);
     setStatus('Creating DID...');
     setResult(null);
 
     try {
-      const { testCreateSimpleDID } = await import('@/lib/simpleWasm');
+      const wasmModule = await import('@/lib/simpleWasm');
       
-      const didResult = await testCreateSimpleDID();
+      const didResult = await wasmModule.testCreateSimpleDID();
       
       if (didResult.success) {
         setStatus('✅ DID Created Successfully!');
@@ -58,6 +62,68 @@ export default function OnChainTestPage() {
       setResult(didResult);
     } catch (error: any) {
       setStatus('❌ DID Creation Failed');
+      setResult({
+        success: false,
+        error: error.message,
+        stack: error.stack
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const testIssueCredential = async () => {
+    if (typeof window === 'undefined') return;
+    
+    setLoading(true);
+    setStatus('Issuing credential...');
+    setResult(null);
+
+    try {
+      const wasmModule = await import('@/lib/simpleWasm');
+      
+      const credResult = await wasmModule.testIssueCredential();
+      
+      if (credResult.success) {
+        setStatus('✅ Credential Issued Successfully!');
+      } else {
+        setStatus('❌ Credential Issuance Failed');
+      }
+      setResult(credResult);
+    } catch (error: any) {
+      setStatus('❌ Credential Issuance Failed');
+      setResult({
+        success: false,
+        error: error.message,
+        stack: error.stack
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const testVerifyCredential = async () => {
+    if (typeof window === 'undefined') return;
+    
+    setLoading(true);
+    setStatus('Verifying credential...');
+    setResult(null);
+
+    try {
+      const wasmModule = await import('@/lib/simpleWasm');
+      
+      const verifyResult = await wasmModule.testVerifyCredential();
+      
+      if (verifyResult.success && verifyResult.isValid) {
+        setStatus('✅ Credential Verified Successfully!');
+      } else if (verifyResult.success && !verifyResult.isValid) {
+        setStatus('⚠️ Credential is Invalid');
+      } else {
+        setStatus('❌ Verification Failed');
+      }
+      setResult(verifyResult);
+    } catch (error: any) {
+      setStatus('❌ Verification Failed');
       setResult({
         success: false,
         error: error.message,
@@ -93,13 +159,13 @@ export default function OnChainTestPage() {
         </div>
 
         {/* Actions */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
           <button
             onClick={testWasmInit}
             disabled={loading}
             className="bg-blue-600 hover:bg-blue-500 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-medium transition-colors"
           >
-            Test WASM Init
+            1. Init WASM
           </button>
           
           <button
@@ -107,13 +173,29 @@ export default function OnChainTestPage() {
             disabled={loading}
             className="bg-green-600 hover:bg-green-500 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-medium transition-colors"
           >
-            Test Create DID
+            2. Create DID
+          </button>
+
+          <button
+            onClick={testIssueCredential}
+            disabled={loading}
+            className="bg-purple-600 hover:bg-purple-500 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-medium transition-colors"
+          >
+            3. Issue Credential
+          </button>
+
+          <button
+            onClick={testVerifyCredential}
+            disabled={loading}
+            className="bg-orange-600 hover:bg-orange-500 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-medium transition-colors"
+          >
+            4. Verify Credential
           </button>
 
           <button
             onClick={clearCache}
             disabled={loading}
-            className="bg-red-600 hover:bg-red-500 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-medium transition-colors"
+            className="bg-red-600 hover:bg-red-500 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-medium transition-colors sm:col-span-2 lg:col-span-1"
           >
             Clear Cache
           </button>
@@ -133,10 +215,11 @@ export default function OnChainTestPage() {
         <div className="mt-8 bg-blue-500/10 border border-blue-500/20 rounded-lg p-6">
           <h3 className="text-lg font-semibold mb-3 text-blue-400">📋 Instructions</h3>
           <ol className="space-y-2 text-sm text-zinc-300">
-            <li>1. Click "Test WASM Init" to initialize the IOTA Identity WASM module</li>
-            <li>2. If successful, click "Test Create DID" to create a real DID document</li>
-            <li>3. Check the console (F12) for detailed logs</li>
-            <li>4. Use "Clear Cache" to reset localStorage if needed</li>
+            <li>1. <strong>Init WASM</strong> - Initialize the IOTA Identity library</li>
+            <li>2. <strong>Create DID</strong> - Generate a decentralized identifier with keys</li>
+            <li>3. <strong>Issue Credential</strong> - Create a verifiable credential (Organic Cocoa Certificate)</li>
+            <li>4. <strong>Verify Credential</strong> - Validate the credential&apos;s authenticity and expiration</li>
+            <li>5. Check the console (F12) for detailed logs at each step</li>
           </ol>
         </div>
 
