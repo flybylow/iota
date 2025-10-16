@@ -115,19 +115,28 @@ export function ConsumerJourney() {
             </div>
           </div>
 
-          {/* Explainer */}
-          <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-4">
-            <h4 className="text-sm font-medium text-white mb-2">💡 For Consumers</h4>
-            <p className="text-xs text-zinc-400 leading-relaxed mb-3">
-              Scan any product QR code and instantly see the verified supply chain. 
-              No waiting, no phone calls, just instant cryptographic verification.
-            </p>
-            <h4 className="text-sm font-medium text-blue-400 mb-2">💡 For Your DPP Business</h4>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              This proves your solution works. Show this to chocolate brands, coffee roasters, 
-              fashion companies - anyone with supply chain transparency needs.
-            </p>
-          </div>
+          {/* Explainer - Collapsible */}
+          <details className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-4">
+            <summary className="text-sm font-medium text-white cursor-pointer hover:text-blue-400 transition-colors flex items-center gap-2">
+              <span>💡 Why This Matters</span>
+            </summary>
+            <div className="mt-3 space-y-4">
+              <div>
+                <h4 className="text-sm font-medium text-white mb-2">For Consumers</h4>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  Scan any product QR code and instantly see the verified supply chain. 
+                  No waiting, no phone calls, just instant cryptographic verification.
+                </p>
+              </div>
+              <div>
+                <h4 className="text-sm font-medium text-blue-400 mb-2">For Your DPP Business</h4>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  This proves your solution works. Show this to chocolate brands, coffee roasters, 
+                  fashion companies - anyone with supply chain transparency needs.
+                </p>
+              </div>
+            </div>
+          </details>
         </>
       )}
 

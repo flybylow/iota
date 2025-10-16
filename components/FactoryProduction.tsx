@@ -285,18 +285,22 @@ export function FactoryProduction() {
             </div>
           )}
 
-          {/* Explainer */}
-          <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-4">
-            <h4 className="text-sm font-medium text-white mb-2">💡 Credential Chaining</h4>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              The factory <strong>MUST verify</strong> the farmer&apos;s certificate before producing. 
-              The production certificate then <strong>references</strong> the origin certificate, 
-              creating an immutable chain of custody.
-            </p>
-            <p className="text-xs text-blue-400 mt-3">
-              <strong>For DPP:</strong> This prevents fraud. You can&apos;t claim &quot;organic&quot; chocolate if the organic cocoa certificate doesn&apos;t verify!
-            </p>
-          </div>
+          {/* Explainer - Collapsible */}
+          <details className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-4">
+            <summary className="text-sm font-medium text-white cursor-pointer hover:text-blue-400 transition-colors flex items-center gap-2">
+              <span>💡 Credential Chaining</span>
+            </summary>
+            <div className="mt-3 space-y-3">
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                The factory <strong>MUST verify</strong> the farmer&apos;s certificate before producing. 
+                The production certificate then <strong>references</strong> the origin certificate, 
+                creating an immutable chain of custody.
+              </p>
+              <p className="text-xs text-blue-400">
+                <strong>For DPP:</strong> This prevents fraud. You can&apos;t claim &quot;organic&quot; chocolate if the organic cocoa certificate doesn&apos;t verify!
+              </p>
+            </div>
+          </details>
         </>
       )}
 

@@ -175,21 +175,25 @@ export function FarmerOrigin() {
             </button>
           </div>
 
-          {/* Explainer */}
-          <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-4">
-            <h4 className="text-sm font-medium text-white mb-2">💡 What This Does</h4>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              Creates a cryptographically signed certificate proving:
-            </p>
-            <ul className="text-xs text-zinc-400 mt-2 ml-4 space-y-1">
-              <li>• Cocoa is from certified organic farm in Ecuador</li>
-              <li>• Harvested on specific date with batch traceability</li>
-              <li>• Meets EU organic standards and Fair Trade requirements</li>
-            </ul>
-            <p className="text-xs text-blue-400 mt-3">
-              <strong>For DPP:</strong> This is the first link in an unbreakable chain. Every claim is verifiable on the blockchain.
-            </p>
-          </div>
+          {/* Explainer - Collapsible */}
+          <details className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-4">
+            <summary className="text-sm font-medium text-white cursor-pointer hover:text-blue-400 transition-colors flex items-center gap-2">
+              <span>💡 What This Does</span>
+            </summary>
+            <div className="mt-3 space-y-3">
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Creates a cryptographically signed certificate proving:
+              </p>
+              <ul className="text-xs text-zinc-400 ml-4 space-y-1">
+                <li>• Cocoa is from certified organic farm in Ecuador</li>
+                <li>• Harvested on specific date with batch traceability</li>
+                <li>• Meets EU organic standards and Fair Trade requirements</li>
+              </ul>
+              <p className="text-xs text-blue-400">
+                <strong>For DPP:</strong> This is the first link in an unbreakable chain. Every claim is verifiable on the blockchain.
+              </p>
+            </div>
+          </details>
         </>
       )}
 
