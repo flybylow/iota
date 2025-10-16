@@ -270,7 +270,7 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div>
                   <p className="text-zinc-400 text-xs mb-1">Batch Number:</p>
-                  <p className="text-white font-mono text-xs">{chocolateProduct.batchNumber}</p>
+                  <p className="text-white font-mono text-xs">{product.batchNumber}</p>
                 </div>
                 <div>
                   <p className="text-zinc-400 text-xs mb-1">Units Produced:</p>
@@ -340,11 +340,11 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
             <div className="space-y-1.5 text-xs">
               <div className="flex justify-between">
                 <span className="text-zinc-400">Batch:</span>
-                <span className="text-zinc-200">{chocolateProduct.batchNumber}</span>
+                <span className="text-zinc-200">{product.batchNumber}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-zinc-400">Product:</span>
-                <span className="text-zinc-200">{chocolateProduct.name}</span>
+                <span className="text-zinc-200">{product.name}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-zinc-400">Units:</span>
