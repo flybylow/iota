@@ -22,6 +22,12 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
 }
 
+/* Prevent links from inheriting browser default colors */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 /* Professional Dark Components */
 .card-dark {
   background: var(--bg-secondary);
