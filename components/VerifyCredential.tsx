@@ -268,10 +268,10 @@ export function VerifyCredential() {
               <div className="text-xs">
                 <p className="text-red-400 font-medium mb-2">This identity could not be verified</p>
                 {result.error && (
-                  <p className="text-zinc-400 mb-2">{result.error}</p>
+                  <p className="text-zinc-100 mb-2">{result.error}</p>
                 )}
-                <p className="text-zinc-500 mb-1">Possible reasons:</p>
-                <ul className="text-zinc-500 ml-4 list-disc space-y-0.5">
+                <p className="text-white mb-1">Possible reasons:</p>
+                <ul className="text-zinc-100 ml-4 list-disc space-y-0.5">
                   <li>DID doesn&apos;t exist on network</li>
                   <li>Invalid format</li>
                   <li>Identity was revoked</li>

@@ -213,8 +213,8 @@ export function CreateDID() {
             </ul>
           </div>
 
-          <div className="text-xs text-zinc-500 pt-3 border-t border-[#3a3a3a]">
-            Click <strong className="text-white">Step 2: Verify Identity</strong> to continue
+          <div className="text-xs text-zinc-100 pt-3 border-t border-[#3a3a3a]">
+            Click <strong className="text-white">Verify</strong> tab to continue
           </div>
         </div>
       )}
@@ -226,7 +226,7 @@ export function CreateDID() {
             <AlertCircle className="w-5 h-5 flex-shrink-0" />
             <div className="text-sm">
               <p className="font-semibold mb-1">Error</p>
-              <p className="text-xs text-zinc-400">{error}</p>
+              <p className="text-xs text-zinc-100">{error}</p>
             </div>
           </div>
         </div>
