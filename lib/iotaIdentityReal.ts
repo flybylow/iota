@@ -138,6 +138,8 @@ export async function issueCredential(
       JwsAlgorithm,
       ProofOptions,
       Storage,
+      Timestamp,
+      Duration,
     } = Identity;
     
     // Create credential subject
@@ -148,7 +150,7 @@ export async function issueCredential(
     
     // Set issuance and expiration dates
     const issuanceDate = Timestamp.nowUTC();
-    const expirationDate = Timestamp.nowUTC().checkedAdd(Duration.years(1));
+    const expirationDate = issuanceDate.checkedAdd(Duration.years(1));
     
     // Build the credential
     const credential = new Credential({
