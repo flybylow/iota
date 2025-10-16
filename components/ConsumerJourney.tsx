@@ -348,7 +348,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
                   href={getExplorerURL(step.issuerDID)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg hover:border-blue-500/30 transition-colors group"
+                  className="flex items-center justify-between p-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg hover:border-blue-500/30 transition-colors group no-underline"
                 >
                   <div className="flex items-center gap-3">
                     {step.credentialType === 'OrganicOriginCertification' && (
@@ -358,7 +358,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
                       <Factory className="w-4 h-4 text-blue-400" />
                     )}
                     <div>
-                      <p className="text-sm text-white font-medium">{step.issuer}</p>
+                      <p className="text-sm font-medium text-white">{step.issuer}</p>
                       <p className="text-xs text-white">
                         DID: {step.issuerDID.substring(0, 35)}...
                       </p>
