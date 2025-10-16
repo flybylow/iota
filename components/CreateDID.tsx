@@ -263,12 +263,12 @@ export function CreateDID() {
           <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4 space-y-2">
             {identityName && (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-white">Identity Name:</span>
+                <span className="text-xs text-white w-24">Identity Name:</span>
                 <span className="text-sm text-zinc-100 font-medium">{identityName}</span>
               </div>
             )}
             <div className="flex items-center gap-2">
-              <span className="text-xs text-white">Type:</span>
+              <span className="text-xs text-white w-24">Type:</span>
               <span className="text-sm text-zinc-100">
                 {identityType === 'supplier' && '👨‍🌾 Supplier/Farmer'}
                 {identityType === 'manufacturer' && '🏭 Manufacturer'}
