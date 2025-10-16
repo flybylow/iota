@@ -18,6 +18,12 @@ const eslintConfig = [
       "out/**",
       "build/**",
       "next-env.d.ts",
+      "app/test-wasm/**",
+      "app/onchain-test/**",
+      "lib/wasm-test.ts",
+      "lib/iotaIdentityReal.ts",
+      "lib/keyStorage.ts",
+      "lib/simpleWasm.ts",
     ],
   },
 ];

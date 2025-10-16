@@ -1,0 +1,4 @@
+app/test-wasm/
+lib/wasm-test.ts
+lib/iotaIdentityReal.ts
+

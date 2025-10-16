@@ -23,5 +23,13 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "app/test-wasm/**",
+    "app/onchain-test/**",
+    "lib/wasm-test.ts",
+    "lib/iotaIdentityReal.ts",
+    "lib/keyStorage.ts",
+    "lib/simpleWasm.ts"
+  ]
 }

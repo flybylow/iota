@@ -10,26 +10,14 @@ const nextConfig: NextConfig = {
       layers: true,
     };
     
-    // Handle WASM files
+    // Handle WASM files - simpler approach
     config.module.rules.push({
       test: /\.wasm$/,
-      type: 'webassembly/async',
-    });
-    
-    // Specific handling for IOTA Identity WASM file
-    config.module.rules.push({
-      test: /identity_wasm_bg\.wasm$/,
       type: 'asset/resource',
       generator: {
         filename: 'static/wasm/[name].[hash][ext]'
       }
     });
-
-    // Add alias for IOTA Identity WASM web bindings
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@iota/identity-wasm/web': '@iota/identity-wasm/web/index.js'
-    };
 
     // Add fallbacks for node modules
     config.resolve.fallback = {

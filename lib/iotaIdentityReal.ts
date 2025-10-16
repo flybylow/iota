@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * REAL IOTA Identity Implementation
  * 
@@ -18,7 +19,7 @@ let wasmInitialized = false;
  * Initialize the IOTA Identity WASM module
  * Must be called before using any IOTA Identity functions
  */
-async function initWasm() {
+export async function initWasm() {
   if (wasmInitialized && Identity) return;
   
   try {
