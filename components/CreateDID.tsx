@@ -91,36 +91,6 @@ export function CreateDID() {
         </p>
       </div>
 
-      {/* What is This - Collapsible */}
-      <details className="text-sm">
-        <summary className="cursor-pointer text-blue-400 hover:text-blue-300 underline">
-          What is this?
-        </summary>
-        <div className="mt-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-4">
-          <p className="text-zinc-300 mb-3 text-sm">
-            A <strong>Decentralized Identifier (DID)</strong> is a permanent digital identity that:
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-            <div className="flex items-start gap-2">
-              <span className="text-green-500">✓</span>
-              <span className="text-zinc-400">You own forever - no expiration</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <span className="text-green-500">✓</span>
-              <span className="text-zinc-400">Works everywhere globally</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <span className="text-green-500">✓</span>
-              <span className="text-zinc-400">No company can take away</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <span className="text-green-500">✓</span>
-              <span className="text-zinc-400">Anyone can verify it&apos;s real</span>
-            </div>
-          </div>
-        </div>
-      </details>
-
       {/* Loading State */}
       {loading && (
         <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-8">
@@ -174,6 +144,38 @@ export function CreateDID() {
             Takes ~5 seconds • Free on testnet
           </div>
         </>
+      )}
+
+      {/* What is This - Collapsible */}
+      {!loading && !result && (
+        <details className="text-sm">
+          <summary className="cursor-pointer text-blue-400 hover:text-blue-300 underline px-2">
+            What is this?
+          </summary>
+          <div className="mt-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-4">
+            <p className="text-zinc-300 mb-3 text-sm">
+              A <strong>Decentralized Identifier (DID)</strong> is a permanent digital identity that:
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+              <div className="flex items-start gap-2">
+                <span className="text-green-500">✓</span>
+                <span className="text-zinc-400">You own forever - no expiration</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-green-500">✓</span>
+                <span className="text-zinc-400">Works everywhere globally</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-green-500">✓</span>
+                <span className="text-zinc-400">No company can take away</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-green-500">✓</span>
+                <span className="text-zinc-400">Anyone can verify it&apos;s real</span>
+              </div>
+            </div>
+          </div>
+        </details>
       )}
 
       {/* Success Result */}
