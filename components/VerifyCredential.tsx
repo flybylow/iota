@@ -251,7 +251,8 @@ export function VerifyCredential() {
                 setResult(null);
                 setDidInput('');
               }}
-              className="flex-1 px-4 py-2 bg-[#3a3a3a] text-white text-sm rounded-lg hover:bg-[#4a4a4a] transition-colors"
+              className="flex-1 px-4 py-2 bg-[#3a3a3a] !text-white text-sm rounded-lg hover:bg-[#4a4a4a] transition-colors"
+              style={{ color: '#ffffff' }}
             >
               Verify Another
             </button>
