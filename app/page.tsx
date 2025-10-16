@@ -28,22 +28,22 @@ export default function Home() {
   const tabs = [
     {
       id: 'farmer' as TabType,
-      label: '🌱 Farmer',
-      description: 'Origin',
+      label: '👨‍🌾 Step 1',
+      description: 'Farmer Issues Certificate',
       icon: Sprout,
       color: 'green',
     },
     {
       id: 'factory' as TabType,
-      label: '🏭 Factory',
-      description: 'Production',
+      label: '🏭 Step 2',
+      description: 'Factory Verifies & Produces',
       icon: Factory,
       color: 'blue',
     },
     {
       id: 'consumer' as TabType,
-      label: '✅ Consumer',
-      description: 'Verification',
+      label: '✅ Step 3',
+      description: 'Consumer Verifies Chain',
       icon: Shield,
       color: 'purple',
     },
@@ -72,16 +72,10 @@ export default function Home() {
               }}
               className="text-3xl sm:text-5xl font-bold text-white cursor-pointer hover:text-blue-400 transition-colors leading-tight"
             >
-              Transparent Supply Chains,
-              <br />
-              <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                Powered by Blockchain Identity
-              </span>
+              Transparent Supply Chains
             </h1>
             <p className="text-base sm:text-lg text-zinc-300 max-w-2xl mx-auto leading-relaxed">
-              See how decentralized identifiers (DIDs) and verifiable credentials 
-              enable instant, cryptographic verification of product claims—from 
-              farm to consumer.
+              From farm to your shopping cart.
             </p>
           </div>
         </div>
