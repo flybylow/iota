@@ -230,8 +230,8 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
     <div id="factory-production" className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-sm font-semibold text-white inline-flex items-center gap-2">
-          <span>{labels.productionIcon}</span>
+        <h2 className="text-sm font-semibold text-white inline-flex items-center gap-3">
+          <span className="text-base">{labels.productionIcon}</span>
           <span>Verifies & Produces - 2/3</span>
         </h2>
       </div>
