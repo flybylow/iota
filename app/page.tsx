@@ -73,7 +73,7 @@ export default function Home() {
                 <span className="text-2xl">👛</span>
                 <div className="flex flex-col">
                   <span className="text-sm font-bold text-white leading-tight">DPP</span>
-                  <span className="text-[9px] text-zinc-500 leading-tight">Digital Product Passport</span>
+                  <span className="text-[9px] text-white leading-tight">Digital Product Passport</span>
                 </div>
               </div>
             </div>
@@ -170,7 +170,7 @@ export default function Home() {
                       px-4 py-2 rounded-lg text-lg font-semibold transition-all whitespace-nowrap
                       ${activeTab === tab.id 
                         ? 'bg-white text-black' 
-                        : 'bg-transparent text-zinc-500 hover:text-zinc-300 hover:bg-[#262626]'
+                        : 'bg-transparent text-white hover:bg-[#262626]'
                       }
                     `}
                   >
