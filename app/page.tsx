@@ -197,7 +197,7 @@ export default function Home() {
         {selectedIndustry && (
           <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-5">
             {activeTab === 'farmer' && <FarmerOrigin industry={selectedIndustry} onNextStep={() => setActiveTab('factory')} />}
-            {activeTab === 'factory' && <FactoryProduction industry={selectedIndustry} />}
+            {activeTab === 'factory' && <FactoryProduction industry={selectedIndustry} onNextStep={() => setActiveTab('consumer')} />}
             {activeTab === 'consumer' && <ConsumerJourney industry={selectedIndustry} />}
           </div>
         )}

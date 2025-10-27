@@ -15,9 +15,10 @@ import type { DPPCredential, ProductionCertificationData } from '@/types/dpp';
 
 interface FactoryProductionProps {
   industry: string | null;
+  onNextStep?: () => void;
 }
 
-export function FactoryProduction({ industry }: FactoryProductionProps) {
+export function FactoryProduction({ industry, onNextStep }: FactoryProductionProps) {
   // Get industry-specific data with safety check
   const industryKey = (industry && industry in industryData) 
     ? industry as IndustryId 
@@ -145,19 +146,29 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
           let manufacturerDID = productionStakeholder.did;
           let productDID = product.did;
           
-          // Create new DIDs if using mock DIDs
-          if (manufacturerDID.includes('mock')) {
-            console.log('Creating new DID for manufacturer...');
+          // Check if we need to create new DIDs (if using mock DIDs)
+          const isMockManufacturerDID = manufacturerDID.includes('mock') || manufacturerDID.includes('factory') || manufacturerDID.includes('choco') || !manufacturerDID.startsWith('did:iota:0x');
+          
+          if (isMockManufacturerDID) {
+            console.log('Creating new DID for manufacturer (replacing mock)...');
             const didResult = await createDID();
             manufacturerDID = didResult.did;
             console.log('✅ Manufacturer DID created:', manufacturerDID);
           }
           
-          if (productDID.includes('mock')) {
-            console.log('Using product DID from farmer credential');
+          const isMockProductDID = productDID.includes('mock') || productDID.includes('factory') || !productDID.startsWith('did:iota:0x');
+          
+          if (isMockProductDID) {
+            console.log('Creating new DID for product (replacing mock)...');
             // Use the same product DID from farmer credential if available
-            if (farmerCredential) {
+            if (farmerCredential && farmerCredential.subject && !farmerCredential.subject.includes('mock') && !farmerCredential.subject.includes('factory')) {
               productDID = farmerCredential.subject;
+              console.log('✅ Using product DID from farmer credential:', productDID);
+            } else {
+              // Create new product DID
+              const didResult = await createDID();
+              productDID = didResult.did;
+              console.log('✅ Product DID created:', productDID);
             }
           }
           
@@ -297,15 +308,16 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
                 <button
                   onClick={verifyFarmerCertificate}
                   disabled={loading}
-                  className="bg-blue-600 hover:bg-blue-500 text-white font-medium py-3 px-8 rounded-full transition-all duration-200 disabled:opacity-50 text-sm shadow-lg"
+                  className="bg-black hover:bg-gray-900 border-2 border-white text-white font-medium py-3 px-8 rounded-full transition-all duration-200 disabled:opacity-50 text-sm shadow-lg"
+                  style={{ color: '#ffffff', backgroundColor: '#000000', borderColor: '#ffffff' }}
                 >
                   {loading ? (
                     <div className="flex items-center gap-2">
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      Verifying on IOTA network...
+                      <span style={{ color: '#ffffff' }}>Verifying on IOTA network...</span>
                     </div>
                   ) : (
-                    'Verify Certificate'
+                    <span style={{ color: '#ffffff' }}>Verify Certificate</span>
                   )}
                 </button>
               </div>
@@ -433,17 +445,18 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
                 <button
                   onClick={issueProductionCertificate}
                   disabled={loading}
-                  className="bg-blue-600 hover:bg-blue-500 text-white font-medium py-3 px-8 rounded-full transition-all duration-200 disabled:opacity-50 text-sm flex items-center gap-2 shadow-lg"
+                  className="bg-black hover:bg-gray-900 border-2 border-white text-white font-medium py-3 px-8 rounded-full transition-all duration-200 disabled:opacity-50 text-sm flex items-center gap-2 shadow-lg"
+                  style={{ color: '#ffffff', backgroundColor: '#000000', borderColor: '#ffffff' }}
                 >
                   {loading ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      Issuing Production Certificate...
+                      <span style={{ color: '#ffffff' }}>Issuing Production Certificate...</span>
                     </>
                   ) : (
                     <>
                       <Factory className="w-4 h-4" />
-                      Issue Production Certificate
+                      <span style={{ color: '#ffffff' }}>Issue Production Certificate</span>
                     </>
                   )}
                 </button>
@@ -500,6 +513,28 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
 
           <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
             <p className="text-sm text-green-400 font-medium">✅ Ready for Step 3: Consumer Verification</p>
+          </div>
+
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={() => {
+                if (onNextStep) {
+                  onNextStep();
+                } else {
+                  // Fallback: scroll to consumer section if callback not provided
+                  const consumerSection = document.getElementById('consumer-verification');
+                  if (consumerSection) {
+                    consumerSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    consumerSection.classList.add('highlight-pulse');
+                    setTimeout(() => consumerSection.classList.remove('highlight-pulse'), 2000);
+                  }
+                }
+              }}
+              className="px-4 py-2 bg-black hover:bg-gray-900 border-2 border-white text-white font-medium rounded-lg transition-colors flex items-center gap-2 whitespace-nowrap"
+              style={{ color: '#ffffff', backgroundColor: '#000000', borderColor: '#ffffff' }}
+            >
+              <span style={{ color: '#ffffff' }}>Go to Consumer Verification →</span>
+            </button>
           </div>
         </div>
       )}

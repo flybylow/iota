@@ -68,9 +68,9 @@ export function getRealExplorerURL(did: string, network: 'testnet' | 'mainnet' =
     return getTransactionURL(transactionId, network);
   }
   
-  // Otherwise link to the address
+  // Otherwise link to the address using the correct path with network parameter
   const address = extractAddressFromDID(did);
-  return `${IOTA_EXPLORER_BASE}/addr/${address}?network=${network}`;
+  return `${IOTA_EXPLORER_BASE}/address/${address}?network=${network}`;
 }
 
 /**

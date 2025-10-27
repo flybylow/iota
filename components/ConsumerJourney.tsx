@@ -128,7 +128,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div id="consumer-verification" className="space-y-6">
       {/* Header */}
       <div className="text-center">
         <h2 className="text-sm font-semibold text-white inline-flex items-center gap-3">
@@ -154,10 +154,11 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
               
               <button
                 onClick={scanAndVerify}
-                className="bg-purple-600 hover:bg-purple-500 text-white font-medium py-3 px-8 rounded-full transition-all duration-200 text-sm inline-flex items-center gap-2 shadow-lg"
+                className="bg-black hover:bg-gray-900 border-2 border-white text-white font-medium py-3 px-8 rounded-full transition-all duration-200 text-sm inline-flex items-center gap-2 shadow-lg"
+                style={{ color: '#ffffff', backgroundColor: '#000000', borderColor: '#ffffff' }}
               >
                 <QrCode className="w-4 h-4" />
-                Simulate QR Scan & Verify
+                <span style={{ color: '#ffffff' }}>Simulate QR Scan & Verify</span>
               </button>
             </div>
           </div>

@@ -89,3 +89,4 @@ To test the wallet connection:
 - **Functions**: `isWalletInstalled()`, `connectWallet()`, `signTransaction()`
 - **Helper**: `sendToExtension()`
 
+

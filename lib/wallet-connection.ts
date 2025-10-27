@@ -12,52 +12,98 @@ const IOTA_WALLET_EXTENSION_ID = 'iidjkmdceolghepehaaddojmnjnkkija';
  * Uses chrome.runtime availability as indicator
  */
 export async function isWalletInstalled(): Promise<boolean> {
-  if (typeof window === 'undefined') return false;
+  console.log('🔍 Starting wallet detection...');
+  if (typeof window === 'undefined') {
+    console.log('❌ Window not available (SSR)');
+    return false;
+  }
   
   try {
     const chrome = (window as any).chrome;
     const browser = (window as any).browser;
     
+    console.log('📋 Chrome object:', chrome ? 'exists' : 'missing');
+    console.log('📋 Browser object:', browser ? 'exists' : 'missing');
+    
     // Check if browser extension API is available
     if (!chrome?.runtime && !browser?.runtime) {
       console.log('❌ Browser extension API not available');
+      console.log('💡 Make sure you are using Chrome/Edge/Brave browser');
       return false;
     }
     
     console.log('✅ Extension API detected');
+    console.log('📋 Extension ID to check:', IOTA_WALLET_EXTENSION_ID);
     
-    // Try to ping the IOTA Wallet extension
+    // First, try to check what extensions are installed
     const runtime = chrome?.runtime || browser?.runtime;
     
+    if (runtime) {
+      console.log('📋 Checking for installed extensions...');
+      try {
+        // Try to get all installed extensions
+        if (runtime.getExtensions) {
+          const extensions = await new Promise<any[]>((resolve) => {
+            runtime.getExtensions((result: any) => {
+              resolve(result || []);
+            });
+          });
+          console.log('📋 Installed extensions count:', extensions.length);
+        }
+      } catch (e) {
+        console.log('💡 Cannot enumerate extensions (normal)');
+      }
+    }
+    
+    // Try to ping the IOTA Wallet extension
     if (runtime && runtime.sendMessage) {
+      console.log('📨 Sending ping to extension...');
       // Send a test message to the extension
       return new Promise((resolve) => {
         try {
+          // Add timeout to prevent hanging
+          const timeoutId = setTimeout(() => {
+            console.log('⏱️ Wallet detection timeout after 5 seconds');
+            console.log('💡 Possible causes:');
+            console.log('   • Extension ID is incorrect: ' + IOTA_WALLET_EXTENSION_ID);
+            console.log('   • Extension not installed');
+            console.log('   • Extension disabled in chrome://extensions/');
+            console.log('   • Extension is locked');
+            console.log('💡 Visit chrome://extensions/ to check');
+            resolve(false);
+          }, 5000); // 5 second timeout
+          
           runtime.sendMessage(
             IOTA_WALLET_EXTENSION_ID,
             { method: 'ping' },
             () => {
+              clearTimeout(timeoutId);
               const lastError = chrome?.runtime?.lastError || browser?.runtime?.lastError;
               if (lastError) {
-                console.log('⚠️ IOTA Wallet extension not installed or not responding');
-                console.log('Last error:', lastError.message);
+                console.log('⚠️ Extension not responding');
+                console.log('📋 Error message:', lastError.message);
+                console.log('💡 Debug info:');
+                console.log('   • Extension ID used: ' + IOTA_WALLET_EXTENSION_ID);
+                console.log('   • Error: ' + lastError.message);
+                console.log('   • Check chrome://extensions/?id=' + IOTA_WALLET_EXTENSION_ID);
                 resolve(false);
               } else {
-                console.log('✅ IOTA Wallet extension detected');
+                console.log('✅ IOTA Wallet extension detected and responding!');
                 resolve(true);
               }
             }
           );
         } catch (error) {
-          console.error('Error checking wallet:', error);
+          console.error('❌ Error checking wallet:', error);
           resolve(false);
         }
       });
     }
     
+    console.log('⚠️ runtime.sendMessage not available');
     return false;
   } catch (error) {
-    console.error('Error checking wallet:', error);
+    console.error('❌ Error in wallet detection:', error);
     return false;
   }
 }
@@ -101,13 +147,23 @@ async function sendToExtension(message: any): Promise<any> {
 export async function connectWallet(): Promise<string | null> {
   try {
     console.log('🔗 Attempting to connect to IOTA Wallet via postMessage...');
+    console.log('📋 Extension ID:', IOTA_WALLET_EXTENSION_ID);
+    console.log('🌐 Browser check:', typeof window !== 'undefined' ? 'window exists' : 'no window');
     
     // Check if extension is installed
+    console.log('🔍 Calling isWalletInstalled()...');
     const installed = await isWalletInstalled();
+    console.log('🔍 Wallet installed check result:', installed);
+    
     if (!installed) {
-      console.error('❌ IOTA Wallet extension not installed');
+      console.warn('⚠️  IOTA Wallet extension not detected');
+      console.info('💡 Note: Wallet connection is optional');
+      console.info('✅ App works perfectly without wallet connection!');
+      console.info('🎯 You can still use Blockchain Mode to create DIDs locally');
       return null;
     }
+    
+    console.log('✅ Extension detected and responding!');
     
     console.log('📨 Sending connect message to extension...');
     
@@ -223,6 +279,26 @@ export async function getWalletBalance(): Promise<number | null> {
   } catch (error) {
     console.error('Failed to get balance:', error);
     return null;
+  }
+}
+
+/**
+ * Check if wallet has sufficient balance for DID publishing
+ * Requires minimal amount for storage deposit
+ */
+export async function hasSufficientBalance(): Promise<boolean> {
+  try {
+    const balance = await getWalletBalance();
+    if (balance === null) {
+      return false;
+    }
+    
+    // Minimum balance needed for storage deposit (testnet: very small amount)
+    const MINIMUM_BALANCE = 0.0001;
+    return balance >= MINIMUM_BALANCE;
+  } catch (error) {
+    console.error('Failed to check balance:', error);
+    return false;
   }
 }
 

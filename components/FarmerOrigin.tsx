@@ -79,15 +79,19 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
           let productDID = product.did;
           
           // Check if we need to create new DIDs (if using mock DIDs)
-          if (issuerDID.includes('mock')) {
-            console.log('Creating new DID for farmer...');
+          const isMockDID = issuerDID.includes('mock') || issuerDID.includes('farmer') || issuerDID.includes('factory') || !issuerDID.startsWith('did:iota:0x');
+          
+          if (isMockDID) {
+            console.log('Creating new DID for farmer (replacing mock)...');
             const didResult = await createDID();
             issuerDID = didResult.did;
             console.log('✅ Farmer DID created:', issuerDID);
           }
           
-          if (productDID.includes('mock')) {
-            console.log('Creating new DID for product...');
+          const isMockProductDID = productDID.includes('mock') || productDID.includes('factory') || !productDID.startsWith('did:iota:0x');
+          
+          if (isMockProductDID) {
+            console.log('Creating new DID for product (replacing mock)...');
             const didResult = await createDID();
             productDID = didResult.did;
             console.log('✅ Product DID created:', productDID);
@@ -304,7 +308,8 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
           <div className="flex justify-center mt-8">
             <button
               onClick={issueOriginCertificate}
-              className="bg-green-600 hover:bg-green-500 text-white font-medium py-4 px-10 rounded-full transition-all duration-200 text-sm flex items-center gap-3 shadow-lg"
+              className="bg-black hover:bg-gray-900 border-2 border-white text-white font-medium py-4 px-10 rounded-full transition-all duration-200 text-sm flex items-center gap-3 shadow-lg"
+              style={{ color: '#ffffff', backgroundColor: '#000000', borderColor: '#ffffff' }}
             >
               <span className="text-lg">{labels.originIcon}</span>
               Issue Origin Certificate
@@ -353,8 +358,23 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
           </div>
 
           <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4 text-sm">
-            <p className="text-white font-medium mb-2">Certificate Details:</p>
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-white font-medium">Certificate Details:</p>
+              {credential.onChain && (
+                <span className="text-xs px-2 py-1 bg-green-500/20 text-green-400 border border-green-500/30 rounded">
+                  ✅ On-chain
+                </span>
+              )}
+            </div>
             <div className="space-y-1.5 text-xs">
+              <div className="flex justify-between">
+                <span className="text-white">Issuer DID:</span>
+                <span className="text-zinc-200 break-all">{credential.issuerDID}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-white">Product DID:</span>
+                <span className="text-zinc-200 break-all">{credential.subject}</span>
+              </div>
               <div className="flex justify-between">
                 <span className="text-white">Origin:</span>
                 <span className="text-zinc-200">{originStakeholder.location}</span>
@@ -391,21 +411,31 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             
             {/* IOTA Identity Info */}
             <div className="mt-3 pt-3 border-t border-[#3a3a3a]">
+              <div className="mb-3 space-y-2">
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="text-zinc-500">Issuer DID:</span>
+                  <code className="text-zinc-300 break-all">{credential.issuerDID}</code>
+                </div>
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="text-zinc-500">Product DID:</span>
+                  <code className="text-zinc-300 break-all">{credential.subject}</code>
+                </div>
+              </div>
               <a
-                href={credential.transactionId ? getRealExplorerURL(credential.issuerDID, 'testnet', credential.transactionId) : getExplorerURL(originStakeholder.did)}
+                href={credential.transactionId ? getRealExplorerURL(credential.issuerDID, 'testnet', credential.transactionId) : getRealExplorerURL(credential.issuerDID, 'testnet')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-xs text-blue-400 hover:text-blue-300 transition-colors"
               >
                 <ExternalLink className="w-3 h-3" />
                 <span>
-                  {credential.transactionId ? 'View Transaction on Blockchain' : 'Learn about IOTA Identity & DIDs'}
+                  {credential.transactionId ? 'View Transaction on Blockchain' : 'Verify DID on Blockchain'}
                 </span>
               </a>
               <p className="text-xs text-zinc-500 mt-1.5">
                 {credential.transactionId 
                   ? '✅ View transaction details on IOTA testnet explorer'
-                  : '💡 In production, this would link to verifiable blockchain proof'
+                  : '💡 DID created locally with cryptographic keys'
                 }
               </p>
             </div>
@@ -431,9 +461,10 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                     }
                   }
                 }}
-                className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg transition-colors flex items-center gap-2 whitespace-nowrap"
+                className="px-4 py-2 bg-black hover:bg-gray-900 border-2 border-white text-white font-medium rounded-lg transition-colors flex items-center gap-2 whitespace-nowrap"
+                style={{ color: '#ffffff', backgroundColor: '#000000', borderColor: '#ffffff' }}
               >
-                <span>Go to Factory →</span>
+                <span style={{ color: '#ffffff' }}>Go to Factory →</span>
               </button>
             </div>
           </div>
