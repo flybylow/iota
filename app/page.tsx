@@ -178,7 +178,7 @@ export default function Home() {
                   </button>
                   <p className={`
                     text-[10px] mt-1 transition-all whitespace-nowrap text-center opacity-0 group-hover:opacity-100
-                    ${activeTab === tab.id ? 'text-zinc-400 opacity-100' : 'text-zinc-600'}
+                    ${activeTab === tab.id ? 'text-zinc-400 opacity-100' : 'text-white'}
                   `}>
                     {tab.description}
                   </p>
