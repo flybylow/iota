@@ -143,16 +143,30 @@ export async function issueCredential(
     const oneYearLater = new Date(now);
     oneYearLater.setFullYear(now.getFullYear() + 1);
     
-    // Build the credential (simplified for demo)
-    const credentialData = {
-      '@context': 'https://www.w3.org/2018/credentials/v1',
-      id: `${issuerDID}#credential-${Date.now()}`,
-      type: ['VerifiableCredential'],
-      issuer: issuerDID,
-      issuanceDate: now.toISOString(),
-      expirationDate: oneYearLater.toISOString(),
-      credentialSubject: credentialSubject,
-    };
+    // Check if this is a UNTP credential
+    const isUNTP = (claimData as any).untpCredential;
+    
+    let credentialData;
+    
+    if (isUNTP) {
+      // Use UNTP credential structure
+      console.log('🌍 Building UNTP-compliant credential');
+      credentialData = (claimData as any).untpCredential;
+      credentialData.id = `${issuerDID}#credential-${Date.now()}`;
+      credentialData.issuanceDate = now.toISOString();
+      credentialData.expirationDate = oneYearLater.toISOString();
+    } else {
+      // Build standard credential
+      credentialData = {
+        '@context': 'https://www.w3.org/2018/credentials/v1',
+        id: `${issuerDID}#credential-${Date.now()}`,
+        type: ['VerifiableCredential'],
+        issuer: issuerDID,
+        issuanceDate: now.toISOString(),
+        expirationDate: oneYearLater.toISOString(),
+        credentialSubject: credentialSubject,
+      };
+    }
     
     console.log('📄 Credential structure created:', credentialData);
     
