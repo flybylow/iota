@@ -49,7 +49,7 @@ export function ModeToggle() {
         console.log('💡 Wallet connection is optional - app works without it!');
         console.log('📋 Note: The IOTA Wallet extension was reinstalled');
         console.log('✅ App works perfectly without wallet connection!');
-        alert('✅ Ready to Use!\n\nYou can:\n• Create DIDs with cryptographic keys\n• Issue UNTP-compliant credentials\n• View complete supply chain traceability\n\n🎯 Switch to Blockchain Mode and try creating a certificate!');
+        alert('✅ Blockchain Mode Active!\n\nYou can:\n• Create DIDs with cryptographic keys\n• Issue UNTP-compliant credentials\n• View complete supply chain traceability\n\n💡 Wallet connection is optional - you can still create DIDs and credentials locally.');
       }
     } catch (error) {
       console.error('❌ Failed to connect wallet:', error);
