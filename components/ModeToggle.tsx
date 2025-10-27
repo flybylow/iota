@@ -15,6 +15,7 @@ import { Settings, Zap, Network } from 'lucide-react';
 export function ModeToggle() {
   const [mode, setMode] = useState<DPPMode>('demo');
   const [showSettings, setShowSettings] = useState(false);
+  const [walletConnected, setWalletConnected] = useState(false);
 
   useEffect(() => {
     setMode(getDPPMode());
@@ -25,6 +26,22 @@ export function ModeToggle() {
     setDPPMode(newMode);
     // Reload page to apply mode change
     window.location.reload();
+  };
+
+  const handleConnectWallet = async () => {
+    try {
+      const { connectWallet } = await import('@/lib/wallet-connection');
+      const address = await connectWallet();
+      if (address) {
+        setWalletConnected(true);
+        alert('✅ Wallet connected:\n' + address);
+      } else {
+        alert('❌ Please install IOTA Wallet extension\n\nDownload from:\nhttps://chromewebstore.google.com/detail/iota-wallet/iidjkmdceolghepehaaddojmnjnkkija');
+      }
+    } catch (error) {
+      console.error('Failed to connect wallet:', error);
+      alert('Failed to connect wallet: ' + (error instanceof Error ? error.message : 'Unknown error'));
+    }
   };
 
   return (
@@ -117,6 +134,23 @@ export function ModeToggle() {
                 </div>
               </button>
             </div>
+
+            {/* Wallet Connection Button - Show in Blockchain Mode */}
+            {mode === 'blockchain' && (
+              <div className="p-3 border-t border-[#3a3a3a]">
+                <button
+                  onClick={handleConnectWallet}
+                  disabled={walletConnected}
+                  className={`w-full p-3 rounded-lg text-sm font-medium transition-colors ${
+                    walletConnected
+                      ? 'bg-green-500/10 border border-green-500/20 text-green-400'
+                      : 'bg-purple-600 hover:bg-purple-500 text-white'
+                  }`}
+                >
+                  {walletConnected ? '✓ Wallet Connected' : '🔗 Connect IOTA Wallet'}
+                </button>
+              </div>
+            )}
 
             {mode === 'blockchain' && (
               <div className="p-4 bg-blue-500/5 border-t border-[#3a3a3a]">
