@@ -13,18 +13,36 @@ export async function isWalletInstalled(): Promise<boolean> {
   
   // Check for different possible wallet API structures
   const iota = (window as any).iota;
+  
+  // Log available objects for debugging
+  const windowKeys = Object.keys(window).filter(k => 
+    k.toLowerCase().includes('iota') || 
+    k.toLowerCase().includes('wallet') ||
+    k.startsWith('_iota')
+  );
+  
   console.log('🔍 Checking for wallet:', {
     iotaExists: !!iota,
     iotaKeys: iota ? Object.keys(iota) : [],
-    windowKeys: Object.keys(window).filter(k => k.toLowerCase().includes('iota'))
+    windowKeys: windowKeys,
+    allWindowKeys: Object.keys(window).slice(0, 50) // First 50 keys
   });
   
   // IOTA Wallet might expose API differently
-  return iota !== undefined && (
-    iota.wallet !== undefined ||
-    iota.account !== undefined ||
-    iota.accounts !== undefined
-  );
+  // Check various possible locations
+  if (iota !== undefined) {
+    if (iota.wallet || iota.account || iota.accounts || typeof iota === 'object') {
+      console.log('✅ Found iota object:', Object.keys(iota));
+      return true;
+    }
+  }
+  
+  // Check if installed but API not available yet
+  if (windowKeys.length > 0) {
+    console.log('⚠️  Found wallet-related keys but no API:', windowKeys);
+  }
+  
+  return false;
 }
 
 /**
@@ -42,11 +60,20 @@ export async function connectWallet(): Promise<string | null> {
     }
     
     const iota = (window as any).iota;
-    const wallet = iota?.wallet || iota?.account || iota?.accounts;
+    
+    // Try multiple API structures
+    let wallet = iota?.wallet || iota?.account || iota?.accounts || iota;
+    
+    // If iota is just an object with methods, use it directly
+    if (!wallet && iota && typeof iota === 'object') {
+      console.log('⚠️  iota object found but no standard API. Available keys:', Object.keys(iota));
+      wallet = iota;
+    }
     
     if (!wallet) {
       console.error('❌ Wallet API not available');
-      console.log('Available iota keys:', Object.keys(iota));
+      console.log('Available iota keys:', iota ? Object.keys(iota) : 'none');
+      console.log('💡 The IOTA Wallet extension may use a different API structure');
       return null;
     }
     
