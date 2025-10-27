@@ -670,13 +670,15 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
         </div>
       )}
 
-      {/* Why This Matters - Standalone section */}
+      {/* Why This Matters - Standalone foldable section */}
       {!verified && !loading && (
-        <div className="bg-[#2a2a2a] border border-purple-500/20 rounded-lg p-4">
-          <h4 className="text-sm font-medium text-purple-400 mb-3">
-            💡 Why This Matters
-          </h4>
-          <div className="space-y-3">
+        <details className="bg-[#2a2a2a] border border-purple-500/20 rounded-lg overflow-hidden group">
+          <summary className="p-4 cursor-pointer list-none hover:bg-purple-500/5 transition-colors">
+            <h4 className="text-sm font-medium text-purple-400">
+              💡 Why This Matters
+            </h4>
+          </summary>
+          <div className="px-4 pb-4 pt-2 space-y-3">
             <div>
               <h4 className="text-sm font-medium text-white mb-1">For Consumers</h4>
               <p className="text-xs text-zinc-300 leading-relaxed">
@@ -692,7 +694,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
               </p>
             </div>
           </div>
-        </div>
+        </details>
       )}
 
       {/* You Buy the Chocolate - Moved to bottom */}
