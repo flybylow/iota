@@ -206,7 +206,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-[#2a2a2e] mt-8">
         <div className="max-w-md mx-auto px-4 py-6">
-          <p className="text-center text-xs text-zinc-500">
+          <p className="text-center text-xs text-white">
             Built with Next.js & IOTA Identity
           </p>
         </div>
