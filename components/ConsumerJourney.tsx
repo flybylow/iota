@@ -166,29 +166,6 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
               </button>
             </div>
           </div>
-
-          {/* Why This Matters Card */}
-          <div className="bg-[#2a2a2a] border border-purple-500/20 rounded-lg p-4">
-            <h4 className="text-sm font-medium text-purple-400 mb-3">
-              💡 Why This Matters
-            </h4>
-            <div className="space-y-3">
-              <div>
-                <h4 className="text-sm font-medium text-white mb-1">For Consumers</h4>
-                <p className="text-xs text-zinc-300 leading-relaxed">
-                  Scan any product QR code and instantly see the verified supply chain. 
-                  No waiting, no phone calls, just instant cryptographic verification.
-                </p>
-              </div>
-              <div>
-                <h4 className="text-sm font-medium text-blue-400 mb-1">For Your DPP Business</h4>
-                <p className="text-xs text-zinc-300 leading-relaxed">
-                  This proves your solution works. Show this to chocolate brands, coffee roasters, 
-                  fashion companies - anyone with supply chain transparency needs.
-                </p>
-              </div>
-            </div>
-          </div>
         </>
       )}
 
@@ -693,9 +670,34 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
         </div>
       )}
 
+      {/* Why This Matters - Standalone section */}
+      {!verified && !loading && (
+        <div className="bg-[#2a2a2a] border border-purple-500/20 rounded-lg p-4">
+          <h4 className="text-sm font-medium text-purple-400 mb-3">
+            💡 Why This Matters
+          </h4>
+          <div className="space-y-3">
+            <div>
+              <h4 className="text-sm font-medium text-white mb-1">For Consumers</h4>
+              <p className="text-xs text-zinc-300 leading-relaxed">
+                Scan any product QR code and instantly see the verified supply chain. 
+                No waiting, no phone calls, just instant cryptographic verification.
+              </p>
+            </div>
+            <div>
+              <h4 className="text-sm font-medium text-blue-400 mb-1">For Your DPP Business</h4>
+              <p className="text-xs text-zinc-300 leading-relaxed">
+                This proves your solution works. Show this to chocolate brands, coffee roasters, 
+                fashion companies - anyone with supply chain transparency needs.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* You Buy the Chocolate - Moved to bottom */}
       {!verified && !loading && (
-        <details className="bg-gradient-to-br from-purple-500/10 to-pink-500/5 border border-purple-500/20 rounded-lg overflow-hidden group">
+        <details className="bg-gradient-to-br from-purple-500/10 to-pink-500/5 border border-purple-500/20 rounded-lg overflow-hidden group mt-6">
           <summary className="p-5 cursor-pointer list-none hover:bg-purple-500/5 transition-colors">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0">
