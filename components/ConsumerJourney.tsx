@@ -147,9 +147,9 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
           {/* QR Code Scanner Simulation */}
           <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-8">
             <div className="text-center space-y-4">
-              <div className="bg-[#1a1a1a] border-2 border-dashed border-[#3a3a3a] rounded-lg p-8 mx-auto max-w-xs">
-                <QrCode className="w-24 h-24 text-zinc-600 mx-auto mb-3" />
-                <p className="text-sm text-white">QR Code on {product.name}</p>
+              <div className="bg-[#1a1a1a] border-2 border-dashed border-[#3a3a3a] rounded-lg p-12 mx-auto max-w-sm">
+                <QrCode className="w-40 h-40 text-zinc-400 mx-auto mb-4" />
+                <p className="text-sm text-white font-medium">QR Code on {product.name}</p>
                 <p className="text-xs text-zinc-500 mt-2">Batch: {product.batchNumber}</p>
               </div>
               
