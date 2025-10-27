@@ -127,7 +127,7 @@ export function ModeToggle() {
                 className={`w-full text-left p-3 rounded-lg transition-colors cursor-pointer ${
                   mode === 'blockchain'
                     ? 'bg-gray-700/30 border border-gray-500/30'
-                    : 'bg-[#2a2a2a] border border-[#3a3a3a] hover:border-gray-500/20'
+                    : 'bg-black border border-[#3a3a3a] hover:border-gray-500/20'
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -155,10 +155,10 @@ export function ModeToggle() {
                 <button
                   onClick={handleConnectWallet}
                   disabled={walletConnected}
-                  className={`w-full p-3 rounded-lg text-sm font-medium transition-colors ${
+                  className={`w-full p-3 rounded-lg text-sm font-medium transition-colors border-2 ${
                     walletConnected
-                      ? 'bg-green-500/10 border border-green-500/20 text-green-400'
-                      : 'bg-purple-600 hover:bg-purple-500 text-white'
+                      ? 'bg-green-500/10 border-green-500/30 text-green-400'
+                      : 'bg-black border-white text-white hover:bg-gray-900'
                   }`}
                 >
                   {walletConnected ? '✓ Wallet Connected' : '🔗 Connect IOTA Wallet'}
