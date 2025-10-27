@@ -246,7 +246,7 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
             <span className="text-xl">{labels.productionIcon}</span>
             <span>Factory</span>
           </h3>
-          <h2 className="text-xs font-medium text-zinc-400">
+          <h2 className="text-xs font-medium text-zinc-400 leading-tight">
             Verifies & Produces - 2/3
           </h2>
         </div>

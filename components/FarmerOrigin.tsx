@@ -202,7 +202,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             <span className="text-xl">{labels.originIcon}</span>
             <span>Farmer</span>
           </h3>
-          <h2 className="text-xs font-medium text-zinc-400">
+          <h2 className="text-xs font-medium text-zinc-400 leading-tight">
             Certifies Product Origin - 1/3
           </h2>
         </div>

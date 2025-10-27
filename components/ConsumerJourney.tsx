@@ -136,7 +136,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
             <Shield className="w-5 h-5 text-purple-500" />
             <span>Consumer</span>
           </h3>
-          <h2 className="text-xs font-medium text-zinc-400">
+          <h2 className="text-xs font-medium text-zinc-400 leading-tight">
             Verifies Complete Chain - 3/3
           </h2>
         </div>
