@@ -127,26 +127,26 @@ export function ModeToggle() {
                 onClick={() => toggleMode('blockchain')}
                 className={`w-full text-left p-3 rounded-lg transition-colors cursor-pointer border ${
                   mode === 'blockchain'
-                    ? 'bg-gray-700/30 border-gray-500/30'
+                    ? 'bg-black border-gray-500/30'
                     : 'bg-black border-[#3a3a3a] hover:border-gray-500/20'
                 }`}
-                style={mode !== 'blockchain' ? { backgroundColor: '#000000' } : {}}
+                style={{ backgroundColor: '#000000' }}
               >
-                <div className="flex items-start gap-3">
-                  <Network className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-medium text-white">Blockchain Mode</span>
-                      {mode === 'blockchain' && (
-                        <span className="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded">
-                          Active
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-xs text-white leading-relaxed">
-                      Real IOTA Identity SDK • Creates actual DIDs • Requires testnet tokens
-                    </p>
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <Network className="w-4 h-4 text-green-400" />
+                    <span className="text-sm font-medium text-white">Blockchain Mode</span>
+                    {mode === 'blockchain' && (
+                      <span className="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded">
+                        Active
+                      </span>
+                    )}
                   </div>
+                  <ul className="text-xs text-white space-y-0.5 ml-6">
+                    <li>• Real IOTA Identity SDK</li>
+                    <li>• Creates actual DIDs</li>
+                    <li>• Requires testnet tokens</li>
+                  </ul>
                 </div>
               </button>
             </div>
