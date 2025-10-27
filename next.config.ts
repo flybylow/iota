@@ -26,6 +26,9 @@ const nextConfig: NextConfig = {
       net: false,
       tls: false,
       crypto: false,
+      buffer: false,
+      stream: false,
+      util: false,
     };
 
     // Ignore node-specific modules in client bundle
@@ -35,6 +38,9 @@ const nextConfig: NextConfig = {
         fs: false,
         net: false,
         tls: false,
+        buffer: false,
+        stream: false,
+        util: false,
       };
     }
 
