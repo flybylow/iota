@@ -154,20 +154,17 @@ export function ModeToggle() {
             {/* Blockchain Mode Info Section */}
             {mode === 'blockchain' && (
               <>
-                {/* Wallet Connection Button */}
+                {/* Info: Wallet Connection Not Required */}
                 <div className="p-3 border-t border-[#3a3a3a]">
-                  <button
-                    onClick={handleConnectWallet}
-                    disabled={walletConnected}
-                    className={`w-full p-3 rounded-lg text-sm font-medium transition-colors border-2 ${
-                      walletConnected
-                        ? 'bg-green-500/10 border-green-500/30 text-green-400'
-                        : 'bg-black border-white text-white hover:bg-gray-900'
-                    }`}
-                    style={{ color: walletConnected ? '#86efac' : '#ffffff', backgroundColor: walletConnected ? 'rgba(34, 197, 94, 0.1)' : '#000000', borderColor: walletConnected ? 'rgba(34, 197, 94, 0.3)' : '#ffffff' }}
-                  >
-                    {walletConnected ? '✓ Wallet Connected' : '🔗 Connect IOTA Wallet'}
-                  </button>
+                  <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3">
+                    <p className="text-xs text-green-400 font-medium mb-2 flex items-center gap-2">
+                      <Network className="w-4 h-4" />
+                      Ready to Create Credentials
+                    </p>
+                    <p className="text-xs text-white leading-relaxed">
+                      The app creates real DIDs with cryptographic keys locally. Wallet connection is optional and only needed for on-chain publishing.
+                    </p>
+                  </div>
                 </div>
 
                 {/* Info Section */}
