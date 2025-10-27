@@ -196,7 +196,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
               </h3>
             </div>
             <p className="text-sm text-zinc-300 mb-4">
-              Complete traceability from farm harvest to production. All data cryptographically verified.
+              Complete traceability from farm harvest to production. Data verified using IOTA Identity with cryptographic signatures.
             </p>
             {/* Visual Timeline */}
             <div className="flex items-center justify-center gap-2 text-sm">
