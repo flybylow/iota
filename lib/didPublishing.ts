@@ -9,6 +9,7 @@
 import { initWasm } from './iotaIdentityReal';
 import { initClient, isClientConnected } from './iotaClient';
 import { savePrivateKey } from './keyStorage';
+import { connectWallet } from './wallet-connection';
 import type { DIDCreationResult } from '@/types';
 
 /**
@@ -24,8 +25,8 @@ import type { DIDCreationResult } from '@/types';
  * @returns Transaction receipt if successful
  */
 export async function publishDIDToBlockchain(
-  _document: any,
-  _privateKey: Uint8Array
+  document: any,
+  privateKey: Uint8Array
 ): Promise<{ published: boolean; transactionId?: string; error?: string }> {
   try {
     await initWasm();
@@ -40,34 +41,49 @@ export async function publishDIDToBlockchain(
     
     console.log('📤 Attempting to publish DID to blockchain...');
     
-    const identityModule = await import('@iota/identity-wasm/web');
-    const IotaIdentityClient = (identityModule as any).IotaIdentityClient;
-    
-    if (!IotaIdentityClient) {
+    // Step 1: Connect to wallet
+    const walletAddress = await connectWallet();
+    if (!walletAddress) {
       return {
         published: false,
-        error: 'IotaIdentityClient not available in SDK'
+        error: 'Wallet not connected. Please connect your IOTA Wallet extension.'
       };
     }
     
-    // Note: Would create identity client for publishing
-    // const identityClient = new IotaIdentityClient(client);
+    console.log('✅ Wallet connected:', walletAddress);
     
-    // Publish the DID document
-    // Note: This requires wallet integration and testnet tokens
-    console.log('💰 Note: Publishing requires testnet tokens for storage deposit');
-    console.log('🔑 Note: Requires wallet integration (not implemented in this demo)');
-    
-    // In a real implementation, you would:
-    // 1. Create an Alias Output
-    // 2. Pay the storage deposit (requires tokens)
-    // 3. Submit the transaction
-    // 4. Wait for confirmation
-    
-    return {
-      published: false,
-      error: 'Publishing requires wallet integration and testnet tokens (not implemented)'
-    };
+    // Step 2: Try to import IOTA SDK
+    try {
+      const { Client } = await import('@iota/sdk');
+      
+      const iotaClient = new Client({
+        nodes: ['https://api.testnet.iotaledger.net'],
+      });
+      
+      console.log('✅ IOTA SDK initialized');
+      
+      // Step 3: Note - Actual publishing requires more implementation
+      // This is the framework - full implementation needs:
+      // - Create Alias Output
+      // - Sign transaction with wallet
+      // - Submit to network
+      // - Wait for confirmation
+      
+      console.log('📝 Note: Full blockchain publishing implementation in progress');
+      console.log('💡 DIDs created locally and ready for blockchain when complete');
+      
+      return {
+        published: false,
+        error: 'Blockchain publishing framework ready. Wallet connected. Full implementation in progress.'
+      };
+      
+    } catch (sdkError) {
+      console.error('❌ SDK import failed:', sdkError);
+      return {
+        published: false,
+        error: 'SDK not available. Using local mode.'
+      };
+    }
     
   } catch (error) {
     console.error('❌ Failed to publish DID:', error);
