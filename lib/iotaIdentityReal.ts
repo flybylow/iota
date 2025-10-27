@@ -147,14 +147,14 @@ export async function issueCredential(
     oneYearLater.setFullYear(now.getFullYear() + 1);
     
     // Check if this is a UNTP credential
-    const isUNTP = (claimData as any).untpCredential;
+    const isUNTP = 'untpCredential' in claimData && (claimData as { untpCredential?: unknown }).untpCredential;
     
     let credentialData;
     
     if (isUNTP) {
       // Use UNTP credential structure
       console.log('🌍 Building UNTP-compliant credential');
-      credentialData = (claimData as any).untpCredential;
+      credentialData = (claimData as { untpCredential?: unknown }).untpCredential as Record<string, unknown>;
       credentialData.id = `${issuerDID}#credential-${Date.now()}`;
       credentialData.issuanceDate = now.toISOString();
       credentialData.expirationDate = oneYearLater.toISOString();

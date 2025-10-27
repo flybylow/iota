@@ -19,8 +19,8 @@ export async function isWalletInstalled(): Promise<boolean> {
   }
   
   try {
-    const chrome = (window as any).chrome;
-    const browser = (window as any).browser;
+    const chrome = (window as unknown as { chrome?: typeof window.chrome }).chrome;
+    const browser = (window as unknown as { browser?: typeof window.chrome }).browser;
     
     console.log('📋 Chrome object:', chrome ? 'exists' : 'missing');
     console.log('📋 Browser object:', browser ? 'exists' : 'missing');
@@ -43,14 +43,14 @@ export async function isWalletInstalled(): Promise<boolean> {
       try {
         // Try to get all installed extensions
         if (runtime.getExtensions) {
-          const extensions = await new Promise<any[]>((resolve) => {
-            runtime.getExtensions((result: any) => {
-              resolve(result || []);
+          const extensions = await new Promise<unknown[]>((resolve) => {
+            runtime.getExtensions((result: unknown) => {
+              resolve(result as unknown[] || []);
             });
           });
           console.log('📋 Installed extensions count:', extensions.length);
         }
-      } catch (e) {
+      } catch {
         console.log('💡 Cannot enumerate extensions (normal)');
       }
     }
@@ -111,9 +111,9 @@ export async function isWalletInstalled(): Promise<boolean> {
 /**
  * Send message to IOTA Wallet extension
  */
-async function sendToExtension(message: any): Promise<any> {
-  const chrome = (window as any).chrome;
-  const browser = (window as any).browser;
+async function sendToExtension(message: unknown): Promise<unknown> {
+  const chrome = (window as unknown as { chrome?: typeof window.chrome }).chrome;
+  const browser = (window as unknown as { browser?: typeof window.chrome }).browser;
   const runtime = chrome?.runtime || browser?.runtime;
   
   if (!runtime || !runtime.sendMessage) {
@@ -222,7 +222,7 @@ export async function getWalletAddress(): Promise<string | null> {
 /**
  * Sign a transaction with the wallet using postMessage API
  */
-export async function signTransaction(transaction: any): Promise<any> {
+export async function signTransaction(transaction: unknown): Promise<unknown> {
   try {
     console.log('📝 Requesting transaction signature from wallet...');
     
