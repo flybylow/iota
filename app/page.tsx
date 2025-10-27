@@ -167,8 +167,11 @@ export default function Home() {
                       }
                     }}
                     className={`
-                      text-lg font-semibold transition-colors whitespace-nowrap
-                      ${activeTab === tab.id ? 'text-white' : 'text-zinc-500 group-hover:text-zinc-300'}
+                      px-4 py-2 rounded-lg text-lg font-semibold transition-all whitespace-nowrap
+                      ${activeTab === tab.id 
+                        ? 'bg-white text-black' 
+                        : 'bg-transparent text-zinc-500 hover:text-zinc-300 hover:bg-[#262626]'
+                      }
                     `}
                   >
                     {tab.label}
