@@ -97,10 +97,10 @@ export function ModeToggle() {
               {/* Demo Mode Option */}
               <button
                 onClick={() => toggleMode('demo')}
-                className={`w-full text-left p-3 rounded-lg transition-colors cursor-pointer ${
+                className={`w-full text-left p-3 rounded-lg transition-colors cursor-pointer border ${
                   mode === 'demo'
-                    ? 'bg-blue-500/10 border border-blue-500/30'
-                    : 'bg-[#2a2a2a] border border-[#3a3a3a] hover:border-blue-500/20'
+                    ? 'bg-blue-500/10 border-blue-500/30'
+                    : 'bg-black border-[#3a3a3a] hover:border-blue-500/20'
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -149,25 +149,27 @@ export function ModeToggle() {
               </button>
             </div>
 
-            {/* Wallet Connection Button - Show in Blockchain Mode */}
+            {/* Blockchain Mode Info Section */}
             {mode === 'blockchain' && (
-              <div className="p-3 border-t border-[#3a3a3a]">
-                <button
-                  onClick={handleConnectWallet}
-                  disabled={walletConnected}
-                  className={`w-full p-3 rounded-lg text-sm font-medium transition-colors border-2 ${
-                    walletConnected
-                      ? 'bg-green-500/10 border-green-500/30 text-green-400'
-                      : 'bg-black border-white text-white hover:bg-gray-900'
-                  }`}
-                >
-                  {walletConnected ? '✓ Wallet Connected' : '🔗 Connect IOTA Wallet'}
-                </button>
-              </div>
-            )}
+              <>
+                {/* Wallet Connection Button */}
+                <div className="p-3 border-t border-[#3a3a3a]">
+                  <button
+                    onClick={handleConnectWallet}
+                    disabled={walletConnected}
+                    className={`w-full p-3 rounded-lg text-sm font-medium transition-colors border-2 ${
+                      walletConnected
+                        ? 'bg-green-500/10 border-green-500/30 text-green-400'
+                        : 'bg-black border-white text-white hover:bg-gray-900'
+                    }`}
+                    style={{ color: walletConnected ? '#86efac' : '#ffffff', backgroundColor: walletConnected ? 'rgba(34, 197, 94, 0.1)' : '#000000', borderColor: walletConnected ? 'rgba(34, 197, 94, 0.3)' : '#ffffff' }}
+                  >
+                    {walletConnected ? '✓ Wallet Connected' : '🔗 Connect IOTA Wallet'}
+                  </button>
+                </div>
 
-            {mode === 'blockchain' && (
-              <div className="p-4 bg-blue-500/5 border-t border-[#3a3a3a]">
+                {/* Info Section */}
+                <div className="p-4 bg-blue-500/5 border-t border-[#3a3a3a]">
                 <p className="text-xs text-blue-400 mb-2 font-medium">
                   ⚠️ Blockchain Mode Info:
                 </p>
@@ -204,7 +206,8 @@ export function ModeToggle() {
                     </div>
                   </div>
                 </div>
-              </div>
+                </div>
+              </>
             )}
           </div>
         </>
