@@ -30,19 +30,23 @@ export function ModeToggle() {
 
   const handleConnectWallet = async () => {
     try {
+      console.log('🔗 Attempting to connect IOTA Wallet...');
       const { connectWallet } = await import('@/lib/wallet-connection');
       const address = await connectWallet();
       if (address) {
         setWalletConnected(true);
-        alert('✅ Wallet connected:\n' + address);
+        console.log('✅ Wallet connected:', address);
+        alert('✅ Wallet connected!\n\nAddress: ' + address.substring(0, 20) + '...');
       } else {
-        // Open Chrome Web Store to install wallet
-        window.open('https://chromewebstore.google.com/detail/iota-wallet/iidjkmdceolghepehaaddojmnjnkkija', '_blank');
+        console.log('❌ Wallet not connected - opening Chrome Store');
+        alert('IOTA Wallet extension not installed.\n\nOpening Chrome Web Store to install...');
+        setTimeout(() => {
+          window.open('https://chromewebstore.google.com/detail/iota-wallet/iidjkmdceolghepehaaddojmnjnkkija', '_blank');
+        }, 100);
       }
     } catch (error) {
-      console.error('Failed to connect wallet:', error);
-      // Open Chrome Web Store to install wallet
-      window.open('https://chromewebstore.google.com/detail/iota-wallet/iidjkmdceolghepehaaddojmnjnkkija', '_blank');
+      console.error('❌ Failed to connect wallet:', error);
+      alert('Failed to connect wallet. Please check the browser console for details.');
     }
   };
 
