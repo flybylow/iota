@@ -102,6 +102,7 @@ export function ModeToggle() {
                     ? 'bg-blue-500/10 border-blue-500/30'
                     : 'bg-black border-[#3a3a3a] hover:border-blue-500/20'
                 }`}
+                style={mode !== 'demo' ? { backgroundColor: '#000000' } : {}}
               >
                 <div className="flex items-start gap-3">
                   <Zap className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
@@ -124,11 +125,12 @@ export function ModeToggle() {
               {/* Blockchain Mode Option */}
               <button
                 onClick={() => toggleMode('blockchain')}
-                className={`w-full text-left p-3 rounded-lg transition-colors cursor-pointer ${
+                className={`w-full text-left p-3 rounded-lg transition-colors cursor-pointer border ${
                   mode === 'blockchain'
-                    ? 'bg-gray-700/30 border border-gray-500/30'
-                    : 'bg-black border border-[#3a3a3a] hover:border-gray-500/20'
+                    ? 'bg-gray-700/30 border-gray-500/30'
+                    : 'bg-black border-[#3a3a3a] hover:border-gray-500/20'
                 }`}
+                style={mode !== 'blockchain' ? { backgroundColor: '#000000' } } : {}}
               >
                 <div className="flex items-start gap-3">
                   <Network className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
