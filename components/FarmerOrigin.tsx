@@ -207,10 +207,10 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
       {!credential && !loading && (
         <>
           {/* Harvest Details Form */}
-          <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-5 space-y-4">
-            <h4 className="text-base font-medium text-white">{labels.batchLabel}</h4>
+          <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-5">
+            <h4 className="text-base font-medium text-white mb-5">{labels.batchLabel}</h4>
             
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-5">
               <div>
                 <label className="block text-sm text-zinc-300 mb-1.5">Harvest Date</label>
                 <input
@@ -273,7 +273,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                 </select>
               </div>
               
-              <div className="col-span-2">
+              <div className="col-span-2 mt-2">
                 <label className="block text-sm text-zinc-300 mb-1.5">Certification #</label>
                 <input
                   value={`${industry?.toUpperCase()}-CERT-2025-12345`}
@@ -285,7 +285,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
           </div>
 
           {/* Issue Button */}
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-6">
             <button
               onClick={issueOriginCertificate}
               className="bg-green-600 hover:bg-green-500 text-white font-medium py-3 px-8 rounded-full transition-all duration-200 text-sm flex items-center gap-2 shadow-lg"
