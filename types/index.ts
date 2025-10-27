@@ -5,12 +5,15 @@ export interface DIDCreationResult {
   document: Record<string, unknown>;
   privateKey?: number[];
   needsPublishing?: boolean;
+  keyStored?: boolean;
+  onChain?: boolean;
+  transactionId?: string;
+  note?: string;
 }
 
 export interface CredentialData {
-  name: string;
-  degree: string;
-  university: string;
+  type?: string;
+  [key: string]: unknown; // Allow any credential data fields
 }
 
 export interface VerificationResult {
@@ -18,6 +21,7 @@ export interface VerificationResult {
   credential?: Record<string, unknown>;
   error?: string;
   onChain?: boolean;
+  note?: string;
 }
 
 export interface DIDInfo {

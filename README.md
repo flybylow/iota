@@ -44,6 +44,20 @@ npm run dev
 
 Then open: **http://localhost:3000**
 
+### 🔗 New: Blockchain Integration Mode
+
+This demo now includes **real IOTA Identity SDK integration**! Toggle between:
+
+- **🎭 Demo Mode** (default): Instant operation with mock data
+- **⛓️ Blockchain Mode**: Real DID creation with IOTA Identity SDK
+
+Access blockchain features:
+- **Main App with Mode Toggle:** http://localhost:3000
+- **Integration Tests:** http://localhost:3000/integration-test
+- **Simple Tests:** http://localhost:3000/simple-test
+
+See `docs/onchain/IMPLEMENTATION-STATUS.md` for full details.
+
 ---
 
 ## ✨ What You'll See

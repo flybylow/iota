@@ -2,24 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Dark Theme - Professional Minimal */
+/* Dark Theme - Elegant & Readable */
 :root {
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #1a1a1a;
-  --bg-tertiary: #2a2a2a;
-  --text-primary: #ffffff;
-  --text-secondary: #a1a1aa;
-  --accent: #3b82f6;
-  --accent-hover: #2563eb;
-  --success: #10b981;
-  --error: #ef4444;
-  --border: #27272a;
+  /* Sophisticated dark backgrounds with subtle warmth */
+  --bg-primary: #0f0f0f;
+  --bg-secondary: #171717;
+  --bg-tertiary: #262626;
+  --bg-card: #1c1c1c;
+  
+  /* High contrast, readable text */
+  --text-primary: #f4f4f5;
+  --text-secondary: #d4d4d8;
+  --text-tertiary: #a1a1aa;
+  
+  /* Elegant accent colors */
+  --accent: #60a5fa;
+  --accent-hover: #3b82f6;
+  --accent-glow: rgba(96, 165, 250, 0.15);
+  
+  /* Status colors with proper contrast */
+  --success: #34d399;
+  --error: #f87171;
+  --warning: #fbbf24;
+  
+  /* Refined borders */
+  --border: #2a2a2e;
+  --border-hover: #3a3a3e;
+  
+  /* Gradient accents */
+  --gradient-start: #1e1b24;
+  --gradient-end: #0f0f0f;
 }
 
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
+  /* Force mobile view on all screen sizes */
+  margin: 0 auto;
+  max-width: 448px;
 }
 
 /* Prevent links from inheriting browser default colors */
@@ -208,6 +229,23 @@ canvas {
 
 .journey-icon-active {
   animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Highlight pulse animation for scrolling to sections */
+@keyframes highlight-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 20px 5px rgba(59, 130, 246, 0.3);
+    transform: scale(1.02);
+  }
+}
+
+.highlight-pulse {
+  animation: highlight-pulse 1s ease-in-out 2;
+  border-color: rgba(59, 130, 246, 0.5) !important;
 }
 
 /* Mobile improvements for comparison tables */

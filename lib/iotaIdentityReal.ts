@@ -41,7 +41,7 @@ export async function initWasm() {
 }
 
 /**
- * Create a new DID on the IOTA Tangle (Shimmer Testnet)
+ * Create a new DID on the IOTA Tangle (IOTA Testnet)
  * 
  * Flow:
  * 1. Generate new cryptographic keys (Ed25519)
@@ -55,7 +55,7 @@ export async function createDID(): Promise<DIDCreationResult> {
   try {
     await initWasm();
     
-    console.log('📝 Creating new DID on Shimmer Testnet...');
+    console.log('📝 Creating new DID on IOTA Testnet...');
     
     // Create a new DID document with the actual SDK v1.7 API
     const { IotaDocument } = Identity;
@@ -69,8 +69,8 @@ export async function createDID(): Promise<DIDCreationResult> {
     crypto.getRandomValues(privateKey);
     
     // Create a new DID document (local, not published yet)
-    // Use 'smr' for Shimmer network
-    const document = new IotaDocument('smr');
+    // Use 'iota' for IOTA network
+    const document = new IotaDocument('iota');
     
     console.log('✅ DID document created locally');
     
@@ -85,7 +85,8 @@ export async function createDID(): Promise<DIDCreationResult> {
     // For this demo, we create the document locally
     
     console.log('💡 To publish this DID to blockchain, you need:');
-    console.log('   1. Testnet tokens from:', IOTA_CONFIG.faucetUrl);
+    console.log('   1. Testnet tokens - Join IOTA Discord:', IOTA_CONFIG.faucetUrl);
+    console.log('      ⚠️  Public faucet currently down, ask in developer/help channels');
     console.log('   2. IOTA Client/Wallet integration');
     console.log('   3. Transaction signing capabilities');
     
@@ -319,7 +320,7 @@ export async function resolveDID(did: string): Promise<any> {
     console.warn('⚠️  DID resolution from blockchain requires:');
     console.warn('   1. Proper IOTA Client setup');
     console.warn('   2. DID to be published on-chain');
-    console.warn('   3. Network connectivity to Shimmer testnet');
+    console.warn('   3. Network connectivity to IOTA testnet');
     
     // Return a mock resolution for demo purposes
     return {

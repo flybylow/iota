@@ -3,7 +3,9 @@
 import React, { useState } from 'react';
 import { industryData, type IndustryId } from '@/data/industry-data';
 import { Loader2, CheckCircle2, Copy, ExternalLink } from 'lucide-react';
-import { getExplorerURL } from '@/lib/iotaExplorer';
+import { getExplorerURL, getRealExplorerURL } from '@/lib/iotaExplorer';
+import { isBlockchainMode } from '@/lib/dppMode';
+import { createDID, issueCredential } from '@/lib/iotaIdentityReal';
 import type { DPPCredential, OriginCertificationData } from '@/types/dpp';
 
 /**
@@ -13,9 +15,10 @@ import type { DPPCredential, OriginCertificationData } from '@/types/dpp';
 
 interface FarmerOriginProps {
   industry: string | null;
+  onNextStep?: () => void;
 }
 
-export function FarmerOrigin({ industry }: FarmerOriginProps) {
+export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
   // Get industry-specific data with safety check
   const industryKey = (industry && industry in industryData) 
     ? industry as IndustryId 
@@ -32,14 +35,21 @@ export function FarmerOrigin({ industry }: FarmerOriginProps) {
   const [loading, setLoading] = useState(false);
   const [credential, setCredential] = useState<DPPCredential | null>(null);
   const [copied, setCopied] = useState(false);
+  
+  // Harvest data form state
+  const [harvestData, setHarvestData] = useState({
+    harvestDate: new Date().toISOString().split('T')[0],
+    batchWeight: 2500,
+    cocoaVariety: 'Nacional',
+    fermentationDays: 6,
+    dryingMethod: 'Sun-dried'
+  });
 
   const issueOriginCertificate = async () => {
     setLoading(true);
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Create origin certification data
+      // Create origin certification data using form inputs
       const certificationData: OriginCertificationData = {
         certificationBody: originStakeholder.certifications[0],
         certificationNumber: `${industry?.toUpperCase()}-CERT-2025-12345`,
@@ -49,36 +59,98 @@ export function FarmerOrigin({ industry }: FarmerOriginProps) {
           farm: originStakeholder.name,
           coordinates: originStakeholder.coordinates || { lat: 0, lng: 0 }
         },
-        harvestDate: "2025-10-01",
-        batchWeight: 2500, // kg
-        cocoaVariety: "Premium",
-        fermentationDays: 6,
-        dryingMethod: "Standard"
+        harvestDate: harvestData.harvestDate,
+        batchWeight: harvestData.batchWeight,
+        cocoaVariety: harvestData.cocoaVariety,
+        fermentationDays: harvestData.fermentationDays,
+        dryingMethod: harvestData.dryingMethod
       };
+
+      let dppCredential: DPPCredential;
       
-      // Create mock credential (in real app, this would use IOTA Identity SDK)
-      const dppCredential: DPPCredential = {
-        jwt: btoa(JSON.stringify({
-          issuer: originStakeholder.did,
+      if (isBlockchainMode()) {
+        // BLOCKCHAIN MODE: Use real IOTA Identity SDK
+        console.log('🔗 Blockchain Mode: Creating real DID and credential...');
+        
+        try {
+          // Step 1: Create DID for issuer (farmer) if not exists
+          let issuerDID = originStakeholder.did;
+          let productDID = product.did;
+          
+          // Check if we need to create new DIDs (if using mock DIDs)
+          if (issuerDID.includes('mock')) {
+            console.log('Creating new DID for farmer...');
+            const didResult = await createDID();
+            issuerDID = didResult.did;
+            console.log('✅ Farmer DID created:', issuerDID);
+          }
+          
+          if (productDID.includes('mock')) {
+            console.log('Creating new DID for product...');
+            const didResult = await createDID();
+            productDID = didResult.did;
+            console.log('✅ Product DID created:', productDID);
+          }
+          
+          // Step 2: Issue verifiable credential
+          console.log('Issuing credential from farmer to product...');
+          const credentialJWT = await issueCredential(
+            issuerDID,
+            productDID,
+            {
+              type: labels.originCredential,
+              certificationData: certificationData,
+            }
+          );
+          
+          console.log('✅ Credential issued successfully');
+          
+          dppCredential = {
+            jwt: credentialJWT,
+            issuer: originStakeholder.name,
+            issuerDID: issuerDID,
+            subject: productDID,
+            credentialType: labels.originCredential,
+            issuedAt: new Date().toISOString(),
+            certificationData,
+            onChain: true,
+          };
+        } catch (error) {
+          console.error('❌ Blockchain mode failed:', error);
+          alert('Blockchain mode failed. Falling back to demo mode. Error: ' + (error instanceof Error ? error.message : 'Unknown'));
+          throw error;
+        }
+      } else {
+        // DEMO MODE: Use mock data
+        console.log('🎭 Demo Mode: Creating mock credential...');
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        dppCredential = {
+          jwt: btoa(JSON.stringify({
+            issuer: originStakeholder.did,
+            subject: product.did,
+            type: labels.originCredential,
+            data: certificationData,
+            issuedAt: new Date().toISOString()
+          })),
+          issuer: originStakeholder.name,
+          issuerDID: originStakeholder.did,
           subject: product.did,
-          type: labels.originCredential,
-          data: certificationData,
-          issuedAt: new Date().toISOString()
-        })),
-        issuer: originStakeholder.name,
-        issuerDID: originStakeholder.did,
-        subject: product.did,
-        credentialType: labels.originCredential,
-        issuedAt: new Date().toISOString(),
-        certificationData
-      };
+          credentialType: labels.originCredential,
+          issuedAt: new Date().toISOString(),
+          certificationData,
+          onChain: false,
+          transactionId: '14M74ccxRiShqii8NFPpTCjeUPfCS7aYqDkGKj6PhLYf', // Example transaction ID from IOTA testnet
+        };
+      }
       
-      // Save to localStorage for demo
+      // Save to localStorage for demo flow
       localStorage.setItem('farmer-credential', JSON.stringify(dppCredential));
       
       setCredential(dppCredential);
     } catch (err) {
       console.error('Failed to issue credential:', err);
+      alert('Failed to issue credential: ' + (err instanceof Error ? err.message : 'Unknown error'));
     } finally {
       setLoading(false);
     }
@@ -100,52 +172,16 @@ export function FarmerOrigin({ industry }: FarmerOriginProps) {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <div className="inline-flex items-center gap-2 mb-2 px-3 py-1.5 bg-green-500/10 border border-green-500/20 rounded-full">
-          <span className="text-sm text-green-400 font-medium">Step 1 of 3</span>
-        </div>
-        <div className="flex items-center justify-center gap-2 mb-3">
-          <span className="text-3xl">{labels.originIcon}</span>
-          <h2 className="text-2xl font-semibold text-white">
-            {labels.originStep} Issues Certificate
+        <div className="flex flex-col items-center gap-1">
+          <div className="inline-flex items-center gap-1">
+            <span className="text-xs text-zinc-400">Step 1 of 3</span>
+            <span className="text-base">{labels.originIcon}</span>
+          </div>
+          <h2 className="text-sm font-semibold text-white">
+            Certifies Product Origin
           </h2>
         </div>
-        <p className="text-zinc-300 text-sm">
-          {labels.originStep} certifies {product.type.replace('_', ' ')} origin
-        </p>
       </div>
-
-      {/* Context/Story Card - Collapsible */}
-      <details className="bg-gradient-to-br from-green-500/10 to-blue-500/5 border border-green-500/20 rounded-lg overflow-hidden group">
-        <summary className="p-5 cursor-pointer list-none hover:bg-green-500/5 transition-colors">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-2xl">{labels.originIcon}</span>
-            </div>
-            <div className="flex-1">
-              <h3 className="text-base font-semibold text-white flex items-center gap-2">
-                Meet the Producer
-                <span className="text-xs text-zinc-400 group-open:rotate-180 transition-transform">▼</span>
-              </h3>
-              <p className="text-xs text-zinc-400 mt-1">Click to learn more about the origin story</p>
-            </div>
-          </div>
-        </summary>
-        <div className="px-5 pb-5 pt-2 space-y-3">
-          <p className="text-sm text-zinc-300 leading-relaxed">
-            {industryKey === 'food-beverage' ? 
-              "Maria runs an organic cocoa farm in Ecuador. To sell her cocoa to premium chocolate makers, she needs to prove it's authentic and organically certified." :
-              `${originStakeholder.name} needs to certify the origin and quality of materials before they can be used in production.`
-            }
-          </p>
-          <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-3">
-            <p className="text-xs font-medium text-yellow-400 mb-1">⚡ The Challenge:</p>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              Traditional paper certificates can be forged. Phone calls take days. 
-              {industryKey === 'food-beverage' ? ' She' : ' They'} need instant, verifiable proof.
-            </p>
-          </div>
-        </div>
-      </details>
 
       {/* Stakeholder Info Card */}
       <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-5">
@@ -154,15 +190,15 @@ export function FarmerOrigin({ industry }: FarmerOriginProps) {
         </h3>
         <div className="space-y-2 text-sm">
           <div className="flex items-start gap-2">
-            <span className="text-zinc-400">📍 Location:</span>
+            <span className="text-white">📍 Location:</span>
             <span className="text-white">{originStakeholder.location}</span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="text-zinc-400">✅ Certified:</span>
+            <span className="text-white">✅ Certified:</span>
             <span className="text-white">{originStakeholder.certifications.join(', ')}</span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="text-zinc-400">📅 Established:</span>
+            <span className="text-white">📅 Established:</span>
             <span className="text-white">{originStakeholder.established}</span>
           </div>
         </div>
@@ -179,9 +215,9 @@ export function FarmerOrigin({ industry }: FarmerOriginProps) {
                 <label className="block text-sm text-zinc-300 mb-1.5">Harvest Date</label>
                 <input
                   type="date"
-                  defaultValue="2025-10-01"
-                  className="w-full px-3 py-2 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg text-white text-sm"
-                  disabled
+                  value={harvestData.harvestDate}
+                  onChange={(e) => setHarvestData({...harvestData, harvestDate: e.target.value})}
+                  className="w-full px-3 py-2 bg-white border border-[#3a3a3a] rounded-lg text-gray-900 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
               </div>
               
@@ -189,25 +225,59 @@ export function FarmerOrigin({ industry }: FarmerOriginProps) {
                 <label className="block text-sm text-zinc-300 mb-1.5">Batch Weight (kg)</label>
                 <input
                   type="number"
-                  defaultValue="2500"
-                  className="w-full px-3 py-2 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg text-white text-sm"
-                  disabled
+                  min="100"
+                  max="10000"
+                  step="100"
+                  value={harvestData.batchWeight}
+                  onChange={(e) => setHarvestData({...harvestData, batchWeight: parseInt(e.target.value) || 0})}
+                  className="w-full px-3 py-2 bg-white border border-[#3a3a3a] rounded-lg text-gray-900 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
               </div>
               
               <div>
-                <label className="block text-sm text-zinc-300 mb-1.5">Variety/Type</label>
+                <label className="block text-sm text-zinc-300 mb-1.5">Cocoa Variety</label>
+                <select
+                  value={harvestData.cocoaVariety}
+                  onChange={(e) => setHarvestData({...harvestData, cocoaVariety: e.target.value})}
+                  className="w-full px-3 py-2 bg-white border border-[#3a3a3a] rounded-lg text-gray-900 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                >
+                  <option value="Nacional">Nacional (Premium Ecuador)</option>
+                  <option value="Criollo">Criollo (Fine Flavor)</option>
+                  <option value="Forastero">Forastero (Bulk)</option>
+                  <option value="Trinitario">Trinitario (Hybrid)</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm text-zinc-300 mb-1.5">Fermentation (days)</label>
                 <input
-                  defaultValue="Premium"
-                  className="w-full px-3 py-2 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg text-white text-sm"
-                  disabled
+                  type="number"
+                  min="3"
+                  max="10"
+                  value={harvestData.fermentationDays}
+                  onChange={(e) => setHarvestData({...harvestData, fermentationDays: parseInt(e.target.value) || 0})}
+                  className="w-full px-3 py-2 bg-white border border-[#3a3a3a] rounded-lg text-gray-900 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
+                <p className="text-xs text-zinc-500 mt-1">Premium: 5-7 days</p>
               </div>
               
-              <div>
+              <div className="sm:col-span-2">
+                <label className="block text-sm text-zinc-300 mb-1.5">Drying Method</label>
+                <select
+                  value={harvestData.dryingMethod}
+                  onChange={(e) => setHarvestData({...harvestData, dryingMethod: e.target.value})}
+                  className="w-full px-3 py-2 bg-white border border-[#3a3a3a] rounded-lg text-gray-900 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                >
+                  <option value="Sun-dried">Sun-dried (Traditional)</option>
+                  <option value="Mechanical">Mechanical drying</option>
+                  <option value="Solar-powered">Solar-powered drying</option>
+                </select>
+              </div>
+              
+              <div className="sm:col-span-2">
                 <label className="block text-sm text-zinc-300 mb-1.5">Certification #</label>
                 <input
-                  defaultValue={`${industry?.toUpperCase()}-CERT-2025-12345`}
+                  value={`${industry?.toUpperCase()}-CERT-2025-12345`}
                   className="w-full px-3 py-2 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg text-white text-sm"
                   disabled
                 />
@@ -225,26 +295,6 @@ export function FarmerOrigin({ industry }: FarmerOriginProps) {
               Issue Origin Certificate
             </button>
           </div>
-
-          {/* Explainer - Collapsible */}
-          <details className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-4">
-            <summary className="text-sm font-medium text-white cursor-pointer hover:text-blue-400 transition-colors flex items-center gap-2">
-              <span>💡 What This Does</span>
-            </summary>
-            <div className="mt-3 space-y-3">
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Creates a cryptographically signed certificate proving:
-              </p>
-              <ul className="text-xs text-zinc-400 ml-4 space-y-1">
-                <li>• Origin from {originStakeholder.location}</li>
-                <li>• Harvested/extracted on specific date with batch traceability</li>
-                <li>• Meets certification standards: {originStakeholder.certifications.join(', ')}</li>
-              </ul>
-              <p className="text-xs text-blue-400">
-                <strong>For DPP:</strong> This is the first link in an unbreakable chain. Every claim is verifiable on the blockchain.
-              </p>
-            </div>
-          </details>
         </>
       )}
 
@@ -254,7 +304,7 @@ export function FarmerOrigin({ industry }: FarmerOriginProps) {
           <div className="text-center space-y-4">
             <Loader2 className="w-10 h-10 animate-spin text-green-500 mx-auto" />
             <p className="text-white font-medium">Issuing certificate...</p>
-            <p className="text-xs text-zinc-400">Publishing to IOTA network</p>
+            <p className="text-xs text-white">Publishing to IOTA network</p>
           </div>
         </div>
       )}
@@ -270,12 +320,12 @@ export function FarmerOrigin({ industry }: FarmerOriginProps) {
           <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4 space-y-3">
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1">
-                <p className="text-xs text-zinc-400 mb-1">Certificate JWT:</p>
+                <p className="text-xs text-white mb-1">Certificate JWT:</p>
                 <code className="text-xs text-zinc-300 break-all block">{credential.jwt.substring(0, 100)}...</code>
               </div>
               <button
                 onClick={copyCredential}
-                className="flex-shrink-0 text-zinc-400 hover:text-white transition-colors"
+                className="flex-shrink-0 text-white hover:text-white transition-colors"
                 title="Copy certificate"
               >
                 {copied ? (
@@ -291,19 +341,35 @@ export function FarmerOrigin({ industry }: FarmerOriginProps) {
             <p className="text-white font-medium mb-2">Certificate Details:</p>
             <div className="space-y-1.5 text-xs">
               <div className="flex justify-between">
-                <span className="text-zinc-400">Origin:</span>
+                <span className="text-white">Origin:</span>
                 <span className="text-zinc-200">{originStakeholder.location}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-zinc-400">Batch:</span>
-                <span className="text-zinc-200">2,500 kg Premium grade</span>
+                <span className="text-white">Batch Weight:</span>
+                <span className="text-zinc-200">{(credential.certificationData as OriginCertificationData).batchWeight?.toLocaleString() || '0'} kg</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-zinc-400">Certified:</span>
+                <span className="text-white">Variety:</span>
+                <span className="text-zinc-200">{(credential.certificationData as OriginCertificationData).cocoaVariety || 'N/A'}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-white">Harvest Date:</span>
+                <span className="text-zinc-200">{new Date((credential.certificationData as OriginCertificationData).harvestDate || '').toLocaleDateString()}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-white">Fermentation:</span>
+                <span className="text-zinc-200">{(credential.certificationData as OriginCertificationData).fermentationDays || 0} days</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-white">Drying:</span>
+                <span className="text-zinc-200">{(credential.certificationData as OriginCertificationData).dryingMethod || 'N/A'}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-white">Certified:</span>
                 <span className="text-zinc-200">{originStakeholder.certifications.join(', ')}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-zinc-400">Issued:</span>
+                <span className="text-white">Issued:</span>
                 <span className="text-zinc-200">{new Date(credential.issuedAt).toLocaleString()}</span>
               </div>
             </div>
@@ -311,25 +377,50 @@ export function FarmerOrigin({ industry }: FarmerOriginProps) {
             {/* IOTA Identity Info */}
             <div className="mt-3 pt-3 border-t border-[#3a3a3a]">
               <a
-                href={getExplorerURL(originStakeholder.did)}
+                href={credential.transactionId ? getRealExplorerURL(credential.issuerDID, 'testnet', credential.transactionId) : getExplorerURL(originStakeholder.did)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-xs text-blue-400 hover:text-blue-300 transition-colors"
               >
                 <ExternalLink className="w-3 h-3" />
-                <span>Learn about IOTA Identity & DIDs</span>
+                <span>
+                  {credential.transactionId ? 'View Transaction on Blockchain' : 'Learn about IOTA Identity & DIDs'}
+                </span>
               </a>
               <p className="text-xs text-zinc-500 mt-1.5">
-                💡 In production, this would link to verifiable blockchain proof
+                {credential.transactionId 
+                  ? '✅ View transaction details on IOTA testnet explorer'
+                  : '💡 In production, this would link to verifiable blockchain proof'
+                }
               </p>
             </div>
           </div>
 
           <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
-            <p className="text-sm text-green-400 font-medium mb-1">✅ Ready for Next Step</p>
-            <p className="text-xs text-zinc-300">
-              This certificate can now be verified by the factory before production.
-            </p>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-green-400 font-medium mb-1">✅ Origin Certificate Issued</p>
+                <p className="text-xs text-white">Credentials ready for factory verification</p>
+              </div>
+              <button
+                onClick={() => {
+                  if (onNextStep) {
+                    onNextStep();
+                  } else {
+                    // Fallback: scroll to factory section if callback not provided
+                    const factorySection = document.getElementById('factory-production');
+                    if (factorySection) {
+                      factorySection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      factorySection.classList.add('highlight-pulse');
+                      setTimeout(() => factorySection.classList.remove('highlight-pulse'), 2000);
+                    }
+                  }
+                }}
+                className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg transition-colors flex items-center gap-2 whitespace-nowrap"
+              >
+                <span>Go to Factory →</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

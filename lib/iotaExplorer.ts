@@ -1,18 +1,17 @@
 /**
- * IOTA/Shimmer Explorer Integration
+ * IOTA Explorer Integration
  * Generates links to verify DIDs and credentials on the blockchain
  * 
- * NOTE: This demo uses mock DIDs that don't actually exist on the blockchain.
+ * NOTE: IOTA explorer uses format: https://explorer.iota.org/txblock/[TX_ID]?network=testnet
  * In production, these links would show real, verifiable identity documents.
  */
 
-export const SHIMMER_TESTNET_EXPLORER = 'https://explorer.iota.org/shimmer-testnet';
-export const SHIMMER_MAINNET_EXPLORER = 'https://explorer.iota.org/shimmer';
+export const IOTA_EXPLORER_BASE = 'https://explorer.iota.org';
 export const IOTA_IDENTITY_DOCS = 'https://wiki.iota.org/identity.rs/introduction/';
 
 /**
  * Extract address from DID
- * Format: did:iota:smr:0x... → 0x...
+ * Format: did:iota:0x... → 0x...
  */
 export function extractAddressFromDID(did: string): string {
   const parts = did.split(':');
@@ -48,21 +47,37 @@ export function getExplorerURL(did: string, network: 'testnet' | 'mainnet' = 'te
 }
 
 /**
- * Get the actual blockchain explorer URL for a DID
- * Use this when you know the DID is published on-chain
+ * Get transaction block URL for a published DID
+ * Format: https://explorer.iota.org/txblock/[TX_ID]?network=testnet
+ * 
+ * @param transactionId - The transaction ID from publishing
+ * @param network - 'testnet' or 'mainnet'
  */
-export function getRealExplorerURL(did: string, network: 'testnet' | 'mainnet' = 'testnet'): string {
+export function getTransactionURL(transactionId: string, network: 'testnet' | 'mainnet' = 'testnet'): string {
+  return `${IOTA_EXPLORER_BASE}/txblock/${transactionId}?network=${network}`;
+}
+
+/**
+ * Get the actual blockchain explorer URL for a DID
+ * If transaction ID is available, links to the specific transaction
+ * Otherwise links to the address
+ */
+export function getRealExplorerURL(did: string, network: 'testnet' | 'mainnet' = 'testnet', transactionId?: string): string {
+  // If we have a transaction ID, link directly to it
+  if (transactionId) {
+    return getTransactionURL(transactionId, network);
+  }
+  
+  // Otherwise link to the address
   const address = extractAddressFromDID(did);
-  const baseURL = network === 'testnet' ? SHIMMER_TESTNET_EXPLORER : SHIMMER_MAINNET_EXPLORER;
-  return `${baseURL}/addr/${address}`;
+  return `${IOTA_EXPLORER_BASE}/addr/${address}?network=${network}`;
 }
 
 /**
  * Generate search URL for DID on explorer
  */
 export function getExplorerSearchURL(did: string, network: 'testnet' | 'mainnet' = 'testnet'): string {
-  const baseURL = network === 'testnet' ? SHIMMER_TESTNET_EXPLORER : SHIMMER_MAINNET_EXPLORER;
-  return `${baseURL}/search/${did}`;
+  return `${IOTA_EXPLORER_BASE}/search/${did}?network=${network}`;
 }
 
 /**

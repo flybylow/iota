@@ -91,7 +91,7 @@ export async function testCreateDID() {
     console.log('Creating local DID document...');
     
     // Create a DID document without publishing (local only)
-    const document = new IotaDocument('smr'); // 'smr' for Shimmer network
+    const document = new IotaDocument('iota'); // 'iota' for IOTA network
     
     console.log('✅ DID document created locally!');
     console.log('DID:', document.id().toString());

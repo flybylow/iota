@@ -5,17 +5,20 @@
  */
 
 export const IOTA_CONFIG = {
-  // Shimmer Testnet API endpoint
-  apiEndpoint: process.env.NEXT_PUBLIC_IOTA_API_ENDPOINT || 'https://api.testnet.shimmer.network',
+  // IOTA Testnet API endpoint
+  apiEndpoint: process.env.NEXT_PUBLIC_IOTA_API_ENDPOINT || 'https://api.testnet.iotaledger.net',
   
   // Network type
   network: process.env.NEXT_PUBLIC_NETWORK || 'testnet',
   
   // Explorer URL for testnet
-  explorerUrl: 'https://explorer.shimmer.network/testnet',
+  explorerUrl: 'https://explorer.iota.org/iota-testnet',
   
   // Faucet URL for getting testnet tokens
-  faucetUrl: 'https://faucet.testnet.shimmer.network',
+  // NOTE: Using IOTA testnet faucet (correct for IOTA hackathon)
+  // Alternative: Join IOTA Discord: https://discord.iota.org
+  faucetUrl: 'https://faucet.testnet.iotaledger.net',
+  faucetNote: '💧 IOTA testnet faucet - request tokens for development',
 };
 
 export type NetworkType = 'testnet' | 'mainnet';

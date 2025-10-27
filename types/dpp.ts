@@ -67,5 +67,7 @@ export interface DPPCredential {
   issuedAt: string;
   certificationData: OriginCertificationData | ProductionCertificationData | QualityTestData | Record<string, unknown>;
   previousCredentials?: string[]; // For credential chaining
+  onChain?: boolean; // Whether this credential was created with real blockchain integration
+  transactionId?: string; // Transaction ID if published to blockchain
 }
 

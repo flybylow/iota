@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { industryData, type IndustryId } from '@/data/industry-data';
 import { Loader2, CheckCircle2, XCircle, AlertCircle, Factory } from 'lucide-react';
+import { isBlockchainMode } from '@/lib/dppMode';
+import { createDID, issueCredential, verifyCredential } from '@/lib/iotaIdentityReal';
 import type { DPPCredential, ProductionCertificationData } from '@/types/dpp';
 
 /**
@@ -37,6 +39,18 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
   const [loading, setLoading] = useState(false);
   const [productionCredential, setProductionCredential] = useState<DPPCredential | null>(null);
 
+  // Calculate production units from harvest data
+  const calculateProductionUnits = () => {
+    if (farmerCredential?.certificationData && 'batchWeight' in farmerCredential.certificationData) {
+      const cocoaKg = farmerCredential.certificationData.batchWeight as number;
+      // Formula: 1 kg cocoa produces approximately 7 bars (100g each with 70% cocoa content)
+      // Calculation: 1000g ÷ 100g per bar = 10 bars, but 70% cocoa content means 10 * 0.7 = 7 bars per kg
+      const estimatedBars = Math.floor(cocoaKg * 7);
+      return estimatedBars;
+    }
+    return 17500; // Default fallback (2500 kg * 7)
+  };
+
   useEffect(() => {
     // Auto-load farmer credential from localStorage
     const saved = localStorage.getItem('farmer-credential');
@@ -59,17 +73,35 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
     setLoading(true);
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // In real app, verify signature on IOTA network
-      // For demo, check if it exists and has correct structure
-      if (farmerCredential.credentialType === labels.originCredential) {
-        setVerificationStatus('verified');
+      if (isBlockchainMode()) {
+        // BLOCKCHAIN MODE: Use real verification
+        console.log('🔗 Blockchain Mode: Verifying credential on-chain...');
+        
+        const verificationResult = await verifyCredential(farmerCredential.jwt);
+        
+        if (verificationResult.isValid) {
+          console.log('✅ Credential verified successfully');
+          setVerificationStatus('verified');
+        } else {
+          console.error('❌ Credential verification failed:', verificationResult.error);
+          setVerificationStatus('failed');
+          alert('Credential verification failed: ' + (verificationResult.error || 'Unknown error'));
+        }
       } else {
-        setVerificationStatus('failed');
+        // DEMO MODE: Basic structure check
+        console.log('🎭 Demo Mode: Simulating verification...');
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        if (farmerCredential.credentialType === labels.originCredential) {
+          setVerificationStatus('verified');
+        } else {
+          setVerificationStatus('failed');
+        }
       }
-    } catch {
+    } catch (error) {
+      console.error('Verification error:', error);
       setVerificationStatus('failed');
+      alert('Verification error: ' + (error instanceof Error ? error.message : 'Unknown error'));
     } finally {
       setLoading(false);
     }
@@ -84,8 +116,6 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
     setLoading(true);
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 1800));
-      
       const certificationData: ProductionCertificationData = {
         manufacturer: productionStakeholder.name,
         productionDate: "2025-10-15",
@@ -104,83 +134,112 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
         unitsProduced: 50000
       };
 
-      const dppCredential: DPPCredential = {
-        jwt: btoa(JSON.stringify({
-          issuer: productionStakeholder.did,
+      let dppCredential: DPPCredential;
+
+      if (isBlockchainMode()) {
+        // BLOCKCHAIN MODE: Use real IOTA Identity SDK
+        console.log('🔗 Blockchain Mode: Issuing production credential...');
+        
+        try {
+          // Get manufacturer DID
+          let manufacturerDID = productionStakeholder.did;
+          let productDID = product.did;
+          
+          // Create new DIDs if using mock DIDs
+          if (manufacturerDID.includes('mock')) {
+            console.log('Creating new DID for manufacturer...');
+            const didResult = await createDID();
+            manufacturerDID = didResult.did;
+            console.log('✅ Manufacturer DID created:', manufacturerDID);
+          }
+          
+          if (productDID.includes('mock')) {
+            console.log('Using product DID from farmer credential');
+            // Use the same product DID from farmer credential if available
+            if (farmerCredential) {
+              productDID = farmerCredential.subject;
+            }
+          }
+          
+          // Issue production credential with credential chaining
+          console.log('Issuing production credential...');
+          const credentialJWT = await issueCredential(
+            manufacturerDID,
+            productDID,
+            {
+              type: labels.productionCredential,
+              certificationData: certificationData,
+              previousCredentials: [farmerCredential?.jwt] // Credential chaining!
+            }
+          );
+          
+          console.log('✅ Production credential issued successfully');
+          
+          dppCredential = {
+            jwt: credentialJWT,
+            issuer: productionStakeholder.name,
+            issuerDID: manufacturerDID,
+            subject: productDID,
+            credentialType: labels.productionCredential,
+            issuedAt: new Date().toISOString(),
+            certificationData,
+            previousCredentials: [farmerCredential?.jwt || ''],
+            onChain: true,
+          };
+        } catch (error) {
+          console.error('❌ Blockchain mode failed:', error);
+          alert('Blockchain mode failed. Error: ' + (error instanceof Error ? error.message : 'Unknown'));
+          throw error;
+        }
+      } else {
+        // DEMO MODE: Use mock data
+        console.log('🎭 Demo Mode: Creating mock production credential...');
+        await new Promise(resolve => setTimeout(resolve, 1800));
+        
+        dppCredential = {
+          jwt: btoa(JSON.stringify({
+            issuer: productionStakeholder.did,
+            subject: product.did,
+            type: labels.productionCredential,
+            data: certificationData,
+            issuedAt: new Date().toISOString(),
+            previousCredentials: [farmerCredential?.jwt] // Credential chaining!
+          })),
+          issuer: productionStakeholder.name,
+          issuerDID: productionStakeholder.did,
           subject: product.did,
-          type: labels.productionCredential,
-          data: certificationData,
+          credentialType: labels.productionCredential,
           issuedAt: new Date().toISOString(),
-          previousCredentials: [farmerCredential?.jwt] // Credential chaining!
-        })),
-        issuer: productionStakeholder.name,
-        issuerDID: productionStakeholder.did,
-        subject: product.did,
-        credentialType: labels.productionCredential,
-        issuedAt: new Date().toISOString(),
-        certificationData,
-        previousCredentials: [farmerCredential?.jwt || '']
-      };
+          certificationData,
+          previousCredentials: [farmerCredential?.jwt || ''],
+          onChain: false,
+        };
+      }
 
       localStorage.setItem('factory-credential', JSON.stringify(dppCredential));
       setProductionCredential(dppCredential);
     } catch (err) {
       console.error('Failed to issue production credential:', err);
+      alert('Failed to issue credential: ' + (err instanceof Error ? err.message : 'Unknown error'));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div id="factory-production" className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <div className="inline-flex items-center gap-2 mb-2 px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full">
-          <span className="text-sm text-blue-400 font-medium">Step 2 of 3</span>
-        </div>
-        <div className="flex items-center justify-center gap-2 mb-3">
-          <span className="text-3xl">{labels.productionIcon}</span>
-          <h2 className="text-2xl font-semibold text-white">
-            {labels.productionStep} Verifies & Produces
+        <div className="flex flex-col items-center gap-1">
+          <div className="inline-flex items-center gap-1">
+            <span className="text-xs text-zinc-400">Step 2 of 3</span>
+            <span className="text-base">{labels.productionIcon}</span>
+          </div>
+          <h2 className="text-sm font-semibold text-white">
+            Verifies & Produces
           </h2>
         </div>
-        <p className="text-zinc-300 text-sm">
-          Verify origin, then produce {product.type.replace('_', ' ')}
-        </p>
       </div>
-
-      {/* Context/Story Card - Collapsible */}
-      <details className="bg-gradient-to-br from-blue-500/10 to-purple-500/5 border border-blue-500/20 rounded-lg overflow-hidden group">
-        <summary className="p-5 cursor-pointer list-none hover:bg-blue-500/5 transition-colors">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-2xl">{labels.productionIcon}</span>
-            </div>
-            <div className="flex-1">
-              <h3 className="text-base font-semibold text-white flex items-center gap-2">
-                {productionStakeholder.name}
-                <span className="text-xs text-zinc-400 group-open:rotate-180 transition-transform">▼</span>
-              </h3>
-              <p className="text-xs text-zinc-400 mt-1">Click to learn more about the production story</p>
-            </div>
-          </div>
-        </summary>
-        <div className="px-5 pb-5 pt-2 space-y-3">
-          <p className="text-sm text-zinc-300 leading-relaxed">
-            {industryKey === 'food-beverage' ? 
-              "Located in Bruges, Belgium. Receives cocoa from multiple suppliers across South America. Before using any cocoa, they must verify its authenticity and organic certification." :
-              `${productionStakeholder.name} receives materials from multiple suppliers. They must verify authenticity before production.`
-            }
-          </p>
-          <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-3">
-            <p className="text-xs font-medium text-yellow-400 mb-1">⚡ The Challenge:</p>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              With traditional methods, calling suppliers and checking paper certificates 
-              takes 3-5 business days. Production is delayed, costs increase.
-            </p>
-          </div>
-        </div>
-      </details>
 
       {/* Production Stakeholder Info Card */}
       <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-5">
@@ -189,15 +248,15 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
         </h3>
         <div className="space-y-2 text-sm">
           <div className="flex items-start gap-2">
-            <span className="text-zinc-400">📍 Location:</span>
+            <span className="text-white">📍 Location:</span>
             <span className="text-white">{productionStakeholder.location}</span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="text-zinc-400">✅ Certified:</span>
+            <span className="text-white">✅ Certified:</span>
             <span className="text-white">{productionStakeholder.certifications.join(', ')}</span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="text-zinc-400">⚡ Capacity:</span>
+            <span className="text-white">⚡ Capacity:</span>
             <span className="text-white">{productionStakeholder.capacity}</span>
           </div>
         </div>
@@ -211,7 +270,7 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
             
             {farmerCredential ? (
               <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4">
-                <p className="text-xs text-zinc-400 mb-2">Origin Certificate Detected:</p>
+                <p className="text-xs text-white mb-2">Origin Certificate Detected:</p>
                 <div className="space-y-1.5 text-xs">
                   <div className="flex justify-between">
                     <span className="text-zinc-500">From:</span>
@@ -257,7 +316,7 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
               </div>
             )}
 
-            {verificationStatus === 'verified' && (
+            {verificationStatus === 'verified' && farmerCredential && (
               <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
                 <div className="flex items-start gap-2 text-green-400">
                   <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
@@ -265,14 +324,16 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
                     <p className="font-medium mb-2">✅ Origin Verified!</p>
                     <ul className="space-y-1 text-xs text-green-300">
                       <li>• From: {originStakeholder.name}, {originStakeholder.country}</li>
-                      <li>• Certification: {originStakeholder.certifications[0]} #{industryKey.toUpperCase()}-2025-12345</li>
-                      <li>• {industryKey === 'battery' ? 'Mined' : industryKey === 'fashion' ? 'Harvested' : 'Harvested'}: October 1, 2025</li>
-                      <li>• Batch: {
-                        industryKey === 'food-beverage' ? '2,500 kg Premium grade' :
-                        industryKey === 'battery' ? '5,000 kg Lithium carbonate' :
-                        industryKey === 'fashion' ? '3,000 kg Organic cotton' :
-                        '2,000 kg Rare earth minerals'
-                      }</li>
+                      <li>• Certification: {originStakeholder.certifications[0]}</li>
+                      {farmerCredential.certificationData && 'batchWeight' in farmerCredential.certificationData && (
+                        <>
+                          <li>• Batch Weight: {(farmerCredential.certificationData.batchWeight as number).toLocaleString()} kg</li>
+                          <li>• Variety: {farmerCredential.certificationData.cocoaVariety as string}</li>
+                          <li>• Harvest Date: {new Date(farmerCredential.certificationData.harvestDate as string).toLocaleDateString()}</li>
+                          <li>• Fermentation: {farmerCredential.certificationData.fermentationDays as number} days</li>
+                          <li>• Drying: {farmerCredential.certificationData.dryingMethod as string}</li>
+                        </>
+                      )}
                     </ul>
                   </div>
                 </div>
@@ -334,24 +395,34 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
 
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div>
-                  <p className="text-zinc-400 text-xs mb-1">Batch Number:</p>
+                  <p className="text-white text-xs mb-1">Batch Number:</p>
                   <p className="text-white font-mono text-xs">{product.batchNumber}</p>
                 </div>
                 <div>
-                  <p className="text-zinc-400 text-xs mb-1">Units Produced:</p>
+                  <p className="text-white text-xs mb-1">Production Date:</p>
+                  <p className="text-white font-mono text-xs">{product.productionDate}</p>
+                </div>
+                <div className="col-span-2">
+                  <p className="text-white text-xs mb-1">Input → Output:</p>
                   <p className="text-white font-mono text-xs">
-                    {industryKey === 'food-beverage' ? '50,000 bars' :
-                     industryKey === 'battery' ? '500 units' :
-                     industryKey === 'fashion' ? '10,000 pieces' :
-                     '5,000 units'}
+                    {industryKey === 'food-beverage' ? (
+                      <>
+                        {farmerCredential?.certificationData && 'batchWeight' in farmerCredential.certificationData 
+                          ? `${(farmerCredential.certificationData.batchWeight as number).toLocaleString()} kg cocoa` 
+                          : '2,500 kg cocoa'
+                        } → {calculateProductionUnits().toLocaleString()} bars (100g each)
+                      </>
+                    ) :
+                     industryKey === 'battery' ? '5,000 kg materials → 500 units' :
+                     industryKey === 'fashion' ? '3,000 kg cotton → 10,000 pieces' :
+                     '2,000 kg materials → 5,000 units'}
+                  </p>
+                  <p className="text-zinc-500 text-xs mt-1">
+                    {industryKey === 'food-beverage' && '(70% cocoa content = ~7 bars per kg)'}
                   </p>
                 </div>
                 <div>
-                  <p className="text-zinc-400 text-xs mb-1">Production Date:</p>
-                  <p className="text-white font-mono text-xs">{product.productionDate}</p>
-                </div>
-                <div>
-                  <p className="text-zinc-400 text-xs mb-1">
+                  <p className="text-white text-xs mb-1">
                     {industryKey === 'battery' ? 'Certification:' : 'Packaging:'}
                   </p>
                   <p className="text-white font-mono text-xs">
@@ -384,23 +455,6 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
               </div>
             </div>
           )}
-
-          {/* Explainer - Collapsible */}
-          <details className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-4">
-            <summary className="text-sm font-medium text-white cursor-pointer hover:text-blue-400 transition-colors flex items-center gap-2">
-              <span>💡 Credential Chaining</span>
-            </summary>
-            <div className="mt-3 space-y-3">
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                The manufacturer <strong>MUST verify</strong> the origin certificate before producing. 
-                The production certificate then <strong>references</strong> the origin certificate, 
-                creating an immutable chain of custody.
-              </p>
-              <p className="text-xs text-blue-400">
-                <strong>For DPP:</strong> This prevents fraud. You can&apos;t claim sustainability credentials if the source materials don&apos;t verify!
-              </p>
-            </div>
-          </details>
         </>
       )}
 
@@ -416,46 +470,41 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
             <p className="text-sm text-white font-medium mb-3">Production Summary:</p>
             <div className="space-y-1.5 text-xs">
               <div className="flex justify-between">
-                <span className="text-zinc-400">Batch:</span>
+                <span className="text-white">Batch:</span>
                 <span className="text-zinc-200">{product.batchNumber}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-zinc-400">Product:</span>
+                <span className="text-white">Product:</span>
                 <span className="text-zinc-200">{product.name}</span>
               </div>
+              {farmerCredential?.certificationData && 'batchWeight' in farmerCredential.certificationData && (
+                <div className="flex justify-between">
+                  <span className="text-white">Input Cocoa:</span>
+                  <span className="text-zinc-200">{(farmerCredential.certificationData.batchWeight as number).toLocaleString()} kg</span>
+                </div>
+              )}
               <div className="flex justify-between">
-                <span className="text-zinc-400">Units:</span>
+                <span className="text-white">Units Produced:</span>
                 <span className="text-zinc-200">
-                  {industryKey === 'food-beverage' ? '50,000 bars' :
+                  {industryKey === 'food-beverage' ? `${calculateProductionUnits().toLocaleString()} bars` :
                    industryKey === 'battery' ? '500 units' :
                    industryKey === 'fashion' ? '10,000 pieces' :
                    '5,000 units'}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-zinc-400">Quality Checks:</span>
+                <span className="text-white">Quality Checks:</span>
                 <span className="text-green-400">All Passed ✓</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-zinc-400">Traceability:</span>
+                <span className="text-white">Traceability:</span>
                 <span className="text-green-400">Complete ✓</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
-            <p className="text-sm text-blue-400 font-medium mb-1">🔗 Credential Chain Created</p>
-            <p className="text-xs text-zinc-300">
-              This production certificate is cryptographically linked to the farmer&apos;s origin certificate. 
-              The full supply chain is now verifiable by anyone.
-            </p>
-          </div>
-
           <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
-            <p className="text-sm text-green-400 font-medium mb-1">✅ Ready for Consumer Verification</p>
-            <p className="text-xs text-zinc-300">
-              Consumers can now scan the QR code to see the complete verified journey.
-            </p>
+            <p className="text-sm text-green-400 font-medium">✅ Ready for Step 3: Consumer Verification</p>
           </div>
         </div>
       )}
