@@ -242,7 +242,7 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
       {/* Header */}
       <div className="text-center">
         <div className="flex flex-col items-center gap-0.5">
-          <h3 className="text-base font-medium text-white inline-flex items-center gap-1.5">
+          <h3 className="text-base font-medium text-white inline-flex items-center gap-0.5">
             <span className="text-xl">{labels.productionIcon}</span>
             <span>Factory</span>
           </h3>

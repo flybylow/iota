@@ -198,7 +198,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
       {/* Header */}
       <div className="text-center">
         <div className="flex flex-col items-center gap-0.5">
-          <h3 className="text-base font-medium text-white inline-flex items-center gap-1.5">
+          <h3 className="text-base font-medium text-white inline-flex items-center gap-0.5">
             <span className="text-xl">{labels.originIcon}</span>
             <span>Farmer</span>
           </h3>
