@@ -104,7 +104,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             productDID,
             {
               name: product.name,
-              description: product.description,
+              description: ('description' in product ? product.description : product.name) as string,
               countryOfOrigin: originStakeholder.country,
               manufacturer: {
                 name: originStakeholder.name,

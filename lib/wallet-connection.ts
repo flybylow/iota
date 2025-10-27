@@ -19,8 +19,10 @@ export async function isWalletInstalled(): Promise<boolean> {
   }
   
   try {
-    const chrome = (window as unknown as { chrome?: typeof window.chrome }).chrome;
-    const browser = (window as unknown as { browser?: typeof window.chrome }).browser;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const chrome = (window as any).chrome;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const browser = (window as any).browser;
     
     console.log('📋 Chrome object:', chrome ? 'exists' : 'missing');
     console.log('📋 Browser object:', browser ? 'exists' : 'missing');
@@ -112,8 +114,10 @@ export async function isWalletInstalled(): Promise<boolean> {
  * Send message to IOTA Wallet extension
  */
 async function sendToExtension(message: unknown): Promise<unknown> {
-  const chrome = (window as unknown as { chrome?: typeof window.chrome }).chrome;
-  const browser = (window as unknown as { browser?: typeof window.chrome }).browser;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const chrome = (window as any).chrome;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const browser = (window as any).browser;
   const runtime = chrome?.runtime || browser?.runtime;
   
   if (!runtime || !runtime.sendMessage) {
@@ -125,7 +129,8 @@ async function sendToExtension(message: unknown): Promise<unknown> {
       runtime.sendMessage(
         IOTA_WALLET_EXTENSION_ID,
         message,
-        (response) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (response: any) => {
           const lastError = chrome?.runtime?.lastError || browser?.runtime?.lastError;
           if (lastError) {
             reject(new Error(lastError.message));
@@ -174,9 +179,11 @@ export async function connectWallet(): Promise<string | null> {
         params: {}
       });
       
-      if (response?.address) {
-        console.log('✅ Wallet connected successfully:', response.address);
-        return response.address;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const res = response as any;
+      if (res?.address) {
+        console.log('✅ Wallet connected successfully:', res.address);
+        return res.address;
       }
       
       console.warn('⚠️ No address in response:', response);
@@ -192,9 +199,11 @@ export async function connectWallet(): Promise<string | null> {
           params: {}
         });
         
-        if (accountResponse?.address) {
-          console.log('✅ Got address from account:', accountResponse.address);
-          return accountResponse.address;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const accountRes = accountResponse as any;
+        if (accountRes?.address) {
+          console.log('✅ Got address from account:', accountRes.address);
+          return accountRes.address;
         }
       } catch (accountError) {
         console.error('❌ Failed to get account:', accountError);
@@ -231,9 +240,11 @@ export async function signTransaction(transaction: unknown): Promise<unknown> {
       params: { transaction }
     });
     
-    if (response?.signed) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const signedRes = response as any;
+    if (signedRes?.signed) {
       console.log('✅ Transaction signed successfully');
-      return response.signed;
+      return signedRes.signed;
     }
     
     throw new Error('No signed transaction in response');
@@ -275,7 +286,8 @@ export async function getWalletBalance(): Promise<number | null> {
       params: {}
     });
     
-    return response?.balance || null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (response as any)?.balance || null;
   } catch (error) {
     console.error('Failed to get balance:', error);
     return null;

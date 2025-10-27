@@ -39,7 +39,7 @@ export function buildUNTPDPPCredential(
   subjectDID: string,
   productData: UNTPProductData,
   harvestData: OriginCertificationData
-): any {
+): Record<string, unknown> {
   return {
     '@context': getUNTPContext('dpp'),
     type: getUNTPTypes('dpp'),
@@ -91,7 +91,7 @@ export function buildUNTPDPPCredential(
 /**
  * Build conformity claims from certification data
  */
-function buildOrganicClaims(certData: OriginCertificationData): any[] {
+function buildOrganicClaims(certData: OriginCertificationData): Record<string, unknown>[] {
   const claims = [];
   
   // Add organic certification claim
@@ -125,16 +125,17 @@ function buildOrganicClaims(certData: OriginCertificationData): any[] {
  * Add sustainability claim
  */
 export function addSustainabilityClaim(
-  dpp: any,
+  dpp: Record<string, unknown>,
   topic: string,
   value: { value: number | boolean | string; unit?: string },
   standard?: string
 ): void {
-  if (!dpp.credentialSubject.conformityClaim) {
-    dpp.credentialSubject.conformityClaim = [];
+  const credentialSubject = dpp.credentialSubject as Record<string, unknown>;
+  if (!('conformityClaim' in credentialSubject) || !credentialSubject.conformityClaim) {
+    credentialSubject.conformityClaim = [];
   }
   
-  dpp.credentialSubject.conformityClaim.push({
+  (credentialSubject.conformityClaim as unknown[]).push({
     type: UNTP_TYPES.CLAIM,
     topic,
     standardOrRegulation: standard,
@@ -146,7 +147,7 @@ export function addSustainabilityClaim(
  * Add material provenance
  */
 export function addMaterialProvenance(
-  dpp: any,
+  dpp: Record<string, unknown>,
   material: {
     name: string;
     originCountry: string;
@@ -154,11 +155,12 @@ export function addMaterialProvenance(
     recycledAmount?: number;
   }
 ): void {
-  if (!dpp.credentialSubject.materialsProvenance) {
-    dpp.credentialSubject.materialsProvenance = [];
+  const credentialSubject = dpp.credentialSubject as Record<string, unknown>;
+  if (!('materialsProvenance' in credentialSubject) || !credentialSubject.materialsProvenance) {
+    credentialSubject.materialsProvenance = [];
   }
   
-  dpp.credentialSubject.materialsProvenance.push({
+  (credentialSubject.materialsProvenance as unknown[]).push({
     type: UNTP_TYPES.MATERIAL,
     name: material.name,
     originCountry: material.originCountry,

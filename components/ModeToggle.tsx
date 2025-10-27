@@ -43,7 +43,7 @@ export function ModeToggle() {
         alert('✅ Wallet connected!\n\nAddress: ' + address.substring(0, 20) + '...');
       } else {
         console.log('❌ Wallet not connected - checking extension status...');
-        const isExtensionInstalled = (typeof window !== 'undefined' && (window as any).chrome?.runtime?.id) || (typeof window !== 'undefined' && (window as any).browser?.runtime?.id);
+        const isExtensionInstalled = (typeof window !== 'undefined' && (window as unknown as { chrome?: { runtime?: { id?: string } } }).chrome?.runtime?.id) || (typeof window !== 'undefined' && (window as unknown as { browser?: { runtime?: { id?: string } } }).browser?.runtime?.id);
         console.log('📋 Extension check result:', isExtensionInstalled ? 'extension detected' : 'no extension');
         
         console.log('💡 Wallet connection is optional - app works without it!');
@@ -126,8 +126,8 @@ export function ModeToggle() {
                 onClick={() => toggleMode('blockchain')}
                 className={`w-full text-left p-3 rounded-lg transition-colors cursor-pointer ${
                   mode === 'blockchain'
-                    ? 'bg-blue-500/10 border border-blue-500/30'
-                    : 'bg-[#2a2a2a] border border-[#3a3a3a] hover:border-blue-500/20'
+                    ? 'bg-gray-700/30 border border-gray-500/30'
+                    : 'bg-[#2a2a2a] border border-[#3a3a3a] hover:border-gray-500/20'
                 }`}
               >
                 <div className="flex items-start gap-3">

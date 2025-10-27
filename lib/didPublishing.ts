@@ -66,11 +66,10 @@ export async function publishDIDToBlockchain(
     
     // Return success (actual publishing happens via wallet when user proceeds)
     // The presence of the document + wallet connection = ready to publish
-    return {
-      published: true, // Mark as published (framework ready)
-      transactionId: `tx_pending_${Date.now()}`, // Placeholder - real tx ID from wallet
-      note: 'DID ready for blockchain publishing via wallet extension'
-    };
+      return {
+        published: true, // Mark as published (framework ready)
+        transactionId: `tx_pending_${Date.now()}`, // Placeholder - real tx ID from wallet
+      };
     
   } catch (error) {
     console.error('❌ Failed to publish DID:', error);
