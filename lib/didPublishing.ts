@@ -52,38 +52,17 @@ export async function publishDIDToBlockchain(
     
     console.log('✅ Wallet connected:', walletAddress);
     
-    // Step 2: Try to import IOTA SDK
-    try {
-      const { Client } = await import('@iota/sdk');
-      
-      const iotaClient = new Client({
-        nodes: ['https://api.testnet.iotaledger.net'],
-      });
-      
-      console.log('✅ IOTA SDK initialized');
-      
-      // Step 3: Note - Actual publishing requires more implementation
-      // This is the framework - full implementation needs:
-      // - Create Alias Output
-      // - Sign transaction with wallet
-      // - Submit to network
-      // - Wait for confirmation
-      
-      console.log('📝 Note: Full blockchain publishing implementation in progress');
-      console.log('💡 DIDs created locally and ready for blockchain when complete');
-      
-      return {
-        published: false,
-        error: 'Blockchain publishing framework ready. Wallet connected. Full implementation in progress.'
-      };
-      
-    } catch (sdkError) {
-      console.error('❌ SDK import failed:', sdkError);
-      return {
-        published: false,
-        error: 'SDK not available. Using local mode.'
-      };
-    }
+    // Step 2: Note - IOTA SDK contains native bindings
+    // For now, DIDs are created locally and ready for blockchain publishing
+    // Full publishing requires server-side implementation
+    console.log('📝 Note: Wallet connected successfully');
+    console.log('💡 DIDs created locally and ready for blockchain when publishing is implemented');
+    console.log('🔧 Full publishing requires server-side API or wallet extension with proper methods');
+    
+    return {
+      published: false,
+      error: 'Wallet connected. Framework ready. Publishing requires server-side implementation.'
+    };
     
   } catch (error) {
     console.error('❌ Failed to publish DID:', error);
