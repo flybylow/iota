@@ -710,21 +710,21 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
       )}
 
       {/* Why This Matters - Bottom Section */}
-      <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-4 mt-6">
-        <h4 className="text-sm font-medium text-white mb-3 flex items-center gap-2">
-          <span>💡</span> Why This Matters
+      <div className="bg-[#2a2a2a] border border-purple-500/20 rounded-lg p-4 mt-6">
+        <h4 className="text-sm font-medium text-purple-400 mb-3">
+          💡 Why This Matters
         </h4>
         <div className="space-y-3">
           <div>
             <h4 className="text-sm font-medium text-white mb-1">For Consumers</h4>
-            <p className="text-xs text-white leading-relaxed">
+            <p className="text-xs text-zinc-300 leading-relaxed">
               Scan any product QR code and instantly see the verified supply chain. 
               No waiting, no phone calls, just instant cryptographic verification.
             </p>
           </div>
           <div>
             <h4 className="text-sm font-medium text-blue-400 mb-1">For Your DPP Business</h4>
-            <p className="text-xs text-white leading-relaxed">
+            <p className="text-xs text-zinc-300 leading-relaxed">
               This proves your solution works. Show this to chocolate brands, coffee roasters, 
               fashion companies - anyone with supply chain transparency needs.
             </p>
