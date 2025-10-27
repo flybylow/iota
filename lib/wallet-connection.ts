@@ -17,15 +17,23 @@ export async function isWalletInstalled(): Promise<boolean> {
   // Log available objects for debugging
   const windowKeys = Object.keys(window).filter(k => 
     k.toLowerCase().includes('iota') || 
-    k.toLowerCase().includes('wallet') ||
-    k.startsWith('_iota')
+    k.toLowerCase().includes('wallet')
+  );
+  
+  // Check for IOTA Wallet under different names
+  const possibleIOTAKeys = Object.keys(window).filter(k => 
+    k.toLowerCase().includes('iota') ||
+    k.toLowerCase().includes('iota wallet') ||
+    k.startsWith('iota') ||
+    k.startsWith('IOTA')
   );
   
   console.log('🔍 Checking for wallet:', {
     iotaExists: !!iota,
     iotaKeys: iota ? Object.keys(iota) : [],
     windowKeys: windowKeys,
-    allWindowKeys: Object.keys(window).slice(0, 50) // First 50 keys
+    possibleIOTAKeys: possibleIOTAKeys,
+    allWindowKeys: Object.keys(window) // Show all keys to debug
   });
   
   // IOTA Wallet might expose API differently
