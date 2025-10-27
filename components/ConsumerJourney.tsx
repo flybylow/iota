@@ -131,15 +131,10 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <div className="flex flex-col items-center gap-1">
-          <div className="inline-flex items-center gap-1">
-            <span className="text-xs text-zinc-400">Step 3 of 3</span>
-            <Shield className="w-4 h-4 text-purple-500" />
-          </div>
-          <h2 className="text-sm font-semibold text-white whitespace-nowrap">
-            Verifies Complete Chain
-          </h2>
-        </div>
+        <h2 className="text-sm font-semibold text-white inline-flex items-center gap-2">
+          <Shield className="w-4 h-4 text-purple-500" />
+          <span>Verifies Complete Chain - 3/3</span>
+        </h2>
       </div>
 
       {!verified && !loading && (

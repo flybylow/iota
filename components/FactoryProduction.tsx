@@ -230,15 +230,10 @@ export function FactoryProduction({ industry }: FactoryProductionProps) {
     <div id="factory-production" className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <div className="flex flex-col items-center gap-1">
-          <div className="inline-flex items-center gap-1">
-            <span className="text-xs text-zinc-400">Step 2 of 3</span>
-            <span className="text-base">{labels.productionIcon}</span>
-          </div>
-          <h2 className="text-sm font-semibold text-white">
-            Verifies & Produces
-          </h2>
-        </div>
+        <h2 className="text-sm font-semibold text-white inline-flex items-center gap-2">
+          <span>{labels.productionIcon}</span>
+          <span>Verifies & Produces - 2/3</span>
+        </h2>
       </div>
 
       {/* Production Stakeholder Info Card */}
