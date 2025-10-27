@@ -241,10 +241,15 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
     <div id="factory-production" className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-sm font-semibold text-white inline-flex items-center gap-3">
-          <span className="text-base">{labels.productionIcon}</span>
-          <span>Verifies & Produces - 2/3</span>
-        </h2>
+        <div className="flex flex-col items-center gap-1">
+          <h3 className="text-base font-medium text-white inline-flex items-center gap-2">
+            <span className="text-xl">{labels.productionIcon}</span>
+            <span>Factory</span>
+          </h3>
+          <h2 className="text-xs font-medium text-zinc-400">
+            Verifies & Produces - 2/3
+          </h2>
+        </div>
       </div>
 
       {/* Production Stakeholder Info Card */}
