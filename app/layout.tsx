@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
+
+// Only import SpeedInsights in production
+const SpeedInsights = process.env.NODE_ENV === 'production' 
+  ? require('@vercel/speed-insights/next').SpeedInsights 
+  : () => null;
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
