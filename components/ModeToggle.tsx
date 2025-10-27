@@ -38,11 +38,17 @@ export function ModeToggle() {
         console.log('✅ Wallet connected:', address);
         alert('✅ Wallet connected!\n\nAddress: ' + address.substring(0, 20) + '...');
       } else {
-        console.log('❌ Wallet not connected - opening Chrome Store');
-        alert('IOTA Wallet extension not installed.\n\nOpening Chrome Web Store to install...');
-        setTimeout(() => {
-          window.open('https://chromewebstore.google.com/detail/iota-wallet/iidjkmdceolghepehaaddojmnjnkkija', '_blank');
-        }, 100);
+        console.log('❌ Wallet not connected');
+        const isExtensionInstalled = chrome?.runtime?.id || browser?.runtime?.id;
+        
+        if (isExtensionInstalled) {
+          alert('IOTA Wallet extension is installed but LOCKED.\n\nPlease:\n1. Unlock your wallet in the extension\n2. Then try connecting again');
+        } else {
+          alert('IOTA Wallet extension not installed.\n\nOpening Chrome Web Store to install...');
+          setTimeout(() => {
+            window.open('https://chromewebstore.google.com/detail/iota-wallet/iidjkmdceolghepehaaddojmnjnkkija', '_blank');
+          }, 100);
+        }
       }
     } catch (error) {
       console.error('❌ Failed to connect wallet:', error);
