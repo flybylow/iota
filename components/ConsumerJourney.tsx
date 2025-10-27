@@ -142,45 +142,6 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
         </div>
       </div>
 
-      {/* Context/Story Card - Collapsible */}
-      {!verified && !loading && (
-        <details className="bg-gradient-to-br from-purple-500/10 to-pink-500/5 border border-purple-500/20 rounded-lg overflow-hidden group">
-          <summary className="p-5 cursor-pointer list-none hover:bg-purple-500/5 transition-colors">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-2xl">🍫</span>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-base font-semibold text-white">
-                  You Buy the Chocolate
-                </h3>
-              </div>
-            </div>
-          </summary>
-          <div className="px-5 pb-5 pt-2 space-y-3">
-            <p className="text-sm text-zinc-300 leading-relaxed">
-              You&apos;re standing in a supermarket in Amsterdam. The chocolate bar 
-              claims to be &quot;Single-origin Ecuador, Organic, Fair Trade.&quot; 
-              But is it true?
-            </p>
-            <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-3 space-y-2">
-              <div>
-                <p className="text-xs font-medium text-white mb-1">❌ Traditional Method:</p>
-                <p className="text-xs text-zinc-500 leading-relaxed">
-                  Rely on brand reputation. Call suppliers to verify (takes days).
-                </p>
-              </div>
-              <div>
-                <p className="text-xs font-medium text-green-400 mb-1">✅ With DIDs:</p>
-                <p className="text-xs text-zinc-300 leading-relaxed">
-                  Scan QR code. Verify entire supply chain in 2 seconds with cryptographic proof.
-                </p>
-              </div>
-            </div>
-          </div>
-        </details>
-      )}
-
       {!verified && !loading && (
         <>
           {/* QR Code Scanner Simulation */}
@@ -730,6 +691,45 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
             </p>
           </div>
         </div>
+      )}
+
+      {/* You Buy the Chocolate - Moved to bottom */}
+      {!verified && !loading && (
+        <details className="bg-gradient-to-br from-purple-500/10 to-pink-500/5 border border-purple-500/20 rounded-lg overflow-hidden group">
+          <summary className="p-5 cursor-pointer list-none hover:bg-purple-500/5 transition-colors">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-2xl">🍫</span>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-base font-semibold text-white">
+                  You Buy the Chocolate
+                </h3>
+              </div>
+            </div>
+          </summary>
+          <div className="px-5 pb-5 pt-2 space-y-3">
+            <p className="text-sm text-zinc-300 leading-relaxed">
+              You&apos;re standing in a supermarket in Amsterdam. The chocolate bar 
+              claims to be &quot;Single-origin Ecuador, Organic, Fair Trade.&quot; 
+              But is it true?
+            </p>
+            <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-3 space-y-2">
+              <div>
+                <p className="text-xs font-medium text-white mb-1">❌ Traditional Method:</p>
+                <p className="text-xs text-zinc-500 leading-relaxed">
+                  Rely on brand reputation. Call suppliers to verify (takes days).
+                </p>
+              </div>
+              <div>
+                <p className="text-xs font-medium text-green-400 mb-1">✅ With DIDs:</p>
+                <p className="text-xs text-zinc-300 leading-relaxed">
+                  Scan QR code. Verify entire supply chain in 2 seconds with cryptographic proof.
+                </p>
+              </div>
+            </div>
+          </div>
+        </details>
       )}
     </div>
   );
