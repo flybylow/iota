@@ -43,6 +43,19 @@ body {
   max-width: 448px;
 }
 
+/* Ensure button text color is respected */
+button {
+  color: inherit;
+}
+
+button.text-white {
+  color: white !important;
+}
+
+button.text-black {
+  color: black !important;
+}
+
 /* Prevent links from inheriting browser default colors */
 a {
   color: inherit;
