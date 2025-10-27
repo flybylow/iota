@@ -193,15 +193,10 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <div className="flex flex-col items-center gap-1">
-          <div className="inline-flex items-center gap-1">
-            <span className="text-xs text-zinc-400">Step 1 of 3</span>
-            <span className="text-base">{labels.originIcon}</span>
-          </div>
-          <h2 className="text-sm font-semibold text-white">
-            Certifies Product Origin
-          </h2>
-        </div>
+        <h2 className="text-sm font-semibold text-white inline-flex items-center gap-2">
+          <span>{labels.originIcon}</span>
+          <span>Certifies Product Origin - 1/3</span>
+        </h2>
       </div>
 
       {/* Stakeholder Info Card */}
