@@ -169,8 +169,8 @@ export default function Home() {
                     className={`
                       px-4 py-2 rounded-lg text-lg font-semibold transition-all whitespace-nowrap
                       ${activeTab === tab.id 
-                        ? 'bg-white text-black' 
-                        : 'bg-transparent text-white hover:bg-[#262626]'
+                        ? 'bg-white text-black !text-black' 
+                        : 'bg-transparent text-white hover:bg-[#262626] !text-white'
                       }
                     `}
                   >
