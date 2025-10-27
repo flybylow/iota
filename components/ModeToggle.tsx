@@ -36,11 +36,13 @@ export function ModeToggle() {
         setWalletConnected(true);
         alert('✅ Wallet connected:\n' + address);
       } else {
-        alert('❌ Please install IOTA Wallet extension\n\nDownload from:\nhttps://chromewebstore.google.com/detail/iota-wallet/iidjkmdceolghepehaaddojmnjnkkija');
+        // Open Chrome Web Store to install wallet
+        window.open('https://chromewebstore.google.com/detail/iota-wallet/iidjkmdceolghepehaaddojmnjnkkija', '_blank');
       }
     } catch (error) {
       console.error('Failed to connect wallet:', error);
-      alert('Failed to connect wallet: ' + (error instanceof Error ? error.message : 'Unknown error'));
+      // Open Chrome Web Store to install wallet
+      window.open('https://chromewebstore.google.com/detail/iota-wallet/iidjkmdceolghepehaaddojmnjnkkija', '_blank');
     }
   };
 
