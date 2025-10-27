@@ -210,7 +210,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
           <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-5 space-y-4">
             <h4 className="text-base font-medium text-white">{labels.batchLabel}</h4>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm text-zinc-300 mb-1.5">Harvest Date</label>
                 <input
@@ -258,10 +258,9 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                   onChange={(e) => setHarvestData({...harvestData, fermentationDays: parseInt(e.target.value) || 0})}
                   className="w-full px-3 py-2 bg-white border border-[#3a3a3a] rounded-lg text-gray-900 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
-                <p className="text-xs text-zinc-500 mt-1">Premium: 5-7 days</p>
               </div>
               
-              <div className="sm:col-span-2">
+              <div className="col-span-2">
                 <label className="block text-sm text-zinc-300 mb-1.5">Drying Method</label>
                 <select
                   value={harvestData.dryingMethod}
@@ -274,7 +273,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                 </select>
               </div>
               
-              <div className="sm:col-span-2">
+              <div className="col-span-2">
                 <label className="block text-sm text-zinc-300 mb-1.5">Certification #</label>
                 <input
                   value={`${industry?.toUpperCase()}-CERT-2025-12345`}
