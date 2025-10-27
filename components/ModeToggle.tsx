@@ -130,7 +130,7 @@ export function ModeToggle() {
                     ? 'bg-gray-700/30 border-gray-500/30'
                     : 'bg-black border-[#3a3a3a] hover:border-gray-500/20'
                 }`}
-                style={mode !== 'blockchain' ? { backgroundColor: '#000000' } } : {}}
+                style={mode !== 'blockchain' ? { backgroundColor: '#000000' } : {}}
               >
                 <div className="flex items-start gap-3">
                   <Network className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
