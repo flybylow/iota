@@ -207,10 +207,10 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
       {!credential && !loading && (
         <>
           {/* Harvest Details Form */}
-          <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-5">
-            <h4 className="text-base font-medium text-white mb-5">{labels.batchLabel}</h4>
+          <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-6">
+            <h4 className="text-base font-medium text-white mb-6">{labels.batchLabel}</h4>
             
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-2 gap-6 space-y-0">
               <div>
                 <label className="block text-sm text-zinc-300 mb-1.5">Harvest Date</label>
                 <input
@@ -273,7 +273,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                 </select>
               </div>
               
-              <div className="col-span-2 mt-2">
+              <div className="col-span-2 mt-4">
                 <label className="block text-sm text-zinc-300 mb-1.5">Certification #</label>
                 <input
                   value={`${industry?.toUpperCase()}-CERT-2025-12345`}
@@ -285,10 +285,10 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
           </div>
 
           {/* Issue Button */}
-          <div className="flex justify-center mt-6">
+          <div className="flex justify-center mt-8">
             <button
               onClick={issueOriginCertificate}
-              className="bg-green-600 hover:bg-green-500 text-white font-medium py-3 px-8 rounded-full transition-all duration-200 text-sm flex items-center gap-2 shadow-lg"
+              className="bg-green-600 hover:bg-green-500 text-white font-medium py-4 px-10 rounded-full transition-all duration-200 text-sm flex items-center gap-3 shadow-lg"
             >
               <span className="text-lg">{labels.originIcon}</span>
               Issue Origin Certificate
