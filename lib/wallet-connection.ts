@@ -11,8 +11,20 @@
 export async function isWalletInstalled(): Promise<boolean> {
   if (typeof window === 'undefined') return false;
   
+  // Check for different possible wallet API structures
   const iota = (window as any).iota;
-  return iota !== undefined && iota.wallet !== undefined;
+  console.log('🔍 Checking for wallet:', {
+    iotaExists: !!iota,
+    iotaKeys: iota ? Object.keys(iota) : [],
+    windowKeys: Object.keys(window).filter(k => k.toLowerCase().includes('iota'))
+  });
+  
+  // IOTA Wallet might expose API differently
+  return iota !== undefined && (
+    iota.wallet !== undefined ||
+    iota.account !== undefined ||
+    iota.accounts !== undefined
+  );
 }
 
 /**
@@ -21,30 +33,48 @@ export async function isWalletInstalled(): Promise<boolean> {
  */
 export async function connectWallet(): Promise<string | null> {
   try {
+    console.log('🔍 Available window objects:', Object.keys(window).filter(k => k.toLowerCase().includes('iota') || k.toLowerCase().includes('wallet')));
+    
     if (!await isWalletInstalled()) {
       console.error('❌ IOTA Wallet extension not installed');
+      console.log('💡 Make sure IOTA Wallet extension is enabled');
       return null;
     }
     
-    const wallet = (window as any).iota?.wallet;
+    const iota = (window as any).iota;
+    const wallet = iota?.wallet || iota?.account || iota?.accounts;
+    
     if (!wallet) {
-      console.error('❌ Wallet not available');
+      console.error('❌ Wallet API not available');
+      console.log('Available iota keys:', Object.keys(iota));
       return null;
     }
     
     console.log('🔗 Connecting to IOTA Wallet...');
+    console.log('Wallet object:', wallet);
     
-    // Get wallet accounts
-    const accounts = await wallet.getAccounts();
-    if (!accounts || accounts.length === 0) {
-      console.error('❌ No accounts found in wallet');
+    // Try to get wallet address - different possible methods
+    let address = null;
+    
+    if (typeof wallet.getAccounts === 'function') {
+      const accounts = await wallet.getAccounts();
+      address = accounts[0]?.receiveAddress;
+    } else if (typeof wallet.address === 'string') {
+      address = wallet.address;
+    } else if (typeof wallet.account === 'function') {
+      const account = await wallet.account();
+      address = account?.address || account?.addresses?.[0];
+    }
+    
+    if (!address) {
+      console.error('❌ Could not get wallet address');
+      console.log('Available wallet methods:', Object.keys(wallet));
       return null;
     }
     
-    const address = accounts[0]?.receiveAddress;
     console.log('✅ Wallet connected:', address);
     
-    return address || null;
+    return address;
   } catch (error) {
     console.error('❌ Failed to connect wallet:', error);
     return null;
