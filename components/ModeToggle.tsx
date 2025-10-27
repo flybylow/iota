@@ -86,7 +86,7 @@ export function ModeToggle() {
                 <Settings className="w-4 h-4" />
                 DPP Mode Settings
               </h3>
-              <p className="text-xs text-zinc-400 mt-1">
+              <p className="text-xs text-white mt-1">
                 Choose how the demo operates
               </p>
             </div>
@@ -112,7 +112,7 @@ export function ModeToggle() {
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-zinc-400 leading-relaxed">
+                    <p className="text-xs text-white leading-relaxed">
                       Instant • Uses mock data • No blockchain connection needed
                     </p>
                   </div>
@@ -139,7 +139,7 @@ export function ModeToggle() {
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-zinc-400 leading-relaxed">
+                    <p className="text-xs text-white leading-relaxed">
                       Real IOTA Identity SDK • Creates actual DIDs • Requires testnet tokens
                     </p>
                   </div>
@@ -169,7 +169,7 @@ export function ModeToggle() {
                 <p className="text-xs text-blue-400 mb-2 font-medium">
                   ⚠️ Blockchain Mode Info:
                 </p>
-                <ul className="text-xs text-zinc-400 space-y-1 ml-4">
+                <ul className="text-xs text-white space-y-1 ml-4">
                   <li>• Creates DIDs locally (not published to chain)</li>
                   <li>• WASM initialization required</li>
                   <li>• Publishing requires testnet tokens</li>
@@ -178,7 +178,7 @@ export function ModeToggle() {
                   <p className="text-xs text-yellow-400 font-medium mb-1">
                     🚧 Testnet Faucet Currently Down
                   </p>
-                  <p className="text-xs text-zinc-400 mb-2">
+                  <p className="text-xs text-white mb-2">
                     The public faucet is unavailable. For development, use Demo Mode or:
                   </p>
                   <a
@@ -189,7 +189,7 @@ export function ModeToggle() {
                   >
                     Join IOTA Discord →
                   </a>
-                  <p className="text-xs text-zinc-500 mt-1">
+                  <p className="text-xs text-white mt-1">
                     Ask for testnet tokens in developer/help channels
                   </p>
                 </div>
