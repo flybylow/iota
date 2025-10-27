@@ -6,6 +6,7 @@ import { Loader2, CheckCircle2, Copy, ExternalLink } from 'lucide-react';
 import { getExplorerURL, getRealExplorerURL } from '@/lib/iotaExplorer';
 import { isBlockchainMode } from '@/lib/dppMode';
 import { createDID, issueCredential } from '@/lib/iotaIdentityReal';
+import { buildUNTPDPPCredential } from '@/lib/schemas/untp/dpp-builder';
 import type { DPPCredential, OriginCertificationData } from '@/types/dpp';
 
 /**
@@ -92,7 +93,26 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             console.log('✅ Product DID created:', productDID);
           }
           
-          // Step 2: Issue verifiable credential
+          // Step 2: Build UNTP-compliant credential
+          console.log('Building UNTP-compliant credential...');
+          const untpCredential = buildUNTPDPPCredential(
+            issuerDID,
+            productDID,
+            {
+              name: product.name,
+              description: product.description,
+              countryOfOrigin: originStakeholder.country,
+              manufacturer: {
+                name: originStakeholder.name,
+                did: issuerDID,
+              },
+            },
+            certificationData
+          );
+          
+          console.log('✅ UNTP credential structure created');
+          
+          // Step 3: Issue verifiable credential
           console.log('Issuing credential from farmer to product...');
           const credentialJWT = await issueCredential(
             issuerDID,
@@ -100,10 +120,11 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             {
               type: labels.originCredential,
               certificationData: certificationData,
+              untpCredential: untpCredential, // Include UNTP structure
             }
           );
           
-          console.log('✅ Credential issued successfully');
+          console.log('✅ Credential issued successfully (UNTP-compliant)');
           
           dppCredential = {
             jwt: credentialJWT,
