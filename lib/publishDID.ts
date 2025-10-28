@@ -61,13 +61,9 @@ export async function publishDIDToBlockchain(
     console.log('📦 Step 2: Creating IOTA Client...');
     
     // Dynamic import for client-side only
-    const { Client } = await import('@iota/client');
+    const { Client } = await import('@iota/iota-sdk');
     const client = new Client({
-      networks: {
-        testnet: {
-          url: 'https://api.testnet.iota.org'
-        }
-      }
+      nodes: ['https://api.testnet.iota.org'],
     });
     
     console.log('✅ Step 3: IOTA Client created');
