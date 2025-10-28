@@ -46,6 +46,7 @@ body {
 /* Ensure button text color is respected */
 button {
   color: inherit;
+  background-color: transparent;
 }
 
 button.text-white {
@@ -54,6 +55,11 @@ button.text-white {
 
 button.text-black {
   color: black !important;
+}
+
+/* Force buttons to respect background color when explicitly set */
+button[style*="background-color"] {
+  background-color: inherit;
 }
 
 /* Prevent links from inheriting browser default colors */
