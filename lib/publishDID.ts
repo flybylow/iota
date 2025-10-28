@@ -40,13 +40,14 @@ export async function prepareDIDForPublishing(did: string, walletAddress: string
   console.log('📝 DID:', didString);
   console.log('📍 Wallet address:', walletAddress);
   
-  // The document is ready for publishing
-  // Next step: Call doc.publish(client) when ready to submit
-  console.log('🔧 Document ready for doc.publish(client) call');
+  // Pack the document for state metadata
+  const packedDoc = doc.pack();
+  console.log('📦 Document packed for state metadata');
   
   return {
     document: doc,
     did: didString,
+    packedDoc: packedDoc,
   };
 }
 
