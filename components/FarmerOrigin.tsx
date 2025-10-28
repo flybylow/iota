@@ -13,6 +13,9 @@ import { useSignAndExecuteTransaction, useIotaClient } from '@iota/dapp-kit';
 import type { DPPCredential, OriginCertificationData } from '@/types/dpp';
 import { publishDIDToBlockchain, prepareDIDForPublishing } from '@/lib/publishDID';
 
+// Import AliasOutputBuilder for transaction building
+let IotaSDK: any = null;
+
 /**
  * Origin Certification Component
  * Step 1 in the supply chain - dynamic for all industries
@@ -174,25 +177,45 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                     console.log('💡 Call doc.publish(client) to create Alias Output');
                     console.log('💡 This will prepare the transaction for signing');
                     
-                    // Step 4: Build transaction using client
-                    console.log('📦 Step 4: Building transaction for blockchain...');
+                    // Step 4: Build Alias Output transaction using IOTA SDK
+                    console.log('📦 Step 4: Building Alias Output transaction...');
                     
-                    // Use client to build a basic output first (Alias Output needs more setup)
-                    // For now, we'll prepare the transaction data
-                    console.log('💡 Transaction building with IOTA Client');
-                    console.log('📝 DID ready:', preparedDID.did);
+                    // Import IOTA SDK for transaction building
+                    if (!IotaSDK) {
+                        IotaSDK = await import('@iota/iota-sdk');
+                        console.log('✅ IOTA SDK loaded');
+                    }
                     
-                    // Note: Full Alias Output creation requires:
-                    // 1. AliasOutputBuilder from @iota/iota-sdk
-                    // 2. Proper state controller and governor setup
-                    // 3. State metadata with DID document
-                    // 4. Storage deposit calculation
+                    // Build Alias Output with DID document
+                    const { AliasOutputBuilder, AliasId } = IotaSDK;
                     
-                    console.log('✅ Transaction data prepared');
-                    console.log('💡 Ready for signAndExecute()');
+                    // Create zero alias ID for new DID
+                    const aliasId = AliasId.fromBytes(new Uint8Array(32));
+                    console.log('📋 Alias ID created:', aliasId.toHex());
                     
-                    // Show final status
-                    alert(`✅ Certificate ready for blockchain!\n\n🔧 Final status:\n   • DID: ${preparedDID.did.substring(0, 50)}...\n   • IOTA Client: ✅\n   • Wallet: ✅ Connected\n   • Document: ✅ Packed\n   • Transaction: ✅ Ready\n\n📝 All infrastructure ready\n💡 Certificate ready locally\n\n🚀 Blockchain publishing: Infrastructure complete`);
+                    // Create Alias Output with DID document in state metadata
+                    console.log('📦 Building Alias Output with DID document...');
+                    const aliasOutput = new AliasOutputBuilder()
+                        .nativeTokens([])
+                        .aliasId(aliasId.toHex())
+                        .stateMetadata(preparedDID.packedDoc || new Uint8Array())
+                        .build();
+                    
+                    console.log('✅ Alias Output created');
+                    console.log('📋 Output ID:', aliasOutput.outputId);
+                    
+                    // Step 5: Sign and submit transaction
+                    console.log('📦 Step 5: Signing and submitting transaction...');
+                    signAndExecute(aliasOutput, {
+                        onSuccess: (result) => {
+                            console.log('✅ Transaction submitted to blockchain!', result);
+                            alert(`✅ Certificate published to blockchain!\n\n📋 Transaction ID: ${result.id}\n🔗 Explorer: https://explorer.iota.org/txblock/${result.id}?network=testnet`);
+                        },
+                        onError: (error) => {
+                            console.error('❌ Transaction failed:', error);
+                            alert(`❌ Transaction failed: ${error.message}`);
+                        }
+                    });
                   } catch (publishError) {
                     console.error('❌ Publishing error:', publishError);
                     alert(`❌ Publishing error: ${publishError instanceof Error ? publishError.message : 'Unknown error'}`);
