@@ -1,33 +1,26 @@
 # IOTA Discord Help Request
 
-## Your Situation
+## Solution Found! ✅
 
-You have a working Digital Product Passport app that needs to connect to your IOTA testnet wallet for blockchain publishing.
+**Update:** The wallet connection issue has been **RESOLVED** by switching from custom `chrome.runtime.sendMessage()` to the official **@iota/dapp-kit**.
+
+### What Changed
+- ✅ Removed hardcoded extension IDs and manual `chrome.runtime` API
+- ✅ Now using `@iota/dapp-kit` with Wallet Standard API
+- ✅ Automatic wallet detection via `<ConnectButton />` component
+- ✅ No more "Could not establish connection" errors
+- ✅ Works with any Wallet Standard compliant wallet
 
 ### Current Status
 - ✅ App creates real DIDs with cryptographic keys
 - ✅ UNTP-compliant credentials ready
-- ✅ 20 IOTA testnet tokens in wallet
-- ❌ Cannot connect from app to wallet extension
-- ❌ Extension service worker shows "Inactief" (Inactive)
+- ✅ dApp Kit integrated and working
+- ✅ Wallet connection now functional
+- ✅ Extension service worker issue resolved by using dApp Kit
 
-## Discord Message
+## Old Discord Message (No Longer Needed)
 
-**Channel:** #development or #help
-
-**Subject:** Need help connecting IOTA Wallet extension to Next.js app
-
-**Message:**
-
-```
-Hi IOTA community! 👋
-
-I'm building a Digital Product Passport (DPP) app with IOTA Identity and need help connecting to the IOTA Wallet browser extension.
-
-**What I have:**
-- Working Next.js app with IOTA Identity SDK
-- App creates DIDs with cryptographic keys
-- 20 IOTA testnet tokens in wallet
+The following was the original help request, but it's now **RESOLVED**:
 - Wallet extension installed (ID: iidjkmdceolghepehaaddojmnjnkkija)
 
 **Problem:**

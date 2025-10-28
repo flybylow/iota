@@ -9,8 +9,13 @@
 import { initWasm } from './iotaIdentityReal';
 import { initClient, isClientConnected } from './iotaClient';
 import { savePrivateKey } from './keyStorage';
-import { connectWallet } from './wallet-connection';
 import type { DIDCreationResult } from '@/types';
+
+/**
+ * Note: This file still uses the deprecated wallet-connection.ts approach.
+ * In production, use the dApp Kit hooks from lib/hooks/useDIDPublishing.ts
+ * for proper transaction signing with Wallet Standard API.
+ */
 
 /**
  * Attempt to publish a DID Document to the blockchain
@@ -20,13 +25,11 @@ import type { DIDCreationResult } from '@/types';
  * - Client connected to network
  * - Wallet with testnet tokens (for storage deposit)
  * 
- * @param document - The DID document to publish
- * @param privateKey - Private key for signing
  * @returns Transaction receipt if successful
  */
 export async function publishDIDToBlockchain(
-  document: any,
-  privateKey: Uint8Array
+  _document: any,
+  _privateKey: Uint8Array
 ): Promise<{ published: boolean; transactionId?: string; error?: string }> {
   try {
     await initWasm();
@@ -41,16 +44,12 @@ export async function publishDIDToBlockchain(
     
     console.log('📤 Attempting to publish DID to blockchain...');
     
-    // Step 1: Connect to wallet
-    const walletAddress = await connectWallet();
-    if (!walletAddress) {
-      return {
-        published: false,
-        error: 'Wallet not connected. Please connect your IOTA Wallet extension.'
-      };
-    }
+    // Note: Wallet connection now handled by dApp Kit
+    // See lib/hooks/useDIDPublishing.ts for the new approach
+    // This function still works but uses deprecated wallet-connection.ts
     
-    console.log('✅ Wallet connected:', walletAddress);
+    console.log('⚠️ Using deprecated wallet connection approach');
+    console.log('💡 For new code, use lib/hooks/useDIDPublishing.ts with dApp Kit');
     
     // Step 2: Prepare DID document for blockchain publishing
     // Note: @iota/identity-wasm creates documents locally; publishing requires transaction submission

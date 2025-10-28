@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { industryData, type IndustryId } from '@/data/industry-data';
 import { Loader2, CheckCircle2, Copy, ExternalLink } from 'lucide-react';
-import { getExplorerURL, getRealExplorerURL } from '@/lib/iotaExplorer';
+import { getRealExplorerURL } from '@/lib/iotaExplorer';
 import { isBlockchainMode } from '@/lib/dppMode';
 import { createDID, issueCredential } from '@/lib/iotaIdentityReal';
 import { buildUNTPDPPCredential } from '@/lib/schemas/untp/dpp-builder';

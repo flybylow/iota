@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-// Only import SpeedInsights in production
-const SpeedInsights = process.env.NODE_ENV === 'production' 
-  ? require('@vercel/speed-insights/next').SpeedInsights 
-  : () => null;
+import { Providers } from "@/components/Providers";
+import { SpeedInsightsWrapper } from "@/components/SpeedInsightsWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,8 +30,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-        <SpeedInsights />
+        <Providers>
+          {children}
+        </Providers>
+        <SpeedInsightsWrapper />
       </body>
     </html>
   );

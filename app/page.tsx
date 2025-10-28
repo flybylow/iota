@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { FarmerOrigin } from '@/components/FarmerOrigin';
 import { FactoryProduction } from '@/components/FactoryProduction';
 import { ConsumerJourney } from '@/components/ConsumerJourney';
-import { IndustrySelector } from '@/components/IndustrySelector';
 import { ModeToggle } from '@/components/ModeToggle';
 import { Sprout, Factory, Shield } from 'lucide-react';
 
@@ -56,7 +55,7 @@ export default function Home() {
       {/* Mobile-width container - forced on all screens */}
       <div className="min-h-screen bg-[#0f0f0f] max-w-md mx-auto shadow-2xl">
       {/* Hero Section */}
-      <header className="bg-gradient-to-b from-[#1c1c1c] to-[#0f0f0f] border-b border-[#2a2a2e]">
+      <header className="bg-gradient-to-b from-[#1c1c1c] to-[#0f0f0f] border-b border-[#2a2a2e] mb-8">
         <div className="max-w-md mx-auto px-4 py-6">
           {/* Top Bar - Logo, Industry, Mode Toggle */}
           <div className="flex items-center justify-between mb-8 gap-4 px-2">
