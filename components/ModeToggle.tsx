@@ -145,6 +145,7 @@ export function ModeToggle() {
                   <button
                     onClick={() => setShowInfo(!showInfo)}
                     className="w-full px-4 py-2 text-left flex items-center justify-between text-xs text-zinc-400 hover:text-white transition-colors bg-black"
+                    style={{ backgroundColor: '#000000' }}
                   >
                     <span className="flex items-center gap-2">
                       <Info className="w-4 h-4" />
