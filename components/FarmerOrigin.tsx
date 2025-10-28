@@ -152,8 +152,14 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
           console.log('✅ Credential issued successfully (UNTP-compliant)');
           
           // Show signature prompt if wallet is connected
+          console.log('🔏 Wallet status:', isConnected);
+          console.log('🔏 Wallet address:', originStakeholder.did);
+          
           if (isConnected) {
+            console.log('✅ Wallet is connected - showing signature prompt');
             alert('✅ Certificate created!\n\n📝 Certificate requires wallet signature for on-chain publishing.\n\n💡 Connect your wallet and click "Sign & Publish" to submit to blockchain.');
+          } else {
+            console.log('⚠️ Wallet not connected - certificate created without blockchain publishing');
           }
           
           dppCredential = {
