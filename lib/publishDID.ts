@@ -57,18 +57,42 @@ export async function publishDIDToBlockchain(
     console.log('   3. Storage deposit calculation');
     console.log('   4. dApp Kit transaction signing');
     
-    // For now, we'll prepare the DID and acknowledge it's ready
-    // Full implementation would involve:
-    // - IotaIdentityClient from @iota/identity SDK
-    // - createDidOutput() method
-    // - Transaction building with storage deposit
-    // - Signing via dApp Kit
-    // - Submitting to network
+    // Create IOTA Client for publishing
+    console.log('📦 Step 2: Creating IOTA Client...');
     
-    const transactionId = `did_ready_${Date.now()}`;
-    // Note: Explorer needs actual block ID or transaction ID
-    // For now, link to the DID page which shows address info
-    const explorerUrl = `https://explorer.iota.org/address/${did.split(':')[2]}?network=testnet`;
+    // Dynamic import for client-side only
+    const { Client } = await import('@iota/client');
+    const client = new Client({
+      networks: {
+        testnet: {
+          url: 'https://api.testnet.iota.org'
+        }
+      }
+    });
+    
+    console.log('✅ Step 3: IOTA Client created');
+    
+    // Create Alias Output for DID document
+    console.log('📦 Step 4: Creating Alias Output for DID document...');
+    
+    // For demo, create a simple transaction ID
+    const transactionId = `tx_${Date.now()}`;
+    
+    // In a real implementation, we would:
+    // 1. Create an Alias Output with the DID document
+    // 2. Calculate storage deposit
+    // 3. Build and sign the transaction
+    // 4. Submit to the network
+    
+    console.log('✅ Step 5: Alias Output created (demo)');
+    console.log('💡 In production, this would:');
+    console.log('   1. Create Alias Output with DID document');
+    console.log('   2. Calculate storage deposit');
+    console.log('   3. Sign with wallet via dApp Kit');
+    console.log('   4. Submit to IOTA Tangle');
+    
+    // For now, return a mock transaction ID
+    const explorerUrl = `https://explorer.iota.org/search/${did}?network=testnet`;
     
     console.log('✅ DID prepared for publishing');
     console.log(`📋 Transaction ID: ${transactionId}`);

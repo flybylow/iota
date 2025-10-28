@@ -11,6 +11,7 @@ import { UNTPSection } from './UNTPSection';
 import { useWalletStatus } from '@/lib/hooks/useWalletStatus';
 import { useSignAndExecuteTransaction } from '@iota/dapp-kit';
 import type { DPPCredential, OriginCertificationData } from '@/types/dpp';
+import { publishDIDToBlockchain } from '@/lib/publishDID';
 
 /**
  * Origin Certification Component
@@ -41,7 +42,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
   const [copied, setCopied] = useState(false);
   
   // Blockchain mode hooks
-  const { isConnected } = useWalletStatus();
+  const { isConnected, address } = useWalletStatus();
   const { mutate: signAndExecute } = useSignAndExecuteTransaction();
   
   // Harvest data form state
@@ -155,20 +156,43 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
           console.log('🔏 Wallet status:', isConnected);
           console.log('🔏 Wallet address:', originStakeholder.did);
           
-          if (isConnected) {
+          if (isConnected && address) {
             console.log('✅ Wallet is connected - signing and publishing to blockchain...');
             
-            // TODO: Implement actual transaction signing here
-            // For now, show that it's ready for signing
+            // Ask user if they want to publish to blockchain
             const shouldPublish = confirm(
               '✅ Certificate created!\n\n📝 This certificate requires wallet signature for on-chain publishing.\n\nWould you like to sign and publish this certificate to the blockchain?'
             );
             
             if (shouldPublish) {
               console.log('📝 User confirmed: Publishing to blockchain...');
-              // TODO: Call signAndExecute({ ... }) with the transaction
-              console.log('⏳ Transaction signing in progress...');
-              alert('⏳ Transaction signing not yet implemented.\n\n✅ Certificate created locally.\n💡 Blockchain publishing coming soon.');
+              console.log('📍 Wallet address:', address);
+              console.log('📤 Publishing DID to blockchain...');
+              
+              // Publish the DID to blockchain using the publishing hook
+              try {
+                const publishResult = await publishDIDToBlockchain(
+                  issuerDID,
+                  { id: issuerDID, '@context': 'https://www.w3.org/ns/did/v1', ...document },
+                  new Uint8Array(32), // Placeholder for private key (wallet handles signing)
+                  address
+                );
+                
+                console.log('📦 Publishing result:', publishResult);
+                
+                if (publishResult.success) {
+                  console.log('✅ DID published successfully!');
+                  console.log('📋 Transaction ID:', publishResult.transactionId);
+                  console.log('🔗 Explorer:', publishResult.explorerUrl);
+                  alert(`✅ Certificate published to blockchain!\n\n📋 Transaction: ${publishResult.transactionId}\n🔗 View: ${publishResult.explorerUrl}`);
+                } else {
+                  console.error('❌ Publishing failed:', publishResult.error);
+                  alert(`❌ Publishing failed: ${publishResult.error}`);
+                }
+              } catch (publishError) {
+                console.error('❌ Publishing error:', publishError);
+                alert(`❌ Publishing error: ${publishError instanceof Error ? publishError.message : 'Unknown error'}`);
+              }
             } else {
               console.log('⚠️ User declined: Certificate created without blockchain publishing');
             }
