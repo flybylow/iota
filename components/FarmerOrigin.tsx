@@ -151,13 +151,27 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
           
           console.log('✅ Credential issued successfully (UNTP-compliant)');
           
-          // Show signature prompt if wallet is connected
+          // Step 5: Publish credential to blockchain if wallet is connected
           console.log('🔏 Wallet status:', isConnected);
           console.log('🔏 Wallet address:', originStakeholder.did);
           
           if (isConnected) {
-            console.log('✅ Wallet is connected - showing signature prompt');
-            alert('✅ Certificate created!\n\n📝 Certificate requires wallet signature for on-chain publishing.\n\n💡 Connect your wallet and click "Sign & Publish" to submit to blockchain.');
+            console.log('✅ Wallet is connected - signing and publishing to blockchain...');
+            
+            // TODO: Implement actual transaction signing here
+            // For now, show that it's ready for signing
+            const shouldPublish = confirm(
+              '✅ Certificate created!\n\n📝 This certificate requires wallet signature for on-chain publishing.\n\nWould you like to sign and publish this certificate to the blockchain?'
+            );
+            
+            if (shouldPublish) {
+              console.log('📝 User confirmed: Publishing to blockchain...');
+              // TODO: Call signAndExecute({ ... }) with the transaction
+              console.log('⏳ Transaction signing in progress...');
+              alert('⏳ Transaction signing not yet implemented.\n\n✅ Certificate created locally.\n💡 Blockchain publishing coming soon.');
+            } else {
+              console.log('⚠️ User declined: Certificate created without blockchain publishing');
+            }
           } else {
             console.log('⚠️ Wallet not connected - certificate created without blockchain publishing');
           }
