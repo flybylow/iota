@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useWalletStatus } from './useWalletStatus';
 import { useSignAndExecuteTransaction } from '@iota/dapp-kit';
 import { Transaction } from '@iota/iota-sdk';
+import { publishDIDToBlockchain, checkWalletBalance } from '@/lib/publishDID';
 
 /**
  * Hook for publishing DIDs to IOTA blockchain using dApp Kit
@@ -60,30 +61,30 @@ export function useIOTAPublishing() {
       console.log('📦 Step 2: DID document ready');
       console.log('📝 Document structure:', JSON.stringify(document, null, 2));
       
-      // TODO: Build proper transaction using IOTA Identity SDK
-      // This would involve:
-      // 1. Creating Alias Output for DID document
-      // 2. Using IotaIdentityClient.createDidOutput()
-      // 3. Preparing block with storage deposit
+      // Check wallet balance first
+      console.log('💵 Step 3: Checking wallet balance...');
+      const balance = await checkWalletBalance(address);
+      console.log(`💰 Balance: ${balance} IOTA`);
       
-      // For demonstration, we'll return a placeholder transaction ID
-      // In production, this would be a real blockchain transaction
+      if (balance < 1000) {
+        console.warn('⚠️ Low balance - may not have enough for storage deposit');
+      }
       
-      const mockTransactionId = `tx_${Date.now()}_${did.substring(0, 16)}`;
-      const explorerUrl = `https://explorer.iota.org/txblock/${mockTransactionId}?network=testnet`;
-      
-      console.log('✅ DID prepared for blockchain publishing');
-      console.log(`📋 Mock Transaction ID: ${mockTransactionId}`);
-      console.log(`🔗 Explorer: ${explorerUrl}`);
+      // Call the publish function
+      console.log('📤 Step 4: Publishing DID to blockchain...');
+      const result = await publishDIDToBlockchain(did, document, new Uint8Array(), address);
       
       setPublishing(false);
       
-      return {
-        success: true,
-        transactionId: mockTransactionId,
-        blockId: mockTransactionId,
-        explorerUrl,
-      };
+      if (result.success) {
+        console.log('✅ DID publishing completed!');
+        console.log(`📋 Transaction ID: ${result.transactionId}`);
+        console.log(`🔗 Explorer: ${result.explorerUrl}`);
+      } else {
+        console.error('❌ Publishing failed:', result.error);
+      }
+      
+      return result;
       
     } catch (error) {
       console.error('❌ Publishing error:', error);
