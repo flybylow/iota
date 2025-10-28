@@ -174,17 +174,24 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                     console.log('💡 Call doc.publish(client) to create Alias Output');
                     console.log('💡 This will prepare the transaction for signing');
                     
-                    // TODO: Implement actual doc.publish(client) call
-                    // const transaction = await preparedDID.document.publish(client);
-                    // Step 4: Sign and execute with signAndExecute()
-                    // signAndExecute({ transaction }, {
-                    //   onSuccess: (result) => {
-                    //     console.log('✅ Transaction submitted!', result);
-                    //     alert(`✅ Certificate published to blockchain!\n\n📋 Block ID: ${result.id}\n🔗 Explorer: https://explorer.iota.org/txblock/${result.id}`);
-                    //   }
-                    // });
+                    // Step 4: Call doc.publish(client) to create Alias Output transaction
+                    console.log('📦 Step 4: Calling doc.publish(client)...');
+                    const transaction = await preparedDID.document.publish(client);
+                    console.log('✅ Alias Output transaction created');
+                    console.log('📋 Transaction details:', transaction);
                     
-                    alert(`✅ Certificate prepared for blockchain!\n\n🔧 Implementation status:\n   • DID document created ✅\n   • IOTA Client available ✅\n   • Wallet connected ✅\n   • Transaction signing ready ✅\n\n📝 Next: Call doc.publish(client) + signAndExecute()\n\n💡 Certificate ready locally`);
+                    // Step 5: Sign and execute transaction with wallet
+                    console.log('📦 Step 5: Signing and submitting transaction...');
+                    signAndExecute(transaction, {
+                      onSuccess: (result) => {
+                        console.log('✅ Transaction submitted to blockchain!', result);
+                        alert(`✅ Certificate published to blockchain!\n\n📋 Transaction ID: ${result.id}\n🔗 Explorer: https://explorer.iota.org/txblock/${result.id}?network=testnet`);
+                      },
+                      onError: (error) => {
+                        console.error('❌ Transaction failed:', error);
+                        alert(`❌ Transaction failed: ${error.message}`);
+                      }
+                    });
                   } catch (publishError) {
                     console.error('❌ Publishing error:', publishError);
                     alert(`❌ Publishing error: ${publishError instanceof Error ? publishError.message : 'Unknown error'}`);
