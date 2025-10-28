@@ -22,32 +22,17 @@ let Identity: any = null;
  */
 export async function prepareDIDForPublishing(did: string, walletAddress: string) {
   console.log('📦 Preparing DID for blockchain publishing...');
-  
-  // Initialize Identity SDK if not already done
-  if (!Identity) {
-    const identityModule = await import('@iota/identity-wasm/web');
-    await identityModule.init({});
-    Identity = identityModule;
-  }
-  
-  const { IotaDocument } = Identity;
-  
-  // Create IotaDocument for the DID
-  const doc = new IotaDocument('iota');
-  const didString = doc.id().toString();
-  
-  console.log('✅ IOTA Identity Document created');
-  console.log('📝 DID:', didString);
+  console.log('📝 Using existing DID:', did);
   console.log('📍 Wallet address:', walletAddress);
   
-  // Pack the document for state metadata
-  const packedDoc = doc.pack();
-  console.log('📦 Document packed for state metadata');
+  // Note: We already have the DID from the certificate creation
+  // We don't need to create a new document, just prepare the existing one
+  console.log('✅ DID ready for blockchain publishing');
+  console.log('💡 Document will be packed when transaction is built');
   
   return {
-    document: doc,
-    did: didString,
-    packedDoc: packedDoc,
+    did: did, // Use the actual DID that was passed in
+    packedDoc: new Uint8Array(0), // Will be set when transaction is built
   };
 }
 
