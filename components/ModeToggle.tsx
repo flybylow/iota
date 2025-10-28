@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { getDPPMode, setDPPMode, type DPPMode } from '@/lib/dppMode';
 import { Settings, Zap, Network } from 'lucide-react';
+import { ConnectButton } from '@iota/dapp-kit';
+import { useWalletStatus } from '@/lib/hooks/useWalletStatus';
 
 /**
  * Mode Toggle Component
@@ -15,7 +17,7 @@ import { Settings, Zap, Network } from 'lucide-react';
 export function ModeToggle() {
   const [mode, setMode] = useState<DPPMode>('demo');
   const [showSettings, setShowSettings] = useState(false);
-  const [walletConnected, setWalletConnected] = useState(false);
+  const { isConnected, address } = useWalletStatus();
 
   useEffect(() => {
     setMode(getDPPMode());
@@ -26,36 +28,6 @@ export function ModeToggle() {
     setDPPMode(newMode);
     // Reload page to apply mode change
     window.location.reload();
-  };
-
-  const handleConnectWallet = async () => {
-    try {
-      console.log('🔗 Attempting to connect IOTA Wallet...');
-      console.log('📋 Step 1: Importing wallet connection module');
-      const { connectWallet } = await import('@/lib/wallet-connection');
-      console.log('📋 Step 2: Calling connectWallet()');
-      const address = await connectWallet();
-      console.log('📋 Step 3: Got address result:', address ? 'connected' : 'not connected');
-      
-      if (address) {
-        setWalletConnected(true);
-        console.log('✅ Wallet connected:', address);
-        alert('✅ Wallet connected!\n\nAddress: ' + address.substring(0, 20) + '...');
-      } else {
-        console.log('❌ Wallet not connected - checking extension status...');
-        const isExtensionInstalled = (typeof window !== 'undefined' && (window as unknown as { chrome?: { runtime?: { id?: string } } }).chrome?.runtime?.id) || (typeof window !== 'undefined' && (window as unknown as { browser?: { runtime?: { id?: string } } }).browser?.runtime?.id);
-        console.log('📋 Extension check result:', isExtensionInstalled ? 'extension detected' : 'no extension');
-        
-        console.log('💡 Wallet connection is optional - app works without it!');
-        console.log('📋 Note: The IOTA Wallet extension was reinstalled');
-        console.log('✅ App works perfectly without wallet connection!');
-        alert('⚠️ Cannot Connect to Browser Extension\n\nPossible reasons:\n• IOTA Wallet extension not installed\n• Extension service worker inactive\n• Extension API not responding\n\n✅ What You Can Still Do:\n• Create DIDs with cryptographic keys\n• Issue UNTP-compliant credentials\n• View complete supply chain traceability\n• All features work without wallet connection!\n\n💡 The app creates and verifies credentials locally. Wallet is only needed for on-chain publishing.');
-      }
-    } catch (error) {
-      console.error('❌ Failed to connect wallet:', error);
-      console.error('❌ Error details:', error);
-      alert('Failed to connect wallet. Please check the browser console for details.');
-    }
   };
 
   return (
@@ -156,18 +128,17 @@ export function ModeToggle() {
               <>
                 {/* Wallet Connection Button */}
                 <div className="p-3 border-t border-[#3a3a3a]">
-                  <button
-                    onClick={handleConnectWallet}
-                    disabled={walletConnected}
-                    className={`w-full p-3 rounded-lg text-sm font-medium transition-colors border-2 ${
-                      walletConnected
-                        ? 'bg-green-500/10 border-green-500/30 text-green-400'
-                        : 'bg-black border-white text-white hover:bg-gray-900'
-                    }`}
-                    style={{ color: walletConnected ? '#86efac' : '#ffffff', backgroundColor: walletConnected ? 'rgba(34, 197, 94, 0.1)' : '#000000', borderColor: walletConnected ? 'rgba(34, 197, 94, 0.3)' : '#ffffff' }}
-                  >
-                    {walletConnected ? '✓ Wallet Connected' : '🔗 Connect IOTA Wallet'}
-                  </button>
+                  {isConnected ? (
+                    <div className="w-full p-3 rounded-lg text-sm font-medium bg-green-500/10 border-2 border-green-500/30 text-green-400 text-center">
+                      ✓ Connected: {address?.substring(0, 10)}...
+                    </div>
+                  ) : (
+                    <ConnectButton
+                      connectText="🔗 Connect IOTA Wallet"
+                      className="w-full p-3 rounded-lg text-sm font-medium transition-colors border-2 bg-black border-white text-white hover:bg-gray-900"
+                      style={{ backgroundColor: '#000000', borderColor: '#ffffff', color: '#ffffff' }}
+                    />
+                  )}
                 </div>
 
                 {/* Info Section */}

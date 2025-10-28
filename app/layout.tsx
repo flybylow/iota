@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Providers } from "@/components/Providers";
 
-// Only import SpeedInsights in production
-const SpeedInsights = process.env.NODE_ENV === 'production' 
-  ? require('@vercel/speed-insights/next').SpeedInsights 
-  : () => null;
+// Dynamically import SpeedInsights only in production
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let SpeedInsights: any = () => null;
+if (process.env.NODE_ENV === 'production') {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  SpeedInsights = require('@vercel/speed-insights/next').SpeedInsights;
+}
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +37,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Providers>
+          {children}
+        </Providers>
         <SpeedInsights />
       </body>
     </html>

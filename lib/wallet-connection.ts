@@ -1,8 +1,17 @@
 /**
  * Wallet Connection Module
  * 
- * Handles connection to IOTA Wallet browser extension
- * Uses postMessage API to communicate with the extension
+ * @deprecated This file is deprecated.
+ * Use @iota/dapp-kit hooks instead:
+ * - useCurrentAccount() for wallet address
+ * - useSignAndExecuteTransaction() for signing
+ * - ConnectButton component for wallet connection
+ * - useWalletStatus() for connection status
+ * 
+ * This file is kept temporarily for reference but should not be used in new code.
+ * 
+ * Old approach: chrome.runtime.sendMessage() with hardcoded extension ID
+ * New approach: @iota/dapp-kit with Wallet Standard API
  */
 
 const IOTA_WALLET_EXTENSION_ID = 'iidjkmdceolghepehaaddojmnjnkkija';
