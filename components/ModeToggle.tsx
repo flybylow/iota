@@ -176,37 +176,18 @@ export function ModeToggle() {
                   ⚠️ Blockchain Mode Info:
                 </p>
                 <ul className="text-xs text-white space-y-1 ml-4">
-                  <li>• Creates real DIDs with cryptographic keys</li>
-                  <li>• WASM initialization required</li>
-                  <li>• Credentials structured for blockchain</li>
-                  <li>• Publishing ready (needs wallet + tokens)</li>
+                  <li>• Creates real DIDs with cryptographic keys ✅</li>
+                  <li>• WASM initialized and working</li>
+                  <li>• UNTP-compliant credentials</li>
+                  <li>• Full supply chain verification</li>
                 </ul>
-                <div className="mt-3 p-2 bg-yellow-500/10 border border-yellow-500/20 rounded">
-                  <p className="text-xs text-yellow-400 font-medium mb-2">
-                    🚧 Testnet Faucet Currently Down
+                <div className="mt-3 p-2 bg-green-500/10 border border-green-500/20 rounded">
+                  <p className="text-xs text-green-400 font-medium mb-1 flex items-center gap-1.5">
+                    ✅ Everything Works Without Wallet
                   </p>
-                  <div className="space-y-2 text-xs text-white">
-                    <div className="mb-2">
-                      The public faucet is temporarily inaccessible. Use Discord to get tokens:
-                    </div>
-                    <div className="bg-blue-500/10 border border-blue-500/20 rounded p-2">
-                      <strong className="text-blue-400">Recommended:</strong>
-                      <a
-                        href="https://discord.iota.org"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-400 hover:text-blue-300 ml-2"
-                      >
-                        Join IOTA Discord →
-                      </a>
-                      <div className="text-zinc-400 text-[10px] mt-1">
-                        Ask in #development or #help channels for testnet tokens
-                      </div>
-                    </div>
-                    <div className="mt-2 text-zinc-400">
-                      💡 The app works perfectly in Demo Mode without tokens!
-                    </div>
-                  </div>
+                  <p className="text-xs text-white leading-relaxed">
+                    The app creates and verifies DIDs locally. Wallet connection is optional and only needed for on-chain publishing of credentials to the blockchain.
+                  </p>
                 </div>
                 </div>
               </>
