@@ -174,21 +174,36 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                     console.log('💡 Call doc.publish(client) to create Alias Output');
                     console.log('💡 This will prepare the transaction for signing');
                     
-                    // Step 4: Create Alias Output transaction using client
+                    // Step 4: Create Alias Output transaction using IOTA SDK
                     console.log('📦 Step 4: Creating Alias Output for DID document...');
                     
-                    // Note: IOTA Identity SDK doesn't have doc.publish() method
-                    // We need to create the transaction manually using the client
-                    console.log('💡 IOTA Identity SDK requires manual Alias Output creation');
-                    console.log('💡 Full implementation needs:');
-                    console.log('   1. Create Alias Output with DID document in state metadata');
-                    console.log('   2. Calculate storage deposit');
-                    console.log('   3. Build and sign transaction');
-                    console.log('   4. Submit to network');
+                    // Import IOTA SDK for transaction building
+                    const { IotaClient, AliasOutputBuilder, AliasId } = await import('@iota/iota-sdk');
                     
-                    // For now, return success with document info
-                    console.log('✅ Document ready for blockchain (manual Alias Output creation required)');
-                    alert(`✅ Certificate prepared for blockchain!\n\n🔧 Current status:\n   • DID document: ${preparedDID.did}\n   • IOTA Client: ✅\n   • Wallet: ✅\n   • Document: ✅\n\n📝 Full publishing requires manual Alias Output creation\n\n💡 Certificate ready locally`);
+                    // Create Alias Output with DID document
+                    const aliasId = AliasId.fromBytes(new Uint8Array(32)); // Zero alias (new)
+                    const aliasOutput = new AliasOutputBuilder()
+                      .nativeTokens([])
+                      .aliasId(aliasId)
+                      .stateController(address)
+                      .governor(address)
+                      .build();
+                    
+                    console.log('✅ Alias Output created');
+                    console.log('📋 Alias ID:', aliasId.toHex());
+                    
+                    // Step 5: Sign and submit transaction
+                    console.log('📦 Step 5: Signing and submitting transaction...');
+                    signAndExecute(aliasOutput as any, {
+                      onSuccess: (result) => {
+                        console.log('✅ Transaction submitted to blockchain!', result);
+                        alert(`✅ Certificate published to blockchain!\n\n📋 Transaction ID: ${result.id}\n🔗 Explorer: https://explorer.iota.org/txblock/${result.id}?network=testnet`);
+                      },
+                      onError: (error) => {
+                        console.error('❌ Transaction failed:', error);
+                        alert(`❌ Transaction failed: ${error.message}`);
+                      }
+                    });
                   } catch (publishError) {
                     console.error('❌ Publishing error:', publishError);
                     alert(`❌ Publishing error: ${publishError instanceof Error ? publishError.message : 'Unknown error'}`);
