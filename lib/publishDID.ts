@@ -85,11 +85,10 @@ export async function publishDIDToBlockchain(
     console.log('📦 Creating IOTA Client for blockchain publishing...');
     
     // Import IOTA Client SDK
-    const { ClientBuilder } = await import('@iota/client');
-    const client = new ClientBuilder()
-      .network('testnet')
-      .node('https://api.testnet.iota.org')
-      .build();
+    const { Client } = await import('@iota/iota-sdk');
+    const client = new Client({
+      nodes: ['https://api.testnet.iota.org'],
+    });
     
     console.log('✅ IOTA Client created');
     console.log('🔗 Network: testnet');
