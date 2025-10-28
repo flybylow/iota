@@ -300,7 +300,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                   max="10000"
                   step="100"
                   value={harvestData.batchWeight}
-                  onChange={(e) => setHarvestData({...harvestData, batchWeight: parseInt(e.target.value) || 0})}
+                  onChange={(e) => setHarvestData({...harvestData, batchWeight: parseInt(e.target.value || '2500', 10)})}
                   className="w-full px-3 py-2 bg-white border border-[#3a3a3a] rounded-lg text-gray-900 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
               </div>
@@ -326,7 +326,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                   min="3"
                   max="10"
                   value={harvestData.fermentationDays}
-                  onChange={(e) => setHarvestData({...harvestData, fermentationDays: parseInt(e.target.value) || 0})}
+                  onChange={(e) => setHarvestData({...harvestData, fermentationDays: parseInt(e.target.value || '6', 10)})}
                   className="w-full px-3 py-2 bg-white border border-[#3a3a3a] rounded-lg text-gray-900 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
               </div>
