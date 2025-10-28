@@ -9,7 +9,7 @@ import { createDID, issueCredential } from '@/lib/iotaIdentityReal';
 import { buildUNTPDPPCredential } from '@/lib/schemas/untp/dpp-builder';
 import { UNTPSection } from './UNTPSection';
 import { useWalletStatus } from '@/lib/hooks/useWalletStatus';
-import { useSignAndExecuteTransaction } from '@iota/dapp-kit';
+import { useSignAndExecuteTransaction, useIotaClient } from '@iota/dapp-kit';
 import type { DPPCredential, OriginCertificationData } from '@/types/dpp';
 import { publishDIDToBlockchain } from '@/lib/publishDID';
 
@@ -44,6 +44,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
   // Blockchain mode hooks
   const { isConnected, address } = useWalletStatus();
   const { mutate: signAndExecute } = useSignAndExecuteTransaction();
+  const client = useIotaClient();
   
   // Harvest data form state
   const [harvestData, setHarvestData] = useState({
@@ -154,14 +155,16 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                 );
                 
                 if (publishResult.success) {
-                  // TODO: Integrate useSignAndExecuteTransaction here
-                  // 1. Create IotaDocument with Alias Output
-                  // 2. Call signAndExecute({ transaction })
-                  // 3. Return actual block ID/transaction ID
-                  
                   console.log('✅ DID prepared for blockchain publishing');
                   console.log('📋 Transaction ID:', publishResult.transactionId);
-                  alert(`✅ Certificate prepared for blockchain!\n\n🔧 Blockchain publishing in progress:\n   • DID document created ✅\n   • Alias Output prepared ✅\n   • Next: Wallet transaction signing\n   • Next: Transaction submission\n\n📝 Certificate is ready locally.`);
+                  
+                  // TODO: Implement full blockchain publishing
+                  // 1. Use client from dApp Kit to create Alias Output
+                  // 2. Call doc.publish(client) to prepare transaction
+                  // 3. Sign transaction with signAndExecute()
+                  // 4. Return actual block ID from Tangle
+                  
+                  alert(`✅ Certificate prepared for blockchain!\n\n🔧 Blockchain publishing in progress:\n   • DID document created ✅\n   • Alias Output prepared ✅\n   • Wallet connected ✅\n   • Transaction signing next ⏳\n\n📝 Full implementation requires:\n   • doc.publish(client)\n   • signAndExecute({ transaction })\n   • Submit to IOTA Tangle`);
                 } else {
                   console.error('❌ Publishing failed:', publishResult.error);
                   alert(`❌ Publishing failed: ${publishResult.error}`);
