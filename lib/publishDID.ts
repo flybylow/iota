@@ -84,23 +84,36 @@ export async function publishDIDToBlockchain(
     console.log('✅ IOTA Identity Document created');
     console.log('📝 DID:', doc.id().toString());
     
-    // Step 3: Prepare Alias Output for publishing
-    // In a real implementation, this would create the Alias Output transaction
-    // and use dApp Kit's useSignAndExecuteTransaction to sign and submit it
+    // Step 3: Prepare transaction for signing
+    // The IotaDocument is now ready for blockchain publishing
+    // To complete the publishing, we need to:
+    // 1. Get the account from wallet (address already provided)
+    // 2. Create the Alias Output transaction
+    // 3. Sign it with signAndExecute() from dApp Kit
     
-    console.log('📦 Preparing Alias Output for blockchain publishing...');
-    console.log('💡 Full blockchain publishing requires:');
-    console.log('   1. Use IotaDocument.publish(client) method');
-    console.log('   2. Integration with dApp Kit useSignAndExecuteTransaction');
-    console.log('   3. Storage deposit calculation and payment');
-    console.log('   4. Transaction submission to IOTA Tangle');
+    console.log('📦 Preparing transaction for blockchain publishing...');
+    console.log('✅ Document created:', doc.id().toString());
+    console.log('📍 Wallet address:', walletAddress);
     
-    // For now, return a demo transaction ID
-    const transactionId = `tx_${Date.now()}`;
+    // Create a transaction payload for signing
+    // Note: In a real implementation, we would:
+    // 1. Call doc.publish(client) which creates the Alias Output
+    // 2. Get the prepared transaction
+    // 3. Sign it with signAndExecute({ transaction })
+    // 4. Return the actual block ID
+    
+    console.log('💡 Next steps for full implementation:');
+    console.log('   1. Import useSignAndExecuteTransaction hook');
+    console.log('   2. Call doc.publish(client) to create Alias Output');
+    console.log('   3. Sign transaction with signAndExecute()');
+    console.log('   4. Submit to IOTA Tangle via dApp Kit');
+    
+    // Return demo transaction ID for now
+    const transactionId = `tx_pending_${Date.now()}`;
     const explorerUrl = `https://explorer.iota.org/search/${did}?network=testnet`;
     
-    console.log('📋 Transaction ID:', transactionId);
-    console.log('💡 Document ready for blockchain publishing');
+    console.log('📋 Demo transaction ID:', transactionId);
+    console.log('🔧 Ready for dApp Kit integration');
     
     return {
       success: true,
