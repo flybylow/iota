@@ -81,36 +81,26 @@ export async function publishDIDToBlockchain(
     // The document already has a default verification method when created
     // We don't need to add another one for basic publishing
     
-    // Step 3: Prepare transaction for signing
+    // Step 3: Prepare document for publishing
     // The IotaDocument is now ready for blockchain publishing
-    // To complete the publishing, we need to:
-    // 1. Get the account from wallet (address already provided)
-    // 2. Create the Alias Output transaction
-    // 3. Sign it with signAndExecute() from dApp Kit
-    
-    console.log('📦 Preparing transaction for blockchain publishing...');
-    console.log('✅ Document created:', doc.id().toString());
+    console.log('📦 Document ready for blockchain publishing');
+    console.log('✅ DID:', didString);
     console.log('📍 Wallet address:', walletAddress);
     
-    // Create a transaction payload for signing
-    // Note: In a real implementation, we would:
-    // 1. Call doc.publish(client) which creates the Alias Output
-    // 2. Get the prepared transaction
-    // 3. Sign it with signAndExecute({ transaction })
-    // 4. Return the actual block ID
+    // Note: Full blockchain publishing requires:
+    // 1. IOTA Client connection to create Alias Output
+    // 2. Call doc.publish(client) to prepare transaction
+    // 3. Use dApp Kit's signAndExecute() to sign and submit
+    // 4. Return actual block ID from Tangle
     
-    console.log('💡 Next steps for full implementation:');
-    console.log('   1. Import useSignAndExecuteTransaction hook');
-    console.log('   2. Call doc.publish(client) to create Alias Output');
-    console.log('   3. Sign transaction with signAndExecute()');
-    console.log('   4. Submit to IOTA Tangle via dApp Kit');
+    console.log('💡 Current status: Document prepared, ready for client integration');
+    console.log('🔧 Next: Integrate IOTA Client and dApp Kit signAndExecute()');
     
-    // Return demo transaction ID for now
+    // Return demo transaction ID
     const transactionId = `tx_pending_${Date.now()}`;
     const explorerUrl = `https://explorer.iota.org/search/${did}?network=testnet`;
     
     console.log('📋 Demo transaction ID:', transactionId);
-    console.log('🔧 Ready for dApp Kit integration');
     
     return {
       success: true,
