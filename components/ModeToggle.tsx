@@ -156,7 +156,7 @@ export function ModeToggle() {
 
                 {/* Collapsible Info Section */}
                 {showInfo && (
-                  <div className="border-t border-[#3a3a3a] px-4 py-3 text-xs text-white space-y-2">
+                  <div className="border-t border-[#3a3a3a] bg-black px-4 py-3 text-xs text-white space-y-2">
                     <ul className="space-y-1">
                       <li>• Creates real DIDs with cryptographic keys ✅</li>
                       <li>• WASM initialized and working</li>
