@@ -68,21 +68,18 @@ export async function publishDIDToBlockchain(
     }
     
     // Create IotaDocument for the DID
-    const { IotaDocument, IotaDID, MethodScope } = Identity;
+    const { IotaDocument, IotaDID, MethodScope, VerificationMethod } = Identity;
     
     // Generate a new DID document
     const doc = new IotaDocument('iota');
     
-    // Add a verification method to the document
-    const verificationMethodId = doc.id().toUrl() + '#key-1';
-    doc.insertMethod({
-      scope: MethodScope.VerificationMethod(),
-      fragment: 'key-1',
-      public: document.verificationMethod?.[0]?.publicKeyMultibase || 'z' + did.split(':')[2].substring(2, 46),
-    });
-    
+    // Get the DID string
+    const didString = doc.id().toString();
     console.log('✅ IOTA Identity Document created');
-    console.log('📝 DID:', doc.id().toString());
+    console.log('📝 DID:', didString);
+    
+    // The document already has a default verification method when created
+    // We don't need to add another one for basic publishing
     
     // Step 3: Prepare transaction for signing
     // The IotaDocument is now ready for blockchain publishing
