@@ -16,6 +16,41 @@ import type { DIDCreationResult } from '@/types';
 let Identity: any = null;
 
 /**
+ * Prepare DID document for blockchain publishing
+ * This creates the IotaDocument but doesn't actually publish yet
+ * Full publishing requires doc.publish(client) + signAndExecute()
+ */
+export async function prepareDIDForPublishing(did: string, walletAddress: string) {
+  console.log('📦 Preparing DID for blockchain publishing...');
+  
+  // Initialize Identity SDK if not already done
+  if (!Identity) {
+    const identityModule = await import('@iota/identity-wasm/web');
+    await identityModule.init({});
+    Identity = identityModule;
+  }
+  
+  const { IotaDocument } = Identity;
+  
+  // Create IotaDocument for the DID
+  const doc = new IotaDocument('iota');
+  const didString = doc.id().toString();
+  
+  console.log('✅ IOTA Identity Document created');
+  console.log('📝 DID:', didString);
+  console.log('📍 Wallet address:', walletAddress);
+  
+  // The document is ready for publishing
+  // Next step: Call doc.publish(client) when ready to submit
+  console.log('🔧 Document ready for doc.publish(client) call');
+  
+  return {
+    document: doc,
+    did: didString,
+  };
+}
+
+/**
  * Publish a DID to the IOTA blockchain
  * 
  * This function creates a real blockchain transaction to publish the DID.
