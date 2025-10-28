@@ -183,7 +183,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                       aliasId: '0x0000000000000000000000000000000000000000000000000000000000000000',
                       stateMetadata: preparedDID.packedDoc,
                       nativeTokens: [],
-                      unlockConditions: [{ type: 0, address: walletAddress }], // State controller
+                      unlockConditions: [{ type: 0, address: address }], // State controller
                     });
                     
                     console.log('✅ Alias Output created');
