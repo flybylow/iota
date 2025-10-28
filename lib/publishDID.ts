@@ -65,14 +65,18 @@ export async function publishDIDToBlockchain(
     console.log('   3. dApp Kit transaction signing (in progress)');
     console.log('   4. Submission to IOTA Tangle');
     
-    // TODO: Implement full blockchain publishing
-    // For now, return a demo transaction ID to show the flow works
-    const transactionId = `tx_${Date.now()}`;
-    const explorerUrl = `https://explorer.iota.org/search/${did}?network=testnet`;
+    // TODO: Implement full blockchain publishing with actual transaction
+    // This is currently a placeholder that shows the publishing flow works
+    const transactionId = `pending_${Date.now()}`;
+    const explorerUrl = 'https://explorer.iota.org';
     
-    console.log('✅ DID prepared for blockchain publishing');
-    console.log(`📋 Transaction ID: ${transactionId}`);
-    console.log('💡 Next: Implement dApp Kit transaction signing');
+    console.log('⚠️ Blockchain publishing not yet fully implemented');
+    console.log('📋 Demo transaction ID:', transactionId);
+    console.log('💡 Real implementation requires:');
+    console.log('   1. Create Alias Output with DID document');
+    console.log('   2. Use dApp Kit useSignAndExecuteTransaction hook');
+    console.log('   3. Submit transaction to IOTA Tangle');
+    console.log('   4. Return actual block ID/transaction ID');
     
     return {
       success: true,

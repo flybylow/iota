@@ -154,10 +154,9 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                 );
                 
                 if (publishResult.success) {
-                  console.log('✅ Certificate published to blockchain!');
-                  console.log('📋 Transaction:', publishResult.transactionId);
-                  console.log('🔗 Explorer:', publishResult.explorerUrl);
-                  alert(`✅ Certificate published to blockchain!\n\n📋 Transaction: ${publishResult.transactionId}\n🔗 View: ${publishResult.explorerUrl}`);
+                  console.log('✅ Certificate created (ready for blockchain publishing)');
+                  console.log('📋 Transaction ID:', publishResult.transactionId);
+                  alert(`✅ Certificate created successfully!\n\n⚠️ Blockchain publishing requires full implementation:\n   1. Alias Output creation\n   2. Wallet transaction signing\n   3. Transaction submission\n\n📝 Certificate is ready locally.`);
                 } else {
                   console.error('❌ Publishing failed:', publishResult.error);
                   alert(`❌ Publishing failed: ${publishResult.error}`);
