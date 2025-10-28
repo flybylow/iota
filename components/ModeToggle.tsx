@@ -69,27 +69,29 @@ export function ModeToggle() {
               {/* Demo Mode Option */}
               <button
                 onClick={() => toggleMode('demo')}
-                className={`w-full text-left p-3 rounded-lg transition-colors cursor-pointer border ${
+                className={`w-full text-left transition-colors cursor-pointer border-2 rounded-lg ${
                   mode === 'demo'
-                    ? 'bg-blue-500/10 border-blue-500/30'
+                    ? 'bg-blue-500/10 border-blue-500/50'
                     : 'bg-black border-[#3a3a3a] hover:border-blue-500/20'
                 }`}
-                style={mode !== 'demo' ? { backgroundColor: '#000000' } : {}}
+                style={mode === 'demo' ? {} : { backgroundColor: '#000000' }}
               >
-                <div className="flex items-start gap-3">
-                  <Zap className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-medium text-white">Demo Mode</span>
-                      {mode === 'demo' && (
-                        <span className="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded">
-                          Active
-                        </span>
-                      )}
+                <div className="p-3">
+                  <div className="flex items-start gap-3">
+                    <Zap className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium text-white">Demo Mode</span>
+                        {mode === 'demo' && (
+                          <span className="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded">
+                            Active
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-white leading-relaxed">
+                        Instant • Uses mock data • No blockchain connection needed
+                      </p>
                     </div>
-                    <p className="text-xs text-white leading-relaxed">
-                      Instant • Uses mock data • No blockchain connection needed
-                    </p>
                   </div>
                 </div>
               </button>
@@ -97,29 +99,31 @@ export function ModeToggle() {
               {/* Blockchain Mode Option */}
               <button
                 onClick={() => toggleMode('blockchain')}
-                className={`w-full text-left p-3 rounded-lg transition-colors cursor-pointer border ${
+                className={`w-full text-left transition-colors cursor-pointer border-2 rounded-lg ${
                   mode === 'blockchain'
-                    ? 'bg-black border-gray-500/30'
-                    : 'bg-black border-[#3a3a3a] hover:border-gray-500/20'
+                    ? 'bg-black border-green-500/50'
+                    : 'bg-black border-[#3a3a3a] hover:border-green-500/20'
                 }`}
                 style={{ backgroundColor: '#000000' }}
               >
-                <div className="space-y-1.5">
-                  <div className="flex items-center gap-2">
-                    <Network className="w-4 h-4 text-green-400" />
-                    <span className="text-sm font-medium text-white">Blockchain Mode</span>
-                    {mode === 'blockchain' && (
-                      <span className="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded">
-                        Active
-                      </span>
-                    )}
+                <div className="p-3">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      <Network className="w-4 h-4 text-green-400" />
+                      <span className="text-sm font-medium text-white">Blockchain Mode</span>
+                      {mode === 'blockchain' && (
+                        <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-400 rounded">
+                          Active
+                        </span>
+                      )}
+                    </div>
+                    <ul className="text-xs text-white space-y-0.5 ml-6">
+                      <li>• Real IOTA Identity SDK</li>
+                      <li>• Creates actual DIDs</li>
+                      <li>• dApp Kit integrated</li>
+                      {isConnected && <li>• Wallet connected</li>}
+                    </ul>
                   </div>
-                  <ul className="text-xs text-white space-y-0.5 ml-6">
-                    <li>• Real IOTA Identity SDK</li>
-                    <li>• Creates actual DIDs</li>
-                    <li>• dApp Kit integrated</li>
-                    {isConnected && <li>• Wallet connected</li>}
-                  </ul>
                 </div>
               </button>
             </div>
