@@ -3,11 +3,15 @@
 import { useWalletStatus } from '@/lib/hooks/useWalletStatus';
 import { useCurrentAccount, ConnectButton } from '@iota/dapp-kit';
 import { useState } from 'react';
+import { useIOTAPublishing } from '@/lib/hooks/useIOTAPublishing';
+import { createDID } from '@/lib/iotaIdentityReal';
 
 export default function TestDAppKitPage() {
   const [logs, setLogs] = useState<string[]>([]);
+  const [createdDID, setCreatedDID] = useState<{did: string; document: unknown} | null>(null);
   const { isConnected, address } = useWalletStatus();
   const account = useCurrentAccount();
+  const { publishDID, publishing } = useIOTAPublishing();
 
   const addLog = (message: string) => {
     setLogs(prev => [...prev, `${new Date().toLocaleTimeString()}: ${message}`]);
@@ -44,6 +48,29 @@ export default function TestDAppKitPage() {
     }
   };
 
+  const testCreateAndPublishDID = async () => {
+    try {
+      addLog('📝 Step 1: Creating DID...');
+      const didResult = await createDID();
+      setCreatedDID({ did: didResult.did, document: didResult.document });
+      addLog(`✅ DID created: ${didResult.did}`);
+      
+      addLog('📤 Step 2: Publishing DID to blockchain...');
+      const publishResult = await publishDID(didResult.did, didResult.document as Record<string, unknown>);
+      
+      if (publishResult.success) {
+        addLog(`✅ DID published!`);
+        addLog(`   Transaction: ${publishResult.transactionId}`);
+        addLog(`   Explorer: ${publishResult.explorerUrl}`);
+        addLog(`🔗 View at: ${publishResult.explorerUrl}`);
+      } else {
+        addLog(`❌ Publishing failed: ${publishResult.error}`);
+      }
+    } catch (error) {
+      addLog(`❌ Error: ${error}`);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white p-8">
       <h1 className="text-2xl font-bold mb-6">IOTA dApp Kit Test</h1>
@@ -67,6 +94,14 @@ export default function TestDAppKitPage() {
         >
           Test Basic Connection
         </button>
+        
+        <button
+          onClick={testCreateAndPublishDID}
+          disabled={!isConnected || publishing}
+          className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded disabled:opacity-50"
+        >
+          {publishing ? 'Publishing...' : 'Create & Publish DID'}
+        </button>
       </div>
 
       <div className="bg-zinc-900 rounded p-4">
@@ -84,6 +119,10 @@ export default function TestDAppKitPage() {
           <li>Connected: {isConnected ? '✅ Yes' : '❌ No'}</li>
           <li>Address: {address || 'N/A'}</li>
           <li>Account: {account ? '✅ Loaded' : '❌ None'}</li>
+          <li>Publishing: {publishing ? '⏳ In Progress' : '✅ Ready'}</li>
+          {createdDID && (
+            <li>Created DID: {createdDID.did.substring(0, 30)}...</li>
+          )}
         </ul>
       </div>
     </div>
