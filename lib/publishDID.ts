@@ -12,6 +12,9 @@
 import { initWasm } from './iotaIdentityReal';
 import type { DIDCreationResult } from '@/types';
 
+// Dynamic imports for client-side only modules
+let clientModule: any = null;
+
 /**
  * Publish a DID to the IOTA blockchain
  * 
@@ -46,13 +49,15 @@ export async function publishDIDToBlockchain(
     // Initialize WASM
     await initWasm();
     
-    // Import IOTA SDK
-    const iotaSDK = await import('@iota/iota-sdk');
-    const { Client } = iotaSDK;
+    // Import IOTA SDK dynamically
+    if (!clientModule) {
+      clientModule = await import('@iota/iota-sdk');
+    }
     
     console.log('✅ Step 1: Creating IOTA Client for testnet...');
     
     // Create client for IOTA testnet
+    const { Client } = clientModule;
     const client = new Client({
       nodes: ['https://api.testnet.iotaledger.net'],
       localPow: true,
@@ -106,8 +111,11 @@ export async function publishDIDToBlockchain(
  */
 export async function checkWalletBalance(address: string): Promise<number> {
   try {
-    const { Client } = await import('@iota/iota-sdk');
+    if (!clientModule) {
+      clientModule = await import('@iota/iota-sdk');
+    }
     
+    const { Client } = clientModule;
     const client = new Client({
       nodes: ['https://api.testnet.iotaledger.net'],
     });
