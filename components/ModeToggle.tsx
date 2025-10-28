@@ -141,10 +141,10 @@ export function ModeToggle() {
                 </div>
 
                 {/* Info Button */}
-                <div className="border-t border-[#3a3a3a] pt-2">
+                <div className="border-t border-[#3a3a3a] pt-2 bg-black">
                   <button
                     onClick={() => setShowInfo(!showInfo)}
-                    className="w-full px-4 py-2 text-left flex items-center justify-between text-xs text-zinc-400 hover:text-white transition-colors"
+                    className="w-full px-4 py-2 text-left flex items-center justify-between text-xs text-zinc-400 hover:text-white transition-colors bg-black"
                   >
                     <span className="flex items-center gap-2">
                       <Info className="w-4 h-4" />
