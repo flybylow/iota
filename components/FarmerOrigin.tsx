@@ -203,8 +203,8 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                     console.log('💡 Ready for signAndExecute()');
                     
                     // Show final status
-                    console.log('✅ All infrastructure ready');
-                    alert(`✅ Certificate ready for blockchain!\n\n🔧 Final status:\n   • DID: ${preparedDID.did.substring(0, 50)}...\n   • IOTA Client: ✅\n   • Wallet: ✅ Connected\n   • Document: ✅ Ready\n   • Transaction data: ✅ Prepared\n\n📝 Blockchain publishing infrastructure complete\n💡 Certificate ready locally\n\n🚀 Next: Transaction building via dApp Kit`);
+                    console.log('✅ All infrastructure ready for blockchain publishing');
+                    alert(`✅ Certificate ready for blockchain!\n\n🔧 Final status:\n   • DID: ${preparedDID.did.substring(0, 50)}...\n   • IOTA Client: ✅ Connected\n   • Wallet: ✅ Ready\n   • Document: ✅ Packed\n   • Transaction: ✅ Prepared\n\n📝 Blockchain publishing: Infrastructure complete\n💡 Certificate ready locally\n\nNote: Full transaction submission requires dApp Kit transaction object`);
                   } catch (publishError) {
                     console.error('❌ Publishing error:', publishError);
                     alert(`❌ Publishing error: ${publishError instanceof Error ? publishError.message : 'Unknown error'}`);
