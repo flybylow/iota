@@ -174,26 +174,33 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                     console.log('💡 Call doc.publish(client) to create Alias Output');
                     console.log('💡 This will prepare the transaction for signing');
                     
-                    // Step 4: Create Alias Output transaction using dApp Kit
-                    console.log('📦 Step 4: Creating Alias Output for DID document...');
+                    // Step 4: Create Alias Output using IOTA Client
+                    console.log('📦 Step 4: Building Alias Output transaction...');
+                    console.log('💡 Using client.buildAliasOutput() for transaction');
                     
-                    // Use dApp Kit to create Alias Output
-                    // The transaction will be built and signed via dApp Kit
-                    console.log('💡 Using dApp Kit for transaction building and signing');
-                    console.log('💡 Transaction will include:');
-                    console.log('   • Alias Output with DID document');
-                    console.log('   • Storage deposit calculation');
-                    console.log('   • Wallet signing');
-                    console.log('   • Network submission');
+                    // Build Alias Output with DID document in state metadata
+                    const aliasOutput = await client.buildAliasOutput({
+                      aliasId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+                      stateMetadata: preparedDID.packedDoc,
+                      nativeTokens: [],
+                      unlockConditions: [{ type: 0, address: walletAddress }], // State controller
+                    });
                     
-                    // Prepare transaction for signing
-                    // Note: signAndExecute() expects a prepared transaction object
-                    // We need to build the transaction using the client first
-                    console.log('✅ Transaction ready for wallet signing');
-                    console.log('📋 Note: Full implementation requires transaction building via client');
+                    console.log('✅ Alias Output created');
+                    console.log('📋 Output ID:', aliasOutput?.outputId);
                     
-                    // For now, show what's ready
-                    alert(`✅ Certificate prepared for blockchain!\n\n🔧 Current status:\n   • DID document: ${preparedDID.did}\n   • IOTA Client: ✅\n   • Wallet: ✅\n   • Document: ✅\n\n📝 Transaction signing ready\n💡 Full Alias Output creation in progress\n\n💡 Certificate ready locally`);
+                    // Step 5: Sign and submit transaction
+                    console.log('📦 Step 5: Signing and submitting transaction...');
+                    signAndExecute(aliasOutput as any, {
+                      onSuccess: (result) => {
+                        console.log('✅ Transaction submitted to blockchain!', result);
+                        alert(`✅ Certificate published to blockchain!\n\n📋 Transaction ID: ${result.id}\n🔗 Explorer: https://explorer.iota.org/txblock/${result.id}?network=testnet`);
+                      },
+                      onError: (error) => {
+                        console.error('❌ Transaction failed:', error);
+                        alert(`❌ Transaction failed: ${error.message}`);
+                      }
+                    });
                   } catch (publishError) {
                     console.error('❌ Publishing error:', publishError);
                     alert(`❌ Publishing error: ${publishError instanceof Error ? publishError.message : 'Unknown error'}`);
