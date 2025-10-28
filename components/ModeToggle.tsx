@@ -82,7 +82,7 @@ export function ModeToggle() {
           />
           
           {/* Dropdown */}
-          <div className="absolute top-full right-0 mt-2 w-96 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg shadow-xl z-50 overflow-hidden">
+          <div className="absolute top-full right-0 mt-2 w-[500px] bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg shadow-xl z-50 overflow-hidden">
             <div className="p-4 border-b border-[#3a3a3a]">
               <h3 className="text-sm font-medium text-white flex items-center gap-2">
                 <Settings className="w-4 h-4" />
