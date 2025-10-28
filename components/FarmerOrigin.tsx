@@ -182,7 +182,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                     
                     // Import IOTA SDK for transaction building
                     if (!IotaSDK) {
-                        IotaSDK = await import('@iota/iota-sdk');
+                        IotaSDK = await import('@iota/iota-sdk/client');
                         console.log('✅ IOTA SDK loaded');
                     }
                     
