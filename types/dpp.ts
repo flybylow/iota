@@ -69,5 +69,6 @@ export interface DPPCredential {
   previousCredentials?: string[]; // For credential chaining
   onChain?: boolean; // Whether this credential was created with real blockchain integration
   transactionId?: string; // Transaction ID if published to blockchain
+  untpCredential?: Record<string, unknown>; // UNTP Digital Product Passport structure
 }
 

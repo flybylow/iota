@@ -7,6 +7,7 @@ import { getExplorerURL, getRealExplorerURL } from '@/lib/iotaExplorer';
 import { isBlockchainMode } from '@/lib/dppMode';
 import { createDID, issueCredential } from '@/lib/iotaIdentityReal';
 import { buildUNTPDPPCredential } from '@/lib/schemas/untp/dpp-builder';
+import { UNTPSection } from './UNTPSection';
 import type { DPPCredential, OriginCertificationData } from '@/types/dpp';
 
 /**
@@ -138,6 +139,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             credentialType: labels.originCredential,
             issuedAt: new Date().toISOString(),
             certificationData,
+            untpCredential: untpCredential,
             onChain: true,
           };
         } catch (error) {
