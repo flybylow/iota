@@ -25,8 +25,6 @@ import type { DIDCreationResult } from '@/types';
  * - Client connected to network
  * - Wallet with testnet tokens (for storage deposit)
  * 
- * @param document - The DID document to publish
- * @param privateKey - Private key for signing
  * @returns Transaction receipt if successful
  */
 export async function publishDIDToBlockchain(

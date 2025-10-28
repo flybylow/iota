@@ -2,14 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
-
-// Dynamically import SpeedInsights only in production
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let SpeedInsights: any = () => null;
-if (process.env.NODE_ENV === 'production') {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  SpeedInsights = require('@vercel/speed-insights/next').SpeedInsights;
-}
+import { SpeedInsightsWrapper } from "@/components/SpeedInsightsWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,7 +33,7 @@ export default function RootLayout({
         <Providers>
           {children}
         </Providers>
-        <SpeedInsights />
+        <SpeedInsightsWrapper />
       </body>
     </html>
   );

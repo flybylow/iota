@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { FarmerOrigin } from '@/components/FarmerOrigin';
 import { FactoryProduction } from '@/components/FactoryProduction';
 import { ConsumerJourney } from '@/components/ConsumerJourney';
-import { IndustrySelector } from '@/components/IndustrySelector';
 import { ModeToggle } from '@/components/ModeToggle';
 import { Sprout, Factory, Shield } from 'lucide-react';
 
