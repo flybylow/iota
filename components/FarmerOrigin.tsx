@@ -415,6 +415,16 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                 <span className="text-zinc-200">{new Date(credential.issuedAt).toLocaleString()}</span>
               </div>
             </div>
+          </div>
+
+          {/* UNTP Digital Product Passport Section */}
+          {credential.untpCredential && (
+            <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4 mt-4">
+              <UNTPSection untpCredential={credential.untpCredential} showTitle={true} />
+            </div>
+          )}
+
+          <div className="mt-4 pt-4 border-t border-[#3a3a3a]">
             
             {/* IOTA Identity Info */}
             <div className="mt-3 pt-3 border-t border-[#3a3a3a]">
