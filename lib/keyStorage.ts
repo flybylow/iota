@@ -98,14 +98,10 @@ const SESSION_PASSWORD = 'demo-session-' + Date.now();
  */
 export async function savePrivateKey(did: string, privateKey: Uint8Array | number[]): Promise<void> {
   try {
-    console.warn('⚠️  DEMO ONLY: Saving private key to localStorage');
-    console.warn('⚠️  In production, use hardware wallet or secure enclave!');
-    
     const keyArray = privateKey instanceof Uint8Array ? privateKey : new Uint8Array(privateKey);
     const encrypted = await encrypt(keyArray, SESSION_PASSWORD);
     
     localStorage.setItem(`privateKey-${did}`, encrypted);
-    console.log('✅ Private key saved (encrypted) for DID:', did.substring(0, 40) + '...');
   } catch (error) {
     console.error('❌ Failed to save private key:', error);
     throw new Error('Failed to save private key');

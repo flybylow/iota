@@ -106,7 +106,6 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
           }
           
           // Step 2: Build UNTP-compliant credential
-          console.log('Building UNTP-compliant credential...');
           const untpCredential = buildUNTPDPPCredential(
             issuerDID,
             productDID,
@@ -122,24 +121,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             certificationData
           );
           
-          console.log('✅ UNTP credential structure created');
-          
-          // Step 3: Check if wallet is connected for signing
-          if (isConnected) {
-            console.log('🔏 Wallet connected - preparing for signature...');
-            console.log('💡 User will be prompted to sign the credential via dApp Kit');
-            
-            // TODO: Integrate actual transaction signing here
-            // For now, we'll show that signature is required
-            console.log('📝 Credential prepared for signing');
-            console.log('⏳ Waiting for wallet signature...');
-          } else {
-            console.log('⚠️ Wallet not connected - credential created without signature');
-            console.log('💡 Connect wallet to enable transaction signing');
-          }
-          
-          // Step 4: Issue verifiable credential
-          console.log('Issuing credential from farmer to product...');
+          // Step 3: Issue verifiable credential
           const credentialJWT = await issueCredential(
             issuerDID,
             productDID,
@@ -150,25 +132,14 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             }
           );
           
-          console.log('✅ Credential issued successfully (UNTP-compliant)');
-          
-          // Step 5: Publish credential to blockchain if wallet is connected
-          console.log('🔏 Wallet status:', isConnected);
-          console.log('🔏 Wallet address:', originStakeholder.did);
-          
+          // Step 4: Publish credential to blockchain if wallet is connected
           if (isConnected && address) {
-            console.log('✅ Wallet is connected - signing and publishing to blockchain...');
-            
             // Ask user if they want to publish to blockchain
             const shouldPublish = confirm(
               '✅ Certificate created!\n\n📝 This certificate requires wallet signature for on-chain publishing.\n\nWould you like to sign and publish this certificate to the blockchain?'
             );
             
             if (shouldPublish) {
-              console.log('📝 User confirmed: Publishing to blockchain...');
-              console.log('📍 Wallet address:', address);
-              console.log('📤 Publishing DID to blockchain...');
-              
               // Publish the DID to blockchain using the publishing hook
               try {
                 const publishResult = await publishDIDToBlockchain(
@@ -178,26 +149,15 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                   address
                 );
                 
-                console.log('📦 Publishing result:', publishResult);
-                
                 if (publishResult.success) {
-                  console.log('✅ DID published successfully!');
-                  console.log('📋 Transaction ID:', publishResult.transactionId);
-                  console.log('🔗 Explorer:', publishResult.explorerUrl);
                   alert(`✅ Certificate published to blockchain!\n\n📋 Transaction: ${publishResult.transactionId}\n🔗 View: ${publishResult.explorerUrl}`);
                 } else {
-                  console.error('❌ Publishing failed:', publishResult.error);
                   alert(`❌ Publishing failed: ${publishResult.error}`);
                 }
               } catch (publishError) {
-                console.error('❌ Publishing error:', publishError);
                 alert(`❌ Publishing error: ${publishError instanceof Error ? publishError.message : 'Unknown error'}`);
               }
-            } else {
-              console.log('⚠️ User declined: Certificate created without blockchain publishing');
             }
-          } else {
-            console.log('⚠️ Wallet not connected - certificate created without blockchain publishing');
           }
           
           dppCredential = {
