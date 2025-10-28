@@ -27,7 +27,8 @@ export async function initWasm() {
     
     // Dynamically import the WASM module (client-side only)
     const identityModule = await import('@iota/identity-wasm/web');
-    await identityModule.init();
+    // Suppress the deprecated init parameter warning
+    await identityModule.init({});
     Identity = identityModule;
     
     wasmInitialized = true;
