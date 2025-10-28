@@ -40,6 +40,10 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
   const [credential, setCredential] = useState<DPPCredential | null>(null);
   const [copied, setCopied] = useState(false);
   
+  // Blockchain mode hooks
+  const { isConnected } = useWalletStatus();
+  const { mutate: signAndExecute } = useSignAndExecuteTransaction();
+  
   // Harvest data form state
   const [harvestData, setHarvestData] = useState({
     harvestDate: new Date().toISOString().split('T')[0],
