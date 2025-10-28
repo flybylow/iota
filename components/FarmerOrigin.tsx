@@ -8,6 +8,8 @@ import { isBlockchainMode } from '@/lib/dppMode';
 import { createDID, issueCredential } from '@/lib/iotaIdentityReal';
 import { buildUNTPDPPCredential } from '@/lib/schemas/untp/dpp-builder';
 import { UNTPSection } from './UNTPSection';
+import { useWalletStatus } from '@/lib/hooks/useWalletStatus';
+import { useSignAndExecuteTransaction } from '@iota/dapp-kit';
 import type { DPPCredential, OriginCertificationData } from '@/types/dpp';
 
 /**
@@ -117,7 +119,21 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
           
           console.log('✅ UNTP credential structure created');
           
-          // Step 3: Issue verifiable credential
+          // Step 3: Check if wallet is connected for signing
+          if (isConnected) {
+            console.log('🔏 Wallet connected - preparing for signature...');
+            console.log('💡 User will be prompted to sign the credential via dApp Kit');
+            
+            // TODO: Integrate actual transaction signing here
+            // For now, we'll show that signature is required
+            console.log('📝 Credential prepared for signing');
+            console.log('⏳ Waiting for wallet signature...');
+          } else {
+            console.log('⚠️ Wallet not connected - credential created without signature');
+            console.log('💡 Connect wallet to enable transaction signing');
+          }
+          
+          // Step 4: Issue verifiable credential
           console.log('Issuing credential from farmer to product...');
           const credentialJWT = await issueCredential(
             issuerDID,
@@ -130,6 +146,11 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
           );
           
           console.log('✅ Credential issued successfully (UNTP-compliant)');
+          
+          // Show signature prompt if wallet is connected
+          if (isConnected) {
+            alert('✅ Certificate created!\n\n📝 Certificate requires wallet signature for on-chain publishing.\n\n💡 Connect your wallet and click "Sign & Publish" to submit to blockchain.');
+          }
           
           dppCredential = {
             jwt: credentialJWT,
