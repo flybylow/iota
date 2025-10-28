@@ -7,7 +7,6 @@ import { useState } from 'react';
 export default function TestDAppKitPage() {
   const [logs, setLogs] = useState<string[]>([]);
   const { isConnected, address } = useWalletStatus();
-  const { mutate: signAndExecute } = useDIDPublishing();
   const account = useCurrentAccount();
 
   const addLog = (message: string) => {
