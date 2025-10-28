@@ -190,7 +190,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                     console.log('💡 Packed DID document:', preparedDID.packedDoc?.length, 'bytes');
                     
                     // Show what's ready
-                    alert(`✅ Certificate prepared for blockchain!\n\n🔧 Current status:\n   • DID document: ${preparedDID.did}\n   • Packed size: ${preparedDID.packedDoc?.length || 0} bytes\n   • IOTA Client: ✅\n   • Wallet: ✅\n\n📝 Full publishing ready\n💡 Document prepared with state metadata\n\n💡 Certificate ready locally`);
+                    alert(`✅ Certificate prepared for blockchain!\n\n🔧 Current status:\n   • DID: ${preparedDID.did.substring(0, 50)}...\n   • IOTA Client: ✅\n   • Wallet: ✅ Connected\n   • Document: ✅ Ready\n\n📝 Full publishing infrastructure ready\n💡 Document prepared with state metadata\n\n💡 Certificate ready locally`);
                   } catch (publishError) {
                     console.error('❌ Publishing error:', publishError);
                     alert(`❌ Publishing error: ${publishError instanceof Error ? publishError.message : 'Unknown error'}`);
