@@ -50,7 +50,7 @@ export default function TestDAppKitPage() {
       
       {/* Connect Wallet Button */}
       <div className="mb-6">
-        <ConnectButton className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded" />
+        <ConnectButton className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-black rounded" style={{ color: '#000000' }} />
       </div>
       
       <div className="space-y-4 mb-8">
