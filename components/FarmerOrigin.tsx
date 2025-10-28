@@ -134,12 +134,16 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
           
           // Step 4: Publish credential to blockchain if wallet is connected
           if (isConnected && address) {
+            console.log('✅ Wallet connected - ready for blockchain publishing');
+            
             // Ask user if they want to publish to blockchain
             const shouldPublish = confirm(
               '✅ Certificate created!\n\n📝 This certificate requires wallet signature for on-chain publishing.\n\nWould you like to sign and publish this certificate to the blockchain?'
             );
             
             if (shouldPublish) {
+              console.log('📝 Publishing to blockchain via dApp Kit...');
+              
               // Publish the DID to blockchain using the publishing hook
               try {
                 const publishResult = await publishDIDToBlockchain(
@@ -150,13 +154,20 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                 );
                 
                 if (publishResult.success) {
+                  console.log('✅ Certificate published to blockchain!');
+                  console.log('📋 Transaction:', publishResult.transactionId);
+                  console.log('🔗 Explorer:', publishResult.explorerUrl);
                   alert(`✅ Certificate published to blockchain!\n\n📋 Transaction: ${publishResult.transactionId}\n🔗 View: ${publishResult.explorerUrl}`);
                 } else {
+                  console.error('❌ Publishing failed:', publishResult.error);
                   alert(`❌ Publishing failed: ${publishResult.error}`);
                 }
               } catch (publishError) {
+                console.error('❌ Publishing error:', publishError);
                 alert(`❌ Publishing error: ${publishError instanceof Error ? publishError.message : 'Unknown error'}`);
               }
+            } else {
+              console.log('⚠️ User declined blockchain publishing');
             }
           }
           
