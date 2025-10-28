@@ -1,7 +1,7 @@
 'use client';
 
 import { useWalletStatus } from '@/lib/hooks/useWalletStatus';
-import { useCurrentAccount } from '@iota/dapp-kit';
+import { useCurrentAccount, ConnectButton } from '@iota/dapp-kit';
 import { useState } from 'react';
 
 export default function TestDAppKitPage() {
@@ -47,6 +47,15 @@ export default function TestDAppKitPage() {
   return (
     <div className="min-h-screen bg-black text-white p-8">
       <h1 className="text-2xl font-bold mb-6">IOTA dApp Kit Test</h1>
+      
+      {/* Connect Wallet Button */}
+      <div className="mb-6">
+        <ConnectButton 
+          connectText="Connect IOTA Wallet"
+          connectedText={`Connected: ${address?.substring(0, 10)}...`}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
+        />
+      </div>
       
       <div className="space-y-4 mb-8">
         <button
