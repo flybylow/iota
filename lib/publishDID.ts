@@ -66,7 +66,9 @@ export async function publishDIDToBlockchain(
     // - Submitting to network
     
     const transactionId = `did_ready_${Date.now()}`;
-    const explorerUrl = `https://explorer.iota.org/search/${did}?network=testnet`;
+    // Note: Explorer needs actual block ID or transaction ID
+    // For now, link to the DID page which shows address info
+    const explorerUrl = `https://explorer.iota.org/address/${did.split(':')[2]}?network=testnet`;
     
     console.log('✅ DID prepared for publishing');
     console.log(`📋 Transaction ID: ${transactionId}`);

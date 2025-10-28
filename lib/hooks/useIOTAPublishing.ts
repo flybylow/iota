@@ -98,9 +98,12 @@ export function useIOTAPublishing() {
   };
 
   /**
-   * Get explorer URL for a transaction
+   * Get explorer URL for a transaction or address
    */
-  const getExplorerUrl = (transactionId: string) => {
+  const getExplorerUrl = (transactionId: string, type: 'block' | 'address' = 'block') => {
+    if (type === 'address') {
+      return `https://explorer.iota.org/address/${transactionId}?network=testnet`;
+    }
     return `https://explorer.iota.org/txblock/${transactionId}?network=testnet`;
   };
 
