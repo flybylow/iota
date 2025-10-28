@@ -1,6 +1,6 @@
 'use client';
 
-import { useWalletStatus, useDIDPublishing } from '@/lib/hooks';
+import { useWalletStatus } from '@/lib/hooks/useWalletStatus';
 import { useCurrentAccount } from '@iota/dapp-kit';
 import { useState } from 'react';
 
