@@ -117,7 +117,8 @@ export function ModeToggle() {
                   <ul className="text-xs text-white space-y-0.5 ml-6">
                     <li>• Real IOTA Identity SDK</li>
                     <li>• Creates actual DIDs</li>
-                    <li>• Requires testnet tokens</li>
+                    <li>• dApp Kit integrated</li>
+                    {isConnected && <li>• Wallet connected</li>}
                   </ul>
                 </div>
               </button>
@@ -154,10 +155,12 @@ export function ModeToggle() {
                 </ul>
                 <div className="mt-3 p-2 bg-green-500/10 border border-green-500/20 rounded">
                   <p className="text-xs text-green-400 font-medium mb-1 flex items-center gap-1.5">
-                    ✅ Everything Works Without Wallet
+                    ✅ {isConnected ? 'Wallet Connected!' : 'Everything Works Without Wallet'}
                   </p>
                   <p className="text-xs text-white leading-relaxed">
-                    The app creates and verifies DIDs locally. Wallet connection is optional and only needed for on-chain publishing of credentials to the blockchain.
+                    {isConnected 
+                      ? 'Your wallet is connected. DIDs can now be published to the blockchain using dApp Kit.'
+                      : 'The app creates and verifies DIDs locally. Wallet connection is optional and only needed for on-chain publishing of credentials to the blockchain.'}
                   </p>
                 </div>
                 </div>
