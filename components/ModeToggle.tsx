@@ -82,9 +82,12 @@ export function ModeToggle() {
                     <div>
                       <span className="text-sm font-medium text-white">Demo Mode</span>
                       {mode === 'demo' && (
-                        <span className="ml-2 text-xs px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded">
-                          Active
-                        </span>
+                        <>
+                          <span className="mx-2 text-zinc-500">:</span>
+                          <span className="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded">
+                            Active
+                          </span>
+                        </>
                       )}
                     </div>
                   </div>
@@ -106,9 +109,12 @@ export function ModeToggle() {
                     <div>
                       <span className="text-sm font-medium text-white">Blockchain Mode</span>
                       {mode === 'blockchain' && (
-                        <span className="ml-2 text-xs px-2 py-0.5 bg-green-500/20 text-green-400 rounded">
-                          Active
-                        </span>
+                        <>
+                          <span className="mx-2 text-zinc-500">:</span>
+                          <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-400 rounded">
+                            Active
+                          </span>
+                        </>
                       )}
                     </div>
                   </div>
