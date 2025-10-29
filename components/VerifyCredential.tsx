@@ -149,14 +149,14 @@ export function VerifyCredential() {
 
       {/* Input Form */}
       {!loading && !result && (
-        <div className="max-w-2xl mx-auto">
-          <form onSubmit={handleVerify} className="space-y-4">
-            <div className="space-y-2">
-              <label className="block text-base font-medium !text-white mb-2" style={{ color: '#ffffff' }}>
+        <div className="w-[80%] mx-auto">
+          <form onSubmit={handleVerify} className="space-y-6">
+            <div className="space-y-4">
+              <label className="block text-xs font-medium !text-white mb-3" style={{ color: '#ffffff' }}>
                 Enter a DID to verify:
               </label>
 
-              <div className="flex flex-row gap-2">
+              <div className="flex flex-row gap-3">
                 {savedDIDs.length > 0 && (
                   <button
                     type="button"
@@ -182,7 +182,7 @@ export function VerifyCredential() {
                 value={didInput}
                 onChange={(e) => setDidInput(e.target.value)}
                 placeholder="did:iota:smr:0x..."
-                className="w-full px-5 py-4 mt-3 mb-1 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg !text-white placeholder-zinc-400 focus:outline-none focus:border-blue-400 focus:bg-[#252525] transition-colors text-base font-normal"
+                className="w-auto min-w-[300px] px-5 py-4 mt-4 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg !text-white placeholder-zinc-400 focus:outline-none focus:border-blue-400 focus:bg-[#252525] transition-colors text-base font-normal"
                 style={{ color: '#ffffff', fontSize: '16px' }}
               />
             </div>

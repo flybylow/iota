@@ -5,8 +5,8 @@
  */
 
 export const IOTA_CONFIG = {
-  // IOTA Testnet API endpoint
-  apiEndpoint: process.env.NEXT_PUBLIC_IOTA_API_ENDPOINT || 'https://api.testnet.iotaledger.net',
+  // IOTA Testnet API endpoint - using .iota.cafe (works) instead of .iotaledger.net (404)
+  apiEndpoint: process.env.NEXT_PUBLIC_IOTA_API_ENDPOINT || 'https://api.testnet.iota.cafe',
   
   // Network type
   network: process.env.NEXT_PUBLIC_NETWORK || 'testnet',

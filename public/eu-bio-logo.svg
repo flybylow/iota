@@ -1,0 +1,32 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Green background -->
+  <rect width="120" height="120" fill="#4a9b4d"/>
+  
+  <!-- Organic leaf made of 12 stars arranged in a curve -->
+  <!-- Stars are positioned to form a leaf shape with a curved stem -->
+  
+  <!-- Stars in leaf shape - arranged in an arc -->
+  <!-- Bottom left stars (wider arc base) -->
+  <path d="M 30 85 L 35 82 L 34 75 L 31 75 L 30 68 L 27 75 L 24 75 L 23 82 Z" fill="white"/>
+  <path d="M 45 75 L 50 72 L 49 65 L 46 65 L 45 58 L 42 65 L 39 65 L 38 72 Z" fill="white"/>
+  
+  <!-- Middle stars (arc curve) -->
+  <path d="M 60 55 L 65 52 L 64 45 L 61 45 L 60 38 L 57 45 L 54 45 L 53 52 Z" fill="white"/>
+  <path d="M 75 45 L 80 42 L 79 35 L 76 35 L 75 28 L 72 35 L 69 35 L 68 42 Z" fill="white"/>
+  
+  <!-- Top right stars (arc narrowing) -->
+  <path d="M 85 30 L 90 27 L 89 20 L 86 20 L 85 13 L 82 20 L 79 20 L 78 27 Z" fill="white"/>
+  <path d="M 70 35 L 75 32 L 74 25 L 71 25 L 70 18 L 67 25 L 64 25 L 63 32 Z" fill="white"/>
+  
+  <!-- Left side stars (fuller leaf outline) -->
+  <path d="M 40 55 L 45 52 L 44 45 L 41 45 L 40 38 L 37 45 L 34 45 L 33 52 Z" fill="white"/>
+  <path d="M 50 40 L 55 37 L 54 30 L 51 30 L 50 23 L 47 30 L 44 30 L 43 37 Z" fill="white"/>
+  
+  <!-- Stem/central vein - curved line through stars -->
+  <path d="M 32 82 Q 42 75, 50 68 Q 55 62, 58 55 Q 62 48, 68 42 Q 72 38, 75 32" 
+        stroke="white" 
+        stroke-width="4" 
+        fill="none" 
+        stroke-linecap="round"/>
+</svg>
+

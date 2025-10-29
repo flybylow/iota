@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { FarmerOrigin } from '@/components/FarmerOrigin';
 import { FactoryProduction } from '@/components/FactoryProduction';
 import { ConsumerJourney } from '@/components/ConsumerJourney';
 import { ModeToggle } from '@/components/ModeToggle';
-import { Sprout, Factory, Shield } from 'lucide-react';
+import { Tabs } from '@/components/Tabs';
+import { Sprout, Factory, Shield, ChevronRight } from 'lucide-react';
 
 /**
  * Digital Product Passport Demo - Chocolate Supply Chain
@@ -22,28 +24,28 @@ import { Sprout, Factory, Shield } from 'lucide-react';
 type TabType = 'farmer' | 'factory' | 'consumer';
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<TabType>('farmer');
   const [selectedIndustry, setSelectedIndustry] = useState<string | null>('food-beverage');
   const [showIndustryDropdown, setShowIndustryDropdown] = useState(false);
+  const [activeMainTab, setActiveMainTab] = useState<'farmer' | 'factory' | 'consumer'>('farmer');
 
   const tabs = [
     {
       id: 'farmer' as TabType,
-      label: '👨‍🌾 Farmer',
+      label: '👨‍🌾  Farmer',
       description: 'Issues Certificate',
       icon: Sprout,
       color: 'green',
     },
     {
       id: 'factory' as TabType,
-      label: '🏭 Factory',
+      label: '🏭  Factory',
       description: 'Verifies & Produces',
       icon: Factory,
       color: 'blue',
     },
     {
       id: 'consumer' as TabType,
-      label: '✅ Consumer',
+      label: '✅  Consumer',
       description: 'Verifies Chain',
       icon: Shield,
       color: 'purple',
@@ -51,166 +53,294 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f]">
-      {/* Mobile-width container - forced on all screens */}
-      <div className="min-h-screen bg-[#0f0f0f] max-w-md mx-auto shadow-2xl">
-      {/* Hero Section */}
-      <header className="bg-gradient-to-b from-[#1c1c1c] to-[#0f0f0f] border-b border-[#2a2a2e] mb-8">
-        <div className="max-w-md mx-auto px-4 py-6">
-          {/* Top Bar - Logo, Industry, Mode Toggle */}
-          <div className="flex items-center justify-between mb-8 gap-4 px-2">
-            {/* Logo - Top Left */}
-            <div 
-              onClick={() => {
-                setActiveTab('farmer');
-                setSelectedIndustry(null);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="cursor-pointer hover:opacity-80 transition-opacity"
-            >
-              <div className="flex items-center gap-2">
-                <span className="text-2xl">👛</span>
-                <div className="flex flex-col">
-                  <span className="text-sm font-bold text-white leading-tight">DPP</span>
-                  <span className="text-[9px] text-white leading-tight">Digital Product Passport</span>
-                </div>
+    <>
+      {/* Top Navigation - Full Width (outside body container) */}
+      <div className="fixed top-0 left-0 right-0 w-screen bg-gradient-to-b from-[#1c1c1c] to-[#0f0f0f] border-b border-[#2a2a2e] z-[100] overflow-x-hidden" style={{ isolation: 'isolate' }}>
+        <div className="flex items-center justify-between px-4 py-4 w-full gap-4 min-w-0 relative z-[100]">
+          {/* Logo - Left */}
+          <Link href="/home">
+            <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
+              <span className="text-2xl">👛</span>
+              <div className="flex flex-col">
+                <span className="text-sm font-bold text-white leading-tight">DPP</span>
+                <span className="text-[9px] text-white leading-tight">Digital Product Passport</span>
               </div>
             </div>
-            
-            {/* Industry Selector - Center */}
-            <div className="relative">
-              <button 
-                onClick={() => setShowIndustryDropdown(!showIndustryDropdown)}
-                className="flex items-center gap-2 px-3 py-2 bg-[#262626] border border-[#3a3a3e] rounded-lg hover:border-blue-500/30 transition-colors text-white"
-              >
-                <span className="text-sm font-medium">
-                  {selectedIndustry === 'food-beverage' && '🍫 Food'}
-                  {selectedIndustry === 'battery' && '🔋 Battery'}
-                  {selectedIndustry === 'fashion' && '👕 Fashion'}
-                  {selectedIndustry === 'electronics' && '📱 Electronics'}
-                  {!selectedIndustry && 'Industry ▼'}
-                </span>
-              </button>
+          </Link>
 
-              {/* Dropdown */}
-              {showIndustryDropdown && (
-                <>
-                  <div 
-                    className="fixed inset-0 z-40"
-                    onClick={() => setShowIndustryDropdown(false)}
-                  />
-                  <div className="absolute top-full right-0 mt-2 w-64 bg-[#1a1a1a] border border-[#3a3a3e] rounded-lg shadow-xl z-50 overflow-hidden">
-                    <div className="p-2 space-y-1">
-                      <button
-                        onClick={() => {
-                          setSelectedIndustry('food-beverage');
-                          setShowIndustryDropdown(false);
-                        }}
-                        className="w-full text-left px-3 py-2 text-sm text-white hover:bg-[#262626] rounded transition-colors flex items-center gap-2"
-                      >
-                        🍫 Food & Beverage
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSelectedIndustry('battery');
-                          setShowIndustryDropdown(false);
-                        }}
-                        className="w-full text-left px-3 py-2 text-sm text-white hover:bg-[#262626] rounded transition-colors flex items-center gap-2"
-                      >
-                        🔋 Batteries
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSelectedIndustry('fashion');
-                          setShowIndustryDropdown(false);
-                        }}
-                        className="w-full text-left px-3 py-2 text-sm text-white hover:bg-[#262626] rounded transition-colors flex items-center gap-2"
-                      >
-                        👕 Fashion & Textiles
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSelectedIndustry('electronics');
-                          setShowIndustryDropdown(false);
-                        }}
-                        className="w-full text-left px-3 py-2 text-sm text-white hover:bg-[#262626] rounded transition-colors flex items-center gap-2"
-                      >
-                        📱 Electronics
-                      </button>
-                    </div>
+          {/* Industry Selector - Center (left of mode toggle) */}
+          <div className="relative flex-1 flex justify-end z-[101]">
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowIndustryDropdown(!showIndustryDropdown);
+              }}
+              className="flex items-center gap-2 px-3 py-2 bg-[#262626] border border-[#3a3a3e] rounded-lg hover:border-blue-500/30 transition-colors text-white relative z-[101]"
+              style={{ position: 'relative' }}
+            >
+              <span className="text-sm font-medium">
+                {selectedIndustry === 'food-beverage' && '🍫  Food'}
+                {selectedIndustry === 'battery' && '🔋  Battery'}
+                {selectedIndustry === 'fashion' && '👕  Fashion'}
+                {selectedIndustry === 'electronics' && '📱  Electronics'}
+                {!selectedIndustry && 'Industry ▼'}
+              </span>
+            </button>
+
+            {/* Dropdown */}
+            {showIndustryDropdown && (
+              <>
+                <div 
+                  className="fixed inset-0 z-[98]"
+                  onClick={() => setShowIndustryDropdown(false)}
+                  style={{ pointerEvents: 'auto', backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
+                />
+                <div className="fixed right-4 w-64 bg-[#1a1a1a] border border-[#3a3a3e] rounded-lg shadow-xl z-[110] overflow-hidden"
+                     style={{ 
+                       top: '73px', // Height of topnav
+                       position: 'fixed',
+                       isolation: 'isolate'
+                     }}
+                     onClick={(e) => e.stopPropagation()}>
+                  <div className="p-2 space-y-1">
+                    <button
+                      onClick={() => {
+                        setSelectedIndustry('food-beverage');
+                        setShowIndustryDropdown(false);
+                      }}
+                      className="w-full text-left px-3 py-2 text-sm text-white hover:bg-[#262626] rounded transition-colors flex items-center gap-2"
+                    >
+                      🍫  Food & Beverage
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedIndustry('battery');
+                        setShowIndustryDropdown(false);
+                      }}
+                      className="w-full text-left px-3 py-2 text-sm text-white hover:bg-[#262626] rounded transition-colors flex items-center gap-2"
+                    >
+                      🔋  Batteries
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedIndustry('fashion');
+                        setShowIndustryDropdown(false);
+                      }}
+                      className="w-full text-left px-3 py-2 text-sm text-white hover:bg-[#262626] rounded transition-colors flex items-center gap-2"
+                    >
+                      👕  Fashion & Textiles
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedIndustry('electronics');
+                        setShowIndustryDropdown(false);
+                      }}
+                      className="w-full text-left px-3 py-2 text-sm text-white hover:bg-[#262626] rounded transition-colors flex items-center gap-2"
+                    >
+                      📱  Electronics
+                    </button>
                   </div>
-                </>
-              )}
-            </div>
-
-            {/* Mode Toggle - Top Right */}
-            <ModeToggle />
+                </div>
+              </>
+            )}
           </div>
-
+          
+          {/* Mode Toggle - Right */}
+          <ModeToggle />
         </div>
-      </header>
+      </div>
+      
+      {/* Body container - Mobile-width constrained */}
+      <div className="min-h-screen bg-[#0f0f0f] relative z-0">
+        {/* Spacer for fixed topnav */}
+        <div className="h-[73px]"></div>
 
-      {/* Progress Indicator */}
-      <div className="bg-[#171717] border-b border-[#2a2a2e]">
-        <div className="max-w-md mx-auto px-4 py-4">
-          <div className="flex items-center justify-between max-w-md mx-auto">
-            {tabs.map((tab, index) => (
-              <React.Fragment key={tab.id}>
-                <div className="flex flex-col items-center group" style={{ width: 'fit-content' }}>
-                  <button 
-                    onClick={() => {
-                      setActiveTab(tab.id);
-                      if (!selectedIndustry) {
-                        // Scroll to industry selector if none selected
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }
-                    }}
-                    className={`
-                      px-4 py-2 rounded-lg text-lg font-semibold transition-all whitespace-nowrap
-                      ${activeTab === tab.id 
-                        ? 'bg-white text-black !text-black' 
-                        : 'bg-transparent text-white hover:bg-[#262626] !text-white'
-                      }
-                    `}
-                  >
-                    {tab.label}
-                  </button>
-                  <p className={`
-                    text-[10px] mt-1 transition-all whitespace-nowrap text-center opacity-0 group-hover:opacity-100
-                    ${activeTab === tab.id ? 'text-zinc-400 opacity-100' : 'text-white'}
-                  `}>
-                    {tab.description}
+        {/* Mobile-width container - forced on all screens - Passport style */}
+        <div className="min-h-screen bg-[#0f0f0f] max-w-[448px] w-full mx-auto shadow-2xl relative z-0">
+          {/* Navigation Tabs - Outside card for minimal mobile design */}
+          <div className="px-4 pt-2 pb-2">
+            <Tabs
+              tabs={[
+                {
+                  id: 'farmer',
+                  label: '🌱 Farmer',
+                  description: tabs[0].description,
+                  content: selectedIndustry ? (
+                    <div className="w-full m-4 border-4 border-white rounded-[2rem] overflow-hidden bg-[#0f0f0f]">
+                      <div className="px-6 py-6">
+                        <FarmerOrigin industry={selectedIndustry} onNextStep={() => {
+                          setActiveMainTab('factory');
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }} />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-full m-4 border-4 border-white rounded-[2rem] overflow-hidden bg-[#0f0f0f]">
+                      <div className="px-6 py-4">
+                        <p className="text-white text-center py-8">Please select an industry first</p>
+                      </div>
+                    </div>
+                  ),
+                  disabled: !selectedIndustry,
+                },
+                {
+                  id: 'factory',
+                  label: tabs[1].label,
+                  description: tabs[1].description,
+                  content: selectedIndustry ? (
+                    <div className="w-full m-4 border-4 border-white rounded-[2rem] overflow-hidden bg-[#0f0f0f]">
+                      <div className="px-6 py-6">
+                        <FactoryProduction industry={selectedIndustry} onNextStep={() => {
+                          setActiveMainTab('consumer');
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }} />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-full m-4 border-4 border-white rounded-[2rem] overflow-hidden bg-[#0f0f0f]">
+                      <div className="px-6 py-8">
+                        <p className="text-white text-center py-8">Please select an industry first</p>
+                      </div>
+                    </div>
+                  ),
+                  disabled: !selectedIndustry,
+                },
+                {
+                  id: 'consumer',
+                  label: 'Consumer',
+                  description: tabs[2].description,
+                  icon: <Shield className="w-3.5 h-3.5" />,
+                  content: selectedIndustry ? (
+                    <div className="w-full m-4 border-4 border-white rounded-[2rem] overflow-hidden bg-[#0f0f0f]">
+                      <div className="px-6 py-8 pb-12">
+                        <ConsumerJourney industry={selectedIndustry} />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-full m-4 border-4 border-white rounded-[2rem] overflow-hidden bg-[#0f0f0f]">
+                      <div className="px-6 py-8 pb-12">
+                        <p className="text-white text-center py-8">Please select an industry first</p>
+                      </div>
+                    </div>
+                  ),
+                  disabled: !selectedIndustry,
+                },
+              ]}
+              variant="navigation"
+              defaultTab="farmer"
+              controlledActiveTab={activeMainTab}
+              onTabChange={(tabId) => {
+                const newTab = tabId as 'farmer' | 'factory' | 'consumer';
+                setActiveMainTab(newTab);
+                // Scroll to top when switching tabs
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Bottom Sections - Outside Card, Bottom of Screen - Only show on Consumer page */}
+        {activeMainTab === 'consumer' && (
+          <div className="max-w-[448px] mx-auto px-4 pb-8 space-y-6">
+            {/* Why This Matters - Card */}
+            <details className="card card-primary overflow-hidden group">
+              <summary className="p-5 cursor-pointer list-none hover:bg-[#2f2f2f] transition-colors flex items-center gap-3">
+                <ChevronRight className="w-5 h-5 text-purple-400 transition-transform group-open:rotate-90 flex-shrink-0" />
+                <h4 className="text-base font-medium text-purple-400">
+                  💡 Why This Matters
+                </h4>
+              </summary>
+              <div className="px-5 pb-5 pt-2 space-y-4">
+                <div>
+                  <h4 className="text-sm font-medium text-white mb-2">For Consumers</h4>
+                  <p className="text-sm text-zinc-300 leading-relaxed">
+                    Scan any product QR code and instantly see the verified supply chain. 
+                    No waiting, no phone calls, just instant cryptographic verification.
                   </p>
                 </div>
-                {index < tabs.length - 1 && (
-                  <div className="flex-1 h-0.5 bg-[#3a3a3a] mx-2"></div>
-                )}
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
-      </div>
+                <div>
+                  <h4 className="text-sm font-medium text-blue-400 mb-2">For Your DPP Business</h4>
+                  <p className="text-sm text-zinc-300 leading-relaxed">
+                    This proves your solution works. Show this to chocolate brands, coffee roasters, 
+                    fashion companies - anyone with supply chain transparency needs.
+                  </p>
+                </div>
+              </div>
+            </details>
 
-      {/* Main Content */}
-      <main className="max-w-md mx-auto px-4 py-8">
-        {selectedIndustry && (
-          <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-5">
-            {activeTab === 'farmer' && <FarmerOrigin industry={selectedIndustry} onNextStep={() => setActiveTab('factory')} />}
-            {activeTab === 'factory' && <FactoryProduction industry={selectedIndustry} onNextStep={() => setActiveTab('consumer')} />}
-            {activeTab === 'consumer' && <ConsumerJourney industry={selectedIndustry} />}
+            {/* You Buy the Chocolate - Card */}
+            <details className="card card-purple overflow-hidden group">
+              <summary className="p-5 cursor-pointer list-none hover:bg-purple-500/10 transition-colors flex items-center gap-3">
+                <ChevronRight className="w-5 h-5 text-purple-400 transition-transform group-open:rotate-90 flex-shrink-0" />
+                <div className="flex items-center gap-4 flex-1">
+                  <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-2xl">🍫</span>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-base font-semibold text-white">
+                      You Buy the Chocolate
+                    </h3>
+                  </div>
+                </div>
+              </summary>
+              <div className="px-5 pb-5 pt-2 space-y-4">
+                <p className="text-sm text-zinc-300 leading-relaxed">
+                  You&apos;re standing in a supermarket in Amsterdam. The chocolate bar 
+                  claims to be &quot;Single-origin Ecuador, Organic, Fair Trade.&quot; 
+                  But is it true?
+                </p>
+                <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4 space-y-3">
+                  <div>
+                    <p className="text-xs font-medium text-white mb-1">❌ Traditional Method:</p>
+                    <p className="text-xs text-zinc-400 leading-relaxed">
+                      Rely on brand reputation. Call suppliers to verify (takes days).
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-green-400 mb-1">✅ With DIDs:</p>
+                    <p className="text-xs text-zinc-300 leading-relaxed">
+                      Scan QR code. Verify entire supply chain in 2 seconds with cryptographic proof.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </details>
           </div>
         )}
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-[#2a2a2e] mt-8">
-        <div className="max-w-md mx-auto px-4 py-6">
-          <p className="text-center text-xs text-white">
-            Built with Next.js & IOTA Identity
-          </p>
+      </div> {/* Closes body container */}
+      
+      {/* Footer - Full Width (outside all containers) */}
+      <footer className="w-full border-t border-[#2a2a2e] bg-[#0f0f0f]">
+        <div className="max-w-[448px] mx-auto px-4 py-6">
+          <div className="flex items-center justify-center gap-3 text-xs text-zinc-400">
+            <span className="flex items-center gap-1.5">
+              <span className="text-base">⚡</span>
+              <span>Built with</span>
+            </span>
+            <span className="flex items-center gap-1.5 hover:text-white transition-colors">
+              <svg className="w-4 h-4" viewBox="0 0 394 80" fill="currentColor">
+                <path d="M262 0h68.5v12.7h-27.2v66.6h-13.6V12.7H262V0zM81 0L53 24v56h14V28l11-11 11 11v52h14V24L81 0zm151 0v12.7h-35v53.9h-13.6V12.7h-35V0h83.6zm46.3 0L237 24v56h13.6V28L258 19l7.6 9v52h13.6V24L278.3 0zm73.8 0v79.3h-13.7V0h13.7z"/>
+              </svg>
+              <span>Next.js</span>
+            </span>
+            <span className="text-zinc-600">•</span>
+            <span className="flex items-center gap-1.5 hover:text-white transition-colors">
+              <span className="text-base">🌐</span>
+              <span>IOTA</span>
+            </span>
+            <span className="text-zinc-600">•</span>
+            <span className="flex items-center gap-1.5 hover:text-white transition-colors">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="12" r="2" opacity="0.3"/>
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                <circle cx="12" cy="12" r="1.5"/>
+                <path d="M7 12c0-2.76 2.24-5 5-5s5 2.24 5 5M17 12c0 2.76-2.24 5-5 5s-5-2.24-5-5" opacity="0.5"/>
+              </svg>
+              <span>React</span>
+            </span>
+          </div>
         </div>
       </footer>
-      </div>
-    </div>
+    </>
   );
 }

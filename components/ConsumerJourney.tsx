@@ -1,13 +1,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, Shield, QrCode, ExternalLink, Sprout, Factory } from 'lucide-react';
+import { CheckCircle2, Shield, ExternalLink, Sprout, Factory } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 import confetti from 'canvas-confetti';
-import { getExplorerURL, getRealExplorerURL } from '@/lib/iotaExplorer';
+import { getExplorerURL, getRealExplorerURL, getBlockExplorerURL } from '@/lib/iotaExplorer';
 import { isBlockchainMode } from '@/lib/dppMode';
 import { verifyCredential } from '@/lib/iotaIdentityReal';
 import { industryData, type IndustryId } from '@/data/industry-data';
 import type { DPPCredential, OriginCertificationData, ProductionCertificationData } from '@/types/dpp';
+import { CTAButton } from './CTAButton';
 
 /**
  * Consumer Journey Component
@@ -34,6 +36,16 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
   const calculateProductionUnits = (harvestWeight: number): number => {
     // Formula: 1 kg cocoa = 7 bars (100g each with 70% cocoa content)
     return Math.floor(harvestWeight * 7);
+  };
+  
+  // Helper to extract UNTP data from credential
+  const getUNTPData = (credential: DPPCredential) => {
+    try {
+      const parsed = typeof credential.jwt === 'string' ? JSON.parse(credential.jwt) : credential.jwt;
+      return (parsed as any).untpCredential || null;
+    } catch {
+      return null;
+    }
   };
 
   useEffect(() => {
@@ -128,7 +140,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
   };
 
   return (
-    <div id="consumer-verification" className="space-y-6">
+        <div id="consumer-verification" className="space-y-8">
       {/* Header */}
       <div className="text-center">
         <div className="flex flex-col items-center gap-0.5">
@@ -136,35 +148,39 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
             <Shield className="w-5 h-5 text-purple-500" />
             <span>Consumer</span>
           </h3>
-          <h2 className="text-xs font-medium text-zinc-400 leading-tight">
-            Verifies Complete Chain - 3/3
-          </h2>
         </div>
       </div>
 
       {!verified && !loading && (
         <>
           {/* QR Code Scanner Simulation */}
-          <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-8">
-            <div className="text-center space-y-4">
-              <div className="bg-[#1a1a1a] border-2 border-dashed border-[#3a3a3a] rounded-lg p-12 mx-auto max-w-sm">
-                <QrCode className="w-40 h-40 text-zinc-400 mx-auto mb-4" />
-                <p className="text-sm text-white font-medium">QR Code on {product.name}</p>
-                <p className="text-xs text-zinc-500 mt-2">Batch: {product.batchNumber}</p>
+          <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-7 space-y-6">
+            <div className="text-center space-y-6">
+              <div className="bg-white border-2 border-dashed border-[#3a3a3a] rounded-lg p-8 mx-auto max-w-sm flex flex-col items-center">
+                <QRCodeSVG 
+                  value={`${typeof window !== 'undefined' ? window.location.origin : ''}/verify?batch=${product.batchNumber}&product=${encodeURIComponent(product.name)}`}
+                  size={160}
+                  level="H"
+                  includeMargin={true}
+                  className="mx-auto"
+                />
+                <div className="mt-4 text-center">
+                  <p className="text-sm text-gray-900 font-medium">QR Code on {product.name}</p>
+                  <p className="text-xs text-gray-600 mt-2">Batch: {product.batchNumber}</p>
+                </div>
               </div>
               
-              <p className="text-sm text-white">
-                In a real app, use your phone camera to scan
-              </p>
-              
-              <button
-                onClick={scanAndVerify}
-                className="bg-black hover:bg-gray-900 border-2 border-white text-white font-medium py-3 px-8 rounded-full transition-all duration-200 text-sm inline-flex items-center gap-2 shadow-lg"
-                style={{ color: '#ffffff', backgroundColor: '#000000', borderColor: '#ffffff' }}
-              >
-                <QrCode className="w-4 h-4" />
-                <span style={{ color: '#ffffff' }}>Simulate QR Scan & Verify</span>
-              </button>
+              <div className="flex justify-center pt-2">
+                <CTAButton
+                  icon="📱"
+                  label="Simulate QR Scan & Verify"
+                  onClick={scanAndVerify}
+                  loading={loading}
+                  disabled={loading}
+                  variant="primary"
+                  size="lg"
+                />
+              </div>
             </div>
           </div>
         </>
@@ -172,13 +188,13 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
 
       {/* Loading State */}
       {loading && (
-        <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-8">
+        <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-7">
           <div className="text-center space-y-4">
             <div className="relative">
               <div className="w-16 h-16 border-4 border-purple-500/20 border-t-purple-500 rounded-full animate-spin mx-auto"></div>
             </div>
             <p className="text-white font-medium">Verifying Supply Chain...</p>
-            <div className="bg-[#1a1a1a] rounded-lg p-4 text-left max-w-md mx-auto">
+            <div className="bg-[#1a1a1a] rounded-lg p-5 text-left max-w-md mx-auto">
               <p className="text-xs text-white mb-2">Checking:</p>
               <ul className="space-y-1.5 text-xs text-zinc-500">
                 <li>• Fetching credentials from IOTA network...</li>
@@ -233,7 +249,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
               {journey.map((step, index) => (
                 <div 
                   key={index}
-                  className="bg-[#1a1a1a] border border-green-500/20 rounded-lg p-4 relative"
+                  className="bg-[#1a1a1a] border border-green-500/20 rounded-lg p-5 relative"
                 >
                   {/* Connection Line */}
                   {index < journey.length - 1 && (
@@ -258,8 +274,8 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <h4 className="text-sm font-semibold text-white">
-                            {step.credentialType === 'OrganicOriginCertification' && '🌱 Origin Certification'}
-                            {step.credentialType === 'ProductionCertification' && '🏭 Production Certification'}
+                            {step.credentialType === 'OrganicOriginCertification' && '🌱  Origin Certification'}
+                            {step.credentialType === 'ProductionCertification' && '🏭  Production Certification'}
                           </h4>
                           <p className="text-xs text-white mt-0.5">{step.issuer}</p>
                         </div>
@@ -267,10 +283,34 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
                       </div>
 
                       <div className="space-y-1.5 text-xs">
+                        {/* Display UNTP fields if available */}
                         {step.credentialType === 'OrganicOriginCertification' && (() => {
                           const data = step.certificationData as unknown as OriginCertificationData;
+                          const untpData = step as any;
                           return (
                             <>
+                              {/* UNTP Fields */}
+                              {getUNTPData(step) && (
+                                <div className="border-t border-green-500/20 pt-2 mt-2 mb-2">
+                                  <div className="flex items-center gap-1 mb-1.5">
+                                    <Shield className="w-3 h-3 text-green-400" />
+                                    <span className="text-[10px] text-green-400 font-medium">UNTP Compliant</span>
+                                  </div>
+                                  {getUNTPData(step)?.productName && (
+                                    <div className="flex justify-between">
+                                      <span className="text-zinc-500">Product:</span>
+                                      <span className="text-zinc-300">{getUNTPData(step)?.productName}</span>
+                                    </div>
+                                  )}
+                                  {getUNTPData(step)?.countryOfOrigin && (
+                                    <div className="flex justify-between">
+                                      <span className="text-zinc-500">Origin Country:</span>
+                                      <span className="text-zinc-300">{getUNTPData(step)?.countryOfOrigin}</span>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                              
                               {data && 'origin' in data && (
                                 <div className="flex justify-between">
                                   <span className="text-zinc-500">Origin:</span>
@@ -314,6 +354,28 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
                           const data = step.certificationData as unknown as ProductionCertificationData;
                           return (
                             <>
+                              {/* UNTP Fields */}
+                              {getUNTPData(step) && (
+                                <div className="border-t border-blue-500/20 pt-2 mt-2 mb-2">
+                                  <div className="flex items-center gap-1 mb-1.5">
+                                    <Shield className="w-3 h-3 text-blue-400" />
+                                    <span className="text-[10px] text-blue-400 font-medium">UNTP Compliant</span>
+                                  </div>
+                                  {getUNTPData(step)?.productName && (
+                                    <div className="flex justify-between">
+                                      <span className="text-zinc-500">Product:</span>
+                                      <span className="text-zinc-300">{getUNTPData(step)?.productName}</span>
+                                    </div>
+                                  )}
+                                  {getUNTPData(step)?.countryOfOrigin && (
+                                    <div className="flex justify-between">
+                                      <span className="text-zinc-500">Origin Country:</span>
+                                      <span className="text-zinc-300">{getUNTPData(step)?.countryOfOrigin}</span>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                              
                               {data && 'unitsProduced' in data && (
                                 <div className="flex justify-between">
                                   <span className="text-zinc-500">Units Produced:</span>
@@ -367,7 +429,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
 
           {/* Summary Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-[#2a2a2a] border border-green-500/20 rounded-lg p-4">
+            <div className="bg-[#2a2a2a] border border-green-500/20 rounded-lg p-6">
               <h4 className="text-sm font-medium text-green-400 mb-3">✅ Verification Summary</h4>
               <ul className="space-y-1.5 text-xs">
                 <li className="flex items-start gap-2">
@@ -389,7 +451,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
               </ul>
             </div>
 
-            <div className="bg-[#2a2a2a] border border-blue-500/20 rounded-lg p-4">
+            <div className="bg-[#2a2a2a] border border-blue-500/20 rounded-lg p-6">
               <h4 className="text-sm font-medium text-blue-400 mb-3">🌍 Sustainability</h4>
               <ul className="space-y-1.5 text-xs">
                 <li className="flex justify-between">
@@ -413,7 +475,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
           </div>
 
           {/* External Proof - IOTA Explorer */}
-          <div className="bg-[#1a1a1a] border border-blue-500/20 rounded-lg p-5">
+            <div className="bg-[#1a1a1a] border border-blue-500/20 rounded-lg p-6">
             <div className="flex items-center gap-2 mb-3">
               <ExternalLink className="w-5 h-5 text-blue-400" />
               <h4 className="text-sm font-medium text-blue-400">🔒 External Proof</h4>
@@ -427,34 +489,54 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
             </p>
             
             <div className="space-y-2">
-              {journey.map((step, index) => (
-                <a
-                  key={index}
-                  href={step.onChain ? getRealExplorerURL(step.issuerDID) : getExplorerURL(step.issuerDID)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg hover:border-blue-500/30 transition-colors group no-underline"
-                >
-                  <div className="flex items-center gap-3">
-                    {step.credentialType === 'OrganicOriginCertification' && (
-                      <Sprout className="w-4 h-4 text-green-400" />
-                    )}
-                    {step.credentialType === 'ProductionCertification' && (
-                      <Factory className="w-4 h-4 text-blue-400" />
-                    )}
-                    <div>
-                      <p className="text-sm font-medium text-white">{step.issuer}</p>
-                      <p className="text-xs text-white">
-                        DID: {step.issuerDID.substring(0, 35)}...
-                      </p>
-                      {step.onChain && (
-                        <p className="text-xs text-green-400 mt-0.5">✅ On-chain</p>
+              {journey.map((step, index) => {
+                // Use transaction block ID if available
+                const explorerUrl = step.transactionId 
+                  ? getBlockExplorerURL(step.transactionId, 'testnet')
+                  : null;
+                
+                return (
+                  <div
+                    key={index}
+                    className="p-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        {step.credentialType === 'OrganicOriginCertification' && (
+                          <Sprout className="w-4 h-4 text-green-400" />
+                        )}
+                        {step.credentialType === 'ProductionCertification' && (
+                          <Factory className="w-4 h-4 text-blue-400" />
+                        )}
+                        <div>
+                          <p className="text-sm font-medium text-white">{step.issuer}</p>
+                          <p className="text-xs text-white">
+                            DID: {step.issuerDID.substring(0, 35)}...
+                          </p>
+                          {step.transactionId && (
+                            <p className="text-xs text-green-400 mt-0.5">
+                              ✅ Published to blockchain
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      {explorerUrl ? (
+                        <a
+                          href={explorerUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          <span>View</span>
+                        </a>
+                      ) : (
+                        <span className="text-xs text-zinc-600">No link</span>
                       )}
                     </div>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-zinc-500 group-hover:text-blue-400 transition-colors" />
-                </a>
-              ))}
+                );
+              })}
             </div>
             
             <div className="mt-4 pt-3 border-t border-[#27272a]">
@@ -468,7 +550,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
           </div>
 
           {/* Technical Proof */}
-          <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-4">
+          <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-5">
             <h4 className="text-sm font-medium text-white mb-2">🔐 How Verification Works</h4>
             <p className="text-xs text-white leading-relaxed mb-3">
               Each step in the supply chain is cryptographically signed and stored on the IOTA network. 
@@ -582,7 +664,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
               Every product will have a verifiable identity and supply chain history.
             </p>
             
-            <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4">
+            <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-5">
               <p className="text-xs font-medium text-white mb-3">Works for any product:</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                 <div className="flex items-center gap-2 text-zinc-300">
@@ -671,71 +753,6 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
         </div>
       )}
 
-      {/* Why This Matters - Standalone foldable section */}
-      {!verified && !loading && (
-        <details className="bg-[#2a2a2a] border border-purple-500/20 rounded-lg overflow-hidden group">
-          <summary className="p-4 cursor-pointer list-none hover:bg-purple-500/5 transition-colors">
-            <h4 className="text-sm font-medium text-purple-400">
-              💡 Why This Matters
-            </h4>
-          </summary>
-          <div className="px-4 pb-4 pt-2 space-y-3">
-            <div>
-              <h4 className="text-sm font-medium text-white mb-1">For Consumers</h4>
-              <p className="text-xs text-zinc-300 leading-relaxed">
-                Scan any product QR code and instantly see the verified supply chain. 
-                No waiting, no phone calls, just instant cryptographic verification.
-              </p>
-            </div>
-            <div>
-              <h4 className="text-sm font-medium text-blue-400 mb-1">For Your DPP Business</h4>
-              <p className="text-xs text-zinc-300 leading-relaxed">
-                This proves your solution works. Show this to chocolate brands, coffee roasters, 
-                fashion companies - anyone with supply chain transparency needs.
-              </p>
-            </div>
-          </div>
-        </details>
-      )}
-
-      {/* You Buy the Chocolate - Moved to bottom */}
-      {!verified && !loading && (
-        <details className="bg-gradient-to-br from-purple-500/10 to-pink-500/5 border border-purple-500/20 rounded-lg overflow-hidden group mt-6">
-          <summary className="p-5 cursor-pointer list-none hover:bg-purple-500/5 transition-colors">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-2xl">🍫</span>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-base font-semibold text-white">
-                  You Buy the Chocolate
-                </h3>
-              </div>
-            </div>
-          </summary>
-          <div className="px-5 pb-5 pt-2 space-y-3">
-            <p className="text-sm text-zinc-300 leading-relaxed">
-              You&apos;re standing in a supermarket in Amsterdam. The chocolate bar 
-              claims to be &quot;Single-origin Ecuador, Organic, Fair Trade.&quot; 
-              But is it true?
-            </p>
-            <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-3 space-y-2">
-              <div>
-                <p className="text-xs font-medium text-white mb-1">❌ Traditional Method:</p>
-                <p className="text-xs text-zinc-500 leading-relaxed">
-                  Rely on brand reputation. Call suppliers to verify (takes days).
-                </p>
-              </div>
-              <div>
-                <p className="text-xs font-medium text-green-400 mb-1">✅ With DIDs:</p>
-                <p className="text-xs text-zinc-300 leading-relaxed">
-                  Scan QR code. Verify entire supply chain in 2 seconds with cryptographic proof.
-                </p>
-              </div>
-            </div>
-          </div>
-        </details>
-      )}
     </div>
   );
 }

@@ -105,24 +105,34 @@ export function UNTPSection({ untpCredential, showTitle = true }: UNTPSectionPro
             Harvest Information
           </h4>
           <div className="space-y-1.5 text-xs">
-            <div className="flex justify-between">
-              <span className="text-zinc-300 flex items-center gap-1">
-                <Calendar className="w-3 h-3" />
-                Harvest Date:
-              </span>
-              <span className="text-white">{new Date(subject.harvestInformation.harvestDate).toLocaleDateString()}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-zinc-300">Variety:</span>
-              <span className="text-white">{subject.harvestInformation.variety}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-zinc-300 flex items-center gap-1">
-                <Scale className="w-3 h-3" />
-                Batch Weight:
-              </span>
-              <span className="text-white font-medium">{subject.harvestInformation.batchWeight} kg</span>
-            </div>
+            {subject.harvestInformation.harvestDate && (
+              <div className="flex justify-between">
+                <span className="text-zinc-300 flex items-center gap-1">
+                  <Calendar className="w-3 h-3" />
+                  Harvest Date:
+                </span>
+                <span className="text-white">
+                  {typeof subject.harvestInformation.harvestDate === 'string' 
+                    ? new Date(subject.harvestInformation.harvestDate).toLocaleDateString() 
+                    : String(subject.harvestInformation.harvestDate)}
+                </span>
+              </div>
+            )}
+            {subject.harvestInformation.variety && (
+              <div className="flex justify-between">
+                <span className="text-zinc-300">Variety:</span>
+                <span className="text-white">{subject.harvestInformation.variety}</span>
+              </div>
+            )}
+            {subject.harvestInformation.batchWeight && (
+              <div className="flex justify-between">
+                <span className="text-zinc-300 flex items-center gap-1">
+                  <Scale className="w-3 h-3" />
+                  Batch Weight:
+                </span>
+                <span className="text-white font-medium">{subject.harvestInformation.batchWeight} kg</span>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -134,14 +144,18 @@ export function UNTPSection({ untpCredential, showTitle = true }: UNTPSectionPro
             Processing Information
           </h4>
           <div className="space-y-1.5 text-xs">
-            <div className="flex justify-between">
-              <span className="text-zinc-300">Fermentation:</span>
-              <span className="text-white">{subject.processingInformation.fermentationDays} days</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-zinc-300">Drying Method:</span>
-              <span className="text-white">{subject.processingInformation.dryingMethod}</span>
-            </div>
+            {subject.processingInformation.fermentationDays && (
+              <div className="flex justify-between">
+                <span className="text-zinc-300">Fermentation:</span>
+                <span className="text-white">{subject.processingInformation.fermentationDays} days</span>
+              </div>
+            )}
+            {subject.processingInformation.dryingMethod && (
+              <div className="flex justify-between">
+                <span className="text-zinc-300">Drying Method:</span>
+                <span className="text-white">{subject.processingInformation.dryingMethod}</span>
+              </div>
+            )}
           </div>
         </div>
       )}

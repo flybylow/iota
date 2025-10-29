@@ -1,0 +1,136 @@
+/**
+ * Design System - Color Palette & Card System
+ * KISS Principle: Keep It Simple, Stupid
+ * 
+ * Brand Colors:
+ * - Primary: Vibrant Cyan-Blue Gradient (#00D4FF → #0099CC)
+ * - Accent: Bright Cyan (#00E5FF)
+ * 
+ * Neutral Colors:
+ * - Background: Dark (#0f0f0f, #1a1a1a, #2a2a2a)
+ * - Text: White/Light Gray (#ffffff, #d4d4d8)
+ * 
+ * Status Colors:
+ * - Success: Green (#34d399)
+ * - Error: Red (#f87171)
+ * - Warning: Yellow (#fbbf24)
+ */
+
+:root {
+  /* Brand Colors - Flashy & Vibrant */
+  --brand-primary: #00D4FF;
+  --brand-primary-dark: #0099CC;
+  --brand-primary-light: #00E5FF;
+  --brand-accent: #00AACC;
+  
+  /* Brand Gradient */
+  --brand-gradient: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-dark) 100%);
+  --brand-gradient-hover: linear-gradient(135deg, var(--brand-primary-light) 0%, var(--brand-accent) 100%);
+  
+  /* Shadows - Cyan Glow */
+  --brand-shadow: 0 10px 25px rgba(0, 212, 255, 0.3);
+  --brand-shadow-hover: 0 15px 35px rgba(0, 212, 255, 0.5);
+  
+  /* Neutral Backgrounds */
+  --bg-primary: #0f0f0f;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #2a2a2a;
+  
+  /* Text */
+  --text-primary: #ffffff;
+  --text-secondary: #d4d4d8;
+  --text-tertiary: #a1a1aa;
+  
+  /* Status */
+  --success: #34d399;
+  --error: #f87171;
+  --warning: #fbbf24;
+
+  /* Card System - Easy to Edit */
+  --card-bg-primary: #2a2a2a;
+  --card-bg-secondary: #1a1a1a;
+  --card-bg-tertiary: #0f0f0f;
+  
+  --card-border-primary: #3a3a3a;
+  --card-border-secondary: #27272a;
+  --card-border-accent: rgba(139, 92, 246, 0.2); /* purple-500/20 */
+  
+  --card-border-radius: 0.75rem; /* rounded-xl */
+  --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  
+  /* Card Gradient Variants */
+  --card-gradient-purple: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
+}
+
+/* CTA Button Brand Style */
+.btn-brand {
+  background: var(--brand-gradient);
+  color: var(--text-primary);
+  box-shadow: var(--brand-shadow);
+  transition: all 0.3s ease;
+}
+
+.btn-brand:hover {
+  background: var(--brand-gradient-hover);
+  box-shadow: var(--brand-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.btn-brand:active {
+  transform: translateY(0);
+}
+
+/* Card System - Simple Utility Classes */
+/* 
+ * Usage Examples:
+ * 
+ * Primary card (light gray bg):
+ *   <div className="card card-primary">...</div>
+ * 
+ * Secondary card (darker bg):
+ *   <div className="card card-secondary">...</div>
+ * 
+ * Purple gradient card:
+ *   <details className="card card-purple">...</details>
+ * 
+ * Custom padding (keep existing padding classes):
+ *   <div className="card card-primary p-5">...</div>
+ *   <div className="card card-primary p-4 space-y-3">...</div>
+ */
+
+.card {
+  background: var(--card-bg-primary);
+  border: 1px solid var(--card-border-primary);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--card-shadow);
+}
+
+.card-primary {
+  background: var(--card-bg-primary);
+  border-color: var(--card-border-primary);
+}
+
+.card-secondary {
+  background: var(--card-bg-secondary);
+  border-color: var(--card-border-secondary);
+}
+
+.card-tertiary {
+  background: var(--card-bg-tertiary);
+  border-color: var(--card-border-primary);
+}
+
+.card-purple {
+  background: var(--card-gradient-purple);
+  border-color: var(--card-border-accent);
+}
+
+/* Nested card inside card (darker) */
+.card-nested {
+  background: var(--card-bg-secondary);
+  border-color: var(--card-border-primary);
+  border-radius: var(--card-border-radius);
+}
+
+/* Easy editing: Just change CSS variables above to update all cards globally */
+

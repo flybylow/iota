@@ -6,7 +6,7 @@
 export const industryData = {
   'food-beverage': {
     product: {
-      did: "did:iota:smr:0xch2025001abc123def456789012345678901234567890123456789012345678",
+      did: "did:iota:0x:0xch2025001abc123def456789012345678901234567890123456789012345678",
       name: "Organic Dark Chocolate 70%",
       batchNumber: "CH-2025-001",
       gtin: "8712345678901",
@@ -27,7 +27,7 @@ export const industryData = {
     },
     stakeholders: {
       farmer: {
-        did: "did:iota:smr:0xfarmermaria001234567890123456789012345678901234567890123456789",
+        did: "did:iota:0x:0xfarmermaria001234567890123456789012345678901234567890123456789",
         name: "Maria's Organic Cocoa Farm",
         role: "Supplier",
         location: "Manabí Province, Ecuador",
@@ -38,11 +38,12 @@ export const industryData = {
         description: "Family-owned organic cocoa farm producing premium Nacional variety cocoa beans"
       },
       factory: {
-        did: "did:iota:smr:0xfactorychoco12345678901234567890123456789012345678901234567",
+        did: "did:iota:0x:0xfactorychoco12345678901234567890123456789012345678901234567",
         name: "Chocolate Dreams Factory",
         role: "Manufacturer",
         location: "Bruges, Belgium",
         country: "Belgium",
+        coordinates: { lat: 51.2093, lng: 3.2247 },
         certifications: ["ISO 22000", "BRC Food Safety"],
         capacity: "50,000 bars/day",
         established: "1995",
@@ -66,7 +67,7 @@ export const industryData = {
 
   'battery': {
     product: {
-      did: "did:iota:smr:0xbatt2025001xyz987fed654321098765432109876543210987654321098765",
+      did: "did:iota:0x:0xbatt2025001xyz987fed654321098765432109876543210987654321098765",
       name: "EV Lithium-Ion Battery 100kWh",
       batchNumber: "BATT-2025-001",
       gtin: "8712345678902",
@@ -93,7 +94,7 @@ export const industryData = {
     },
     stakeholders: {
       miner: {
-        did: "did:iota:smr:0xminerlithium123456789012345678901234567890123456789012345678",
+        did: "did:iota:0x:0xminerlithium123456789012345678901234567890123456789012345678",
         name: "Lithium Minerals Co.",
         role: "Raw Material Supplier",
         location: "Atacama Desert, Chile",
@@ -104,7 +105,7 @@ export const industryData = {
         description: "Sustainable lithium extraction from salt flats with water conservation practices"
       },
       manufacturer: {
-        did: "did:iota:smr:0xbatteurobatt123456789012345678901234567890123456789012345",
+        did: "did:iota:0x:0xbatteurobatt123456789012345678901234567890123456789012345",
         name: "EuroBatt GmbH",
         role: "Battery Manufacturer",
         location: "Stuttgart, Germany",
@@ -132,7 +133,7 @@ export const industryData = {
 
   'fashion': {
     product: {
-      did: "did:iota:smr:0xfash2025001qwe456rty789uio012pas345dfg678hjk901klz234mxc567",
+      did: "did:iota:0x:0xfash2025001qwe456rty789uio012pas345dfg678hjk901klz234mxc567",
       name: "Organic Cotton T-Shirt",
       batchNumber: "TEXT-2025-001",
       gtin: "8712345678903",
@@ -156,7 +157,7 @@ export const industryData = {
     },
     stakeholders: {
       farmer: {
-        did: "did:iota:smr:0xfarmercotton123456789012345678901234567890123456789012345",
+        did: "did:iota:0x:0xfarmercotton123456789012345678901234567890123456789012345",
         name: "Cotton Farmers Cooperative",
         role: "Cotton Supplier",
         location: "Gujarat, India",
@@ -167,7 +168,7 @@ export const industryData = {
         description: "Organic cotton farming cooperative supporting 500+ small-scale farmers"
       },
       factory: {
-        did: "did:iota:smr:0xfactorytextile12345678901234567890123456789012345678901",
+        did: "did:iota:0x:0xfactorytextile12345678901234567890123456789012345678901",
         name: "EcoTextile Factory",
         role: "Garment Manufacturer",
         location: "Porto, Portugal",
@@ -195,7 +196,7 @@ export const industryData = {
 
   'electronics': {
     product: {
-      did: "did:iota:smr:0xelec2025001asd789ghj456bnm123vxz098poi765qwe432lkj109zxc876",
+      did: "did:iota:0x:0xelec2025001asd789ghj456bnm123vxz098poi765qwe432lkj109zxc876",
       name: "Smartphone X Pro",
       batchNumber: "PHONE-2025-001",
       gtin: "8712345678904",
@@ -223,7 +224,7 @@ export const industryData = {
     },
     stakeholders: {
       supplier: {
-        did: "did:iota:smr:0xsupplierrare123456789012345678901234567890123456789012345",
+        did: "did:iota:0x:0xsupplierrare123456789012345678901234567890123456789012345",
         name: "Rare Earth Minerals Ltd",
         role: "Component Supplier",
         location: "Perth, Australia",
@@ -234,7 +235,7 @@ export const industryData = {
         description: "Ethical rare earth element extraction with environmental rehabilitation programs"
       },
       manufacturer: {
-        did: "did:iota:smr:0xmfgtechassembly1234567890123456789012345678901234567890",
+        did: "did:iota:0x:0xmfgtechassembly1234567890123456789012345678901234567890",
         name: "TechAssembly Inc",
         role: "Electronics Manufacturer",
         location: "Taipei, Taiwan",

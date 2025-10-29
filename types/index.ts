@@ -22,6 +22,8 @@ export interface VerificationResult {
   error?: string;
   onChain?: boolean;
   note?: string;
+  didDocument?: Record<string, unknown>;
+  resolutionAttempted?: boolean;
 }
 
 export interface DIDInfo {

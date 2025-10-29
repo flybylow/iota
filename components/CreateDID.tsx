@@ -138,12 +138,12 @@ export function CreateDID() {
 
       {/* Identity Type Selection */}
       {!loading && !result && (
-        <div className="max-w-2xl mx-auto space-y-4">
-          <div className="space-y-3">
-            <label className="block text-base font-medium text-white">
+        <div className="w-[80%] mx-auto space-y-6">
+          <div className="space-y-4">
+            <label className="block text-xs font-medium text-white mb-3">
               What type of identity to create?
             </label>
-            <div className="space-y-2">
+            <div className="space-y-3">
               <label className="flex items-center gap-3 p-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg cursor-pointer hover:bg-[#3a3a3a] transition-colors">
                 <input
                   type="radio"
@@ -191,8 +191,8 @@ export function CreateDID() {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="block text-base font-medium text-white">
+          <div className="space-y-3">
+            <label className="block text-xs font-medium text-white mb-2">
               Optional: Give it a name
             </label>
             <input
@@ -200,7 +200,7 @@ export function CreateDID() {
               value={identityName}
               onChange={(e) => setIdentityName(e.target.value)}
               placeholder="e.g., Acme Coffee Farm, Batch #12345"
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg !text-white placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:bg-[#252525] transition-colors text-sm"
+              className="w-auto min-w-[250px] px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg !text-white placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:bg-[#252525] transition-colors text-sm"
               style={{ color: '#ffffff' }}
             />
           </div>

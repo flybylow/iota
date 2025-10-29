@@ -1,0 +1,21 @@
+<svg width="120" height="60" viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Black background -->
+  <rect width="120" height="60" fill="#000000"/>
+  
+  <!-- Fairtrade symbol: two interlocking curved shapes -->
+  
+  <!-- Left shape (lime green) -->
+  <path d="M 20 35 Q 25 30, 30 25 Q 32 23, 35 20 Q 38 18, 40 25 Q 42 30, 40 35 Q 38 40, 35 45 Q 32 48, 30 45 Q 25 40, 22 38" 
+        fill="#84c128"/>
+  
+  <!-- Right shape (turquoise blue) with black circle -->
+  <path d="M 45 20 Q 50 15, 55 18 Q 60 20, 65 25 Q 70 28, 75 30 Q 80 32, 82 38 Q 83 45, 75 50 Q 70 52, 65 50 Q 60 48, 55 45 Q 50 42, 45 40 Q 40 35, 38 30" 
+        fill="#5bc0de"/>
+  
+  <!-- Black circle (negative space) -->
+  <circle cx="65" cy="32" r="8" fill="#000000"/>
+  
+  <!-- FAIRTRADE text -->
+  <text x="60" y="52" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">FAIRTRADE</text>
+</svg>
+

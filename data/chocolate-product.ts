@@ -5,7 +5,7 @@
 
 export const chocolateProduct = {
   // Product Identity
-  did: "did:iota:smr:0xch2025001abc123def456789012345678901234567890123456789012345678",
+  did: "did:iota:0xch2025001abc123def456789012345678901234567890123456789012345678",
   name: "Organic Dark Chocolate 70%",
   batchNumber: "CH-2025-001",
   gtin: "8712345678901",

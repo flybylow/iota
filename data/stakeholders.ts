@@ -5,8 +5,8 @@
 
 export const stakeholders = {
   farmer: {
-    did: "did:iota:smr:0xfarmermaria001234567890123456789012345678901234567890123456789",
-    name: "Maria's Organic Cocoa Farm",
+    did: "did:iota:0xfarmermaria0012345678901234567890123456789012345678901234567890",
+    name: "Maria's Cocoa Farm",
     role: "Supplier",
     location: "Manabí Province, Ecuador",
     country: "Ecuador",
@@ -17,7 +17,7 @@ export const stakeholders = {
   },
   
   factory: {
-    did: "did:iota:smr:0xfactorychoco12345678901234567890123456789012345678901234567",
+    did: "did:iota:0xfactorychocolate12345678901234567890123456789012345678901234567",
     name: "Chocolate Dreams Factory",
     role: "Manufacturer",
     location: "Bruges, Belgium",
@@ -29,7 +29,7 @@ export const stakeholders = {
   },
   
   lab: {
-    did: "did:iota:smr:0xlabeurofins0123456789012345678901234567890123456789012345",
+    did: "did:iota:0xlabeurofins012345678901234567890123456789012345678901234567",
     name: "Eurofins Food Testing Lab",
     role: "Quality Control",
     location: "Brussels, Belgium",
@@ -41,7 +41,7 @@ export const stakeholders = {
   },
   
   retailer: {
-    did: "did:iota:smr:0xretailergreen123456789012345678901234567890123456789012345",
+    did: "did:iota:0xretailergreenmarket123456789012345678901234567890123456789012",
     name: "GreenMarket Supermarket",
     role: "Retailer",
     location: "Amsterdam, Netherlands",
