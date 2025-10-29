@@ -99,7 +99,7 @@ export function Tabs({
                 className={`
                   relative px-5 py-2.5 rounded-full text-sm font-semibold transition-all whitespace-nowrap
                   ${activeTab === tab.id
-                    ? 'bg-black text-white border-2 border-blue-500 shadow-lg shadow-blue-500/30'
+                    ? 'bg-black text-white border-2 border-white shadow-lg shadow-white/20'
                     : 'bg-[#1a1a1a] text-zinc-400 border-2 border-transparent hover:bg-[#2a2a2a] hover:text-zinc-300'
                   }
                   ${tab.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}

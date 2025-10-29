@@ -346,12 +346,11 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
       </div>
 
       {/* Stakeholder Info Card */}
-      <div className="border border-[#3a3a3a] rounded-lg p-6 relative overflow-hidden">
+      <div className="border border-[#3a3a3a] rounded-lg p-6 relative overflow-hidden bg-green-900/30">
         <div 
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-cover bg-center opacity-50"
           style={{ backgroundImage: 'url(/CACAO4.jpeg)' }}
         />
-        <div className="absolute inset-0 bg-black/70"></div>
         <div className="relative z-10">
           {/* Header with Name */}
           <div className="mb-4">
@@ -567,6 +566,29 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
       {/* Success State */}
       {credential && (
         <div className="bg-[#2a2a2a] border border-green-500/20 rounded-lg p-7 space-y-4">
+          
+          {/* What happens here? Explanation */}
+          <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 mb-4">
+            <h4 className="text-sm font-medium text-blue-400 mb-2">💡 What happens here?</h4>
+            <div className="space-y-2 text-xs text-zinc-300 leading-relaxed">
+              <p>
+                <strong className="text-white">Certificate issued:</strong> A cryptographically signed credential 
+                proving the origin and quality of your harvest batch.
+              </p>
+              <p>
+                <strong className="text-white">Storage:</strong> Stored on the <a 
+                  href="https://docs.iota.org/developer/iota-identity/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:text-blue-300 underline"
+                >IOTA network</a> as an immutable record that cannot be altered or faked.
+              </p>
+              <p>
+                <strong className="text-white">Why it matters:</strong> This certificate is the foundation of your 
+                supply chain. Factories must verify it before producing, creating trust without middlemen.
+              </p>
+            </div>
+          </div>
 
           <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-5 space-y-3">
             <div className="flex items-start justify-between gap-3">

@@ -322,10 +322,13 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
       {/* Production Stakeholder Info Card */}
       <div className="border border-[#3a3a3a] rounded-lg p-6 relative overflow-hidden">
         <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: 'url(/fact.jpeg)' }}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
+          style={{ 
+            backgroundImage: 'url(/fact.jpeg)',
+            opacity: 0.4
+          }}
         />
-        <div className="absolute inset-0 bg-black/70"></div>
+        <div className="absolute inset-0 bg-blue-900/50 z-[1]"></div>
         <div className="relative z-10">
         {/* Header with Name */}
         <div className="mb-4">
@@ -662,6 +665,29 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
           <div className="flex items-center gap-3 text-blue-400">
             <CheckCircle2 className="w-6 h-6" />
             <h3 className="text-lg font-semibold">Production Certificate Issued!</h3>
+          </div>
+
+          {/* What happens here? Explanation */}
+          <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 mb-4">
+            <h4 className="text-sm font-medium text-blue-400 mb-2">💡 What happens here?</h4>
+            <div className="space-y-2 text-xs text-zinc-300 leading-relaxed">
+              <p>
+                <strong className="text-white">Transaction confirmed:</strong> Your production certificate 
+                is cryptographically linked to the origin certificate, creating an immutable chain.
+              </p>
+              <p>
+                <strong className="text-white">Storage:</strong> Both certificates are stored on the <a 
+                  href="https://docs.iota.org/developer/iota-identity/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:text-blue-300 underline"
+                >IOTA network</a>, creating a permanent record of the complete supply chain.
+              </p>
+              <p>
+                <strong className="text-white">Why it matters:</strong> Consumers can now verify the entire journey 
+                from farm to factory instantly. No one can fake or alter this proof.
+              </p>
+            </div>
           </div>
 
           <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4">

@@ -151,12 +151,13 @@ export default function Home() {
       </div>
       
       {/* Body container - Mobile-width constrained */}
-      <div className="min-h-screen bg-[#0f0f0f] relative z-0">
+      <div className="min-h-screen relative z-0" style={{ backgroundColor: '#0f0f0f', backgroundImage: activeMainTab === 'factory' ? 'url(/fact.jpeg)' : activeMainTab === 'farmer' ? 'url(/CACAO4.jpeg)' : activeMainTab === 'consumer' ? 'url(/cea77f55-cab8-48f0-82fa-aee8cfbbbeef.jpeg)' : 'none', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundBlendMode: 'overlay' }}>
+        <div className="absolute inset-0 bg-[#0f0f0f]/90" style={{ zIndex: 0 }}></div>
         {/* Spacer for fixed topnav */}
-        <div className="h-[73px]"></div>
+        <div className="h-[73px] relative z-10"></div>
 
         {/* Mobile-width container - forced on all screens - Passport style */}
-        <div className="min-h-screen bg-[#0f0f0f] max-w-[448px] w-full mx-auto shadow-2xl relative z-0">
+        <div className="min-h-screen max-w-[448px] w-full mx-auto shadow-2xl relative z-10" style={{ backgroundColor: 'transparent' }}>
           {/* Navigation Tabs - Outside card for minimal mobile design */}
           <div className="px-4 pt-2 pb-2">
             <Tabs
@@ -188,12 +189,24 @@ export default function Home() {
                   label: tabs[1].label,
                   description: tabs[1].description,
                   content: selectedIndustry ? (
-                    <div className="w-full m-4 border-4 border-white rounded-[2rem] overflow-hidden bg-[#0f0f0f]">
-                      <div className="px-6 py-6">
-                        <FactoryProduction industry={selectedIndustry} onNextStep={() => {
-                          setActiveMainTab('consumer');
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }} />
+                    <div className="w-full m-4 border-4 border-white rounded-[2rem] overflow-hidden relative">
+                      {/* Background Image - Factory Tab */}
+                      <div 
+                        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                        style={{ 
+                          backgroundImage: 'url(/fact.jpeg)',
+                          opacity: 0.25,
+                          zIndex: 0
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-[#0f0f0f]/80" style={{ zIndex: 1 }}></div>
+                      <div className="relative" style={{ zIndex: 10 }}>
+                        <div className="px-6 py-6">
+                          <FactoryProduction industry={selectedIndustry} onNextStep={() => {
+                            setActiveMainTab('consumer');
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }} />
+                        </div>
                       </div>
                     </div>
                   ) : (
@@ -207,9 +220,8 @@ export default function Home() {
                 },
                 {
                   id: 'consumer',
-                  label: 'Consumer',
+                  label: '🛡️ Consumer',
                   description: tabs[2].description,
-                  icon: <Shield className="w-3.5 h-3.5" />,
                   content: selectedIndustry ? (
                     <div className="w-full m-4 border-4 border-white rounded-[2rem] overflow-hidden bg-[#0f0f0f]">
                       <div className="px-6 py-8 pb-12">
@@ -247,28 +259,29 @@ export default function Home() {
               <summary className="p-5 cursor-pointer list-none hover:bg-[#2f2f2f] transition-colors flex items-center gap-3">
                 <ChevronRight className="w-5 h-5 text-purple-400 transition-transform group-open:rotate-90 flex-shrink-0" />
                 <h4 className="text-base font-medium text-purple-400">
-                  💡 Why This Matters
+                  💡 What happens here?
                 </h4>
               </summary>
               <div className="px-5 pb-5 pt-2 space-y-4">
                 <div>
                   <h4 className="text-sm font-medium text-white mb-2">For Consumers</h4>
                   <p className="text-sm text-zinc-300 leading-relaxed">
-                    Scan any product QR code and instantly see the verified supply chain. 
-                    No waiting, no phone calls, just instant cryptographic verification.
+                    You can instantly verify product authenticity with your phone. No more wondering if claims 
+                    about organic, fair trade, or origin are true. Get complete transparency in seconds, not days.
                   </p>
                 </div>
                 <div>
-                  <h4 className="text-sm font-medium text-blue-400 mb-2">For Your DPP Business</h4>
+                  <h4 className="text-sm font-medium text-blue-400 mb-2">For Your Business</h4>
                   <p className="text-sm text-zinc-300 leading-relaxed">
-                    This proves your solution works. Show this to chocolate brands, coffee roasters, 
-                    fashion companies - anyone with supply chain transparency needs.
+                    You can build trust with customers by showing verified supply chain data. Meet EU Digital 
+                    Product Passport requirements, prevent fraud, and differentiate your products with 
+                    blockchain-backed transparency.
                   </p>
                 </div>
               </div>
             </details>
 
-            {/* You Buy the Chocolate - Card */}
+            {/* Technical & Legal Info - Card */}
             <details className="card card-purple overflow-hidden group">
               <summary className="p-5 cursor-pointer list-none hover:bg-purple-500/10 transition-colors flex items-center gap-3">
                 <ChevronRight className="w-5 h-5 text-purple-400 transition-transform group-open:rotate-90 flex-shrink-0" />
@@ -278,28 +291,42 @@ export default function Home() {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-base font-semibold text-white">
-                      You Buy the Chocolate
+                      Technical & Legal Info
                     </h3>
                   </div>
                 </div>
               </summary>
               <div className="px-5 pb-5 pt-2 space-y-4">
-                <p className="text-sm text-zinc-300 leading-relaxed">
-                  You&apos;re standing in a supermarket in Amsterdam. The chocolate bar 
-                  claims to be &quot;Single-origin Ecuador, Organic, Fair Trade.&quot; 
-                  But is it true?
-                </p>
                 <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4 space-y-3">
                   <div>
-                    <p className="text-xs font-medium text-white mb-1">❌ Traditional Method:</p>
-                    <p className="text-xs text-zinc-400 leading-relaxed">
-                      Rely on brand reputation. Call suppliers to verify (takes days).
+                    <p className="text-xs font-medium text-purple-400 mb-1">🔧 Technical Standards:</p>
+                    <p className="text-xs text-zinc-300 leading-relaxed">
+                      <strong>W3C Verifiable Credentials:</strong> Industry-standard format for digital certificates.
+                      <br />
+                      <strong>Ed25519 Signatures:</strong> Cryptographic proof of authenticity. 
+                      <br />
+                      <strong>IOTA Identity SDK:</strong> Decentralized identity on IOTA network.
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs font-medium text-green-400 mb-1">✅ With DIDs:</p>
+                    <p className="text-xs font-medium text-blue-400 mb-1">⚖️ Legal Compliance:</p>
                     <p className="text-xs text-zinc-300 leading-relaxed">
-                      Scan QR code. Verify entire supply chain in 2 seconds with cryptographic proof.
+                      <strong>EU Digital Product Passport:</strong> Complies with upcoming 2027 regulations for batteries, textiles, and electronics.
+                      <br />
+                      <strong>UN/CEFACT UNTP:</strong> Standardized data schema for global trade.
+                      <br />
+                      <strong>GDPR Compliant:</strong> Privacy-preserving identity without centralized data storage.
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-green-400 mb-1">🔐 Security & Immutability:</p>
+                    <p className="text-xs text-zinc-300 leading-relaxed">
+                      Each certificate is cryptographically signed and stored on the <a 
+                        href="https://docs.iota.org/developer/iota-identity/" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-green-400 hover:text-green-300 underline"
+                      >IOTA Tangle</a>, creating an immutable chain that cannot be altered or falsified once recorded.
                     </p>
                   </div>
                 </div>

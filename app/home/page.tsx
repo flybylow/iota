@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { ModeToggle } from '@/components/ModeToggle';
 import { setDPPMode, isBlockchainMode } from '@/lib/dppMode';
 import { CTAButton } from '@/components/CTAButton';
+import { BlockchainCarousel } from '@/components/BlockchainCarousel';
 
 /**
  * Home Page - Marketing Page
@@ -55,6 +56,43 @@ export default function HomePage() {
 
         {/* Main Content */}
         <main className="w-full px-4 md:px-8 py-8 md:py-12 overflow-x-hidden">
+          {/* Hero Section */}
+          <div className="border border-[#3a3a3a] rounded-lg p-8 md:p-12 mb-8 md:mb-12 relative overflow-hidden">
+            <div 
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
+              style={{ 
+                backgroundImage: 'url(/cea77f55-cab8-48f0-82fa-aee8cfbbbeef.jpeg)',
+                opacity: 0.4
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/60 via-purple-900/50 to-green-900/60 z-[1]"></div>
+            <div className="relative z-10 text-center">
+              <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 md:mb-6">
+                Digital Product Passport
+              </h1>
+              <p className="text-base md:text-xl text-zinc-200 leading-relaxed mb-6 md:mb-8 max-w-2xl mx-auto">
+                Verify your product&apos;s entire supply chain in <strong className="text-green-400">2 seconds</strong> with blockchain-powered credentials.
+              </p>
+              <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+                <div className="flex items-center gap-2 text-white">
+                  <span className="text-2xl">🌱</span>
+                  <span className="text-sm md:text-base">Farm</span>
+                  <span className="text-zinc-400">→</span>
+                  <span className="text-2xl">🏭</span>
+                  <span className="text-sm md:text-base">Factory</span>
+                  <span className="text-zinc-400">→</span>
+                  <span className="text-2xl">✅</span>
+                  <span className="text-sm md:text-base">Consumer</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Blockchain Carousel */}
+          <div className="mb-8 md:mb-12 w-full">
+            <BlockchainCarousel />
+          </div>
+
           {/* Hero Section */}
           <div className="bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-green-500/10 border border-blue-500/20 rounded-xl p-8 md:p-12 mb-8 md:mb-12 text-center">
             <h1 className="text-3xl md:text-4xl font-bold text-dpp-text-primary mb-4 md:mb-6">
@@ -351,28 +389,29 @@ export default function HomePage() {
             <summary className="p-5 md:p-6 cursor-pointer list-none hover:bg-dpp-bg-tertiary transition-colors flex items-center gap-3">
               <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-purple-400 transition-transform group-open:rotate-90 flex-shrink-0" />
               <h4 className="text-base md:text-lg font-medium text-purple-400">
-                💡 Why This Matters
+                💡 What happens here?
               </h4>
             </summary>
             <div className="px-5 md:px-6 pb-5 md:pb-6 pt-2 space-y-4 md:space-y-5">
               <div>
                 <h4 className="text-sm md:text-base font-medium text-dpp-text-primary mb-2 md:mb-3">For Consumers</h4>
                 <p className="text-sm md:text-base text-dpp-text-secondary leading-relaxed">
-                  Scan any product QR code and instantly see the verified supply chain. 
-                  No waiting, no phone calls, just instant cryptographic verification.
+                  You can instantly verify product authenticity with your phone. No more wondering if claims 
+                  about organic, fair trade, or origin are true. Get complete transparency in seconds, not days.
                 </p>
               </div>
               <div>
-                <h4 className="text-sm md:text-base font-medium text-blue-400 mb-2 md:mb-3">For Your DPP Business</h4>
+                <h4 className="text-sm md:text-base font-medium text-blue-400 mb-2 md:mb-3">For Your Business</h4>
                 <p className="text-sm md:text-base text-dpp-text-secondary leading-relaxed">
-                  This proves your solution works. Show this to chocolate brands, coffee roasters, 
-                  fashion companies - anyone with supply chain transparency needs.
+                  You can build trust with customers by showing verified supply chain data. Meet EU Digital 
+                  Product Passport requirements, prevent fraud, and differentiate your products with 
+                  blockchain-backed transparency.
                 </p>
               </div>
             </div>
           </details>
 
-          {/* You Buy the Chocolate */}
+          {/* Technical & Legal Info */}
           <details className="card card-purple overflow-hidden group mb-6 md:mb-8">
             <summary className="p-5 md:p-6 cursor-pointer list-none hover:bg-purple-500/10 transition-colors flex items-center gap-3">
               <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-purple-400 transition-transform group-open:rotate-90 flex-shrink-0" />
@@ -382,28 +421,42 @@ export default function HomePage() {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-base md:text-lg font-semibold text-dpp-text-primary">
-                    You Buy the Chocolate
+                    Technical & Legal Info
                   </h3>
                 </div>
               </div>
             </summary>
             <div className="px-5 md:px-6 pb-5 md:pb-6 pt-2 space-y-4 md:space-y-5">
-              <p className="text-sm md:text-base text-dpp-text-secondary leading-relaxed">
-                You&apos;re standing in a supermarket in Amsterdam. The chocolate bar 
-                claims to be &quot;Single-origin Ecuador, Organic, Fair Trade.&quot; 
-                But is it true?
-              </p>
-              <div className="card card-nested p-4 space-y-3">
+              <div className="card card-nested p-4 md:p-5 space-y-3 md:space-y-4">
                 <div>
-                  <p className="text-xs font-medium text-dpp-text-primary mb-1">❌ Traditional Method:</p>
-                  <p className="text-xs text-dpp-text-tertiary leading-relaxed">
-                    Rely on brand reputation. Call suppliers to verify (takes days).
+                  <p className="text-xs md:text-sm font-medium text-purple-400 mb-1 md:mb-2">🔧 Technical Standards:</p>
+                  <p className="text-xs md:text-sm text-dpp-text-secondary leading-relaxed">
+                    <strong>W3C Verifiable Credentials:</strong> Industry-standard format for digital certificates.
+                    <br />
+                    <strong>Ed25519 Signatures:</strong> Cryptographic proof of authenticity. 
+                    <br />
+                    <strong>IOTA Identity SDK:</strong> Decentralized identity on IOTA network.
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-green-400 mb-1">✅ With DIDs:</p>
-                  <p className="text-xs text-dpp-text-secondary leading-relaxed">
-                    Scan QR code. Verify entire supply chain in 2 seconds with cryptographic proof.
+                  <p className="text-xs md:text-sm font-medium text-blue-400 mb-1 md:mb-2">⚖️ Legal Compliance:</p>
+                  <p className="text-xs md:text-sm text-dpp-text-secondary leading-relaxed">
+                    <strong>EU Digital Product Passport:</strong> Complies with upcoming 2027 regulations for batteries, textiles, and electronics.
+                    <br />
+                    <strong>UN/CEFACT UNTP:</strong> Standardized data schema for global trade.
+                    <br />
+                    <strong>GDPR Compliant:</strong> Privacy-preserving identity without centralized data storage.
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs md:text-sm font-medium text-green-400 mb-1 md:mb-2">🔐 Security & Immutability:</p>
+                  <p className="text-xs md:text-sm text-dpp-text-secondary leading-relaxed">
+                    Each certificate is cryptographically signed and stored on the <a 
+                      href="https://docs.iota.org/developer/iota-identity/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-green-400 hover:text-green-300 underline"
+                    >IOTA Tangle</a>, creating an immutable chain that cannot be altered or falsified once recorded.
                   </p>
                 </div>
               </div>
