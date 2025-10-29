@@ -339,19 +339,24 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h3 className="text-base font-medium text-white">
+        <h4 className="text-sm font-medium text-white">
           {labels.originIcon} {' '} Farmer
-        </h3>
+        </h4>
+        <h3 className="text-base font-medium text-white mt-1">{originStakeholder.name}</h3>
       </div>
 
       {/* Stakeholder Info Card */}
-      <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-6">
-        {/* Header with Name */}
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold text-white mb-2 text-center">{originStakeholder.name}</h3>
-          
-          {/* Layout: Left div (Country/Since) and Right div (Certifications) */}
-          <div className="flex items-start justify-between">
+      <div className="border border-[#3a3a3a] rounded-lg p-6 relative overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: 'url(/CACAO4.jpeg)' }}
+        />
+        <div className="absolute inset-0 bg-black/70"></div>
+        <div className="relative z-10">
+          {/* Header with Name */}
+          <div className="mb-4">
+            {/* Layout: Left div (Country/Since) and Right div (Certifications) */}
+            <div className="flex items-start justify-between">
             {/* Left div: Country and Since */}
             <div>
               <div className="flex items-center gap-1.5 mb-1">
@@ -384,15 +389,40 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
           </div>
         </div>
 
-        {/* About Section */}
-        <div className="mb-3 p-3 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg">
-          <div className="space-y-3">
-            <div className="bg-[#0f0f0f] border border-[#3a3a3a] rounded-lg p-3">
+          {/* Location with Mini Map */}
+          <div className="mb-3 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg overflow-hidden">
+            <div className="h-32 bg-zinc-800 relative">
+              {originStakeholder.coordinates && (
+                <iframe
+                  src={`https://www.openstreetmap.org/export/embed.html?bbox=${originStakeholder.coordinates.lng - 0.05},${originStakeholder.coordinates.lat - 0.05},${originStakeholder.coordinates.lng + 0.05},${originStakeholder.coordinates.lat + 0.05}&layer=mapnik&marker=${originStakeholder.coordinates.lat},${originStakeholder.coordinates.lng}`}
+                  width="100%"
+                  height="128"
+                  frameBorder="0"
+                  style={{ border: 0, filter: 'grayscale(100%) invert(100%) contrast(0.9) brightness(1.3) hue-rotate(180deg)' }}
+                  allowFullScreen
+                  loading="lazy"
+                  title="Location Map"
+                  className="grayscale"
+                />
+              )}
+              <div className="absolute top-2 left-2 bg-black/70 backdrop-blur-sm px-2 py-1 rounded text-xs text-white">
+                📍 {originStakeholder.location}
+              </div>
+              <div className="absolute bottom-2 left-2 bg-black/70 backdrop-blur-sm px-2 py-1 rounded text-xs text-white">
+                Lat: {originStakeholder.coordinates.lat.toFixed(2)}° | Lng: {originStakeholder.coordinates.lng.toFixed(2)}°
+              </div>
+            </div>
+          </div>
+
+          {/* More Section */}
+          <div className="mb-3 p-3 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg">
+            <div className="space-y-3">
+              <div className="bg-[#0f0f0f] border border-[#3a3a3a] rounded-lg p-3">
               <button
                 onClick={() => setShowAbout(!showAbout)}
                 className="w-full flex items-center justify-between mb-2 hover:opacity-80 transition-opacity"
               >
-                <span className="text-xs text-zinc-500">About</span>
+                <span className="text-xs text-zinc-500">More</span>
                 <div className="flex items-center gap-2">
                   <span className="text-lg">📖</span>
                   {showAbout ? (
@@ -407,30 +437,6 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
               )}
             </div>
           </div>
-        </div>
-
-        {/* Location with Mini Map */}
-        <div className="mb-3 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg overflow-hidden">
-            <div className="h-32 bg-zinc-800 relative">
-            {originStakeholder.coordinates && (
-              <iframe
-                src={`https://www.openstreetmap.org/export/embed.html?bbox=${originStakeholder.coordinates.lng - 0.05},${originStakeholder.coordinates.lat - 0.05},${originStakeholder.coordinates.lng + 0.05},${originStakeholder.coordinates.lat + 0.05}&layer=mapnik&marker=${originStakeholder.coordinates.lat},${originStakeholder.coordinates.lng}`}
-                width="100%"
-                height="128"
-                frameBorder="0"
-                  style={{ border: 0, filter: 'grayscale(100%) invert(100%) contrast(0.9) brightness(1.3) hue-rotate(180deg)' }}
-                allowFullScreen
-                loading="lazy"
-                title="Location Map"
-                className="grayscale"
-              />
-            )}
-            <div className="absolute top-2 left-2 bg-black/70 backdrop-blur-sm px-2 py-1 rounded text-xs text-white">
-              📍 {originStakeholder.location}
-            </div>
-            <div className="absolute bottom-2 left-2 bg-black/70 backdrop-blur-sm px-2 py-1 rounded text-xs text-white">
-              Lat: {originStakeholder.coordinates.lat.toFixed(2)}° | Lng: {originStakeholder.coordinates.lng.toFixed(2)}°
-            </div>
           </div>
         </div>
       </div>

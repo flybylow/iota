@@ -313,21 +313,22 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
     <div id="factory-production" className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <div className="flex flex-col items-center gap-0.5">
-          <h3 className="text-base font-medium text-white inline-flex items-center gap-1.5">
-            <span className="text-xl">{labels.productionIcon}</span>
-            <span>Factory</span>
-          </h3>
-        </div>
+        <h4 className="text-sm font-medium text-white">
+          {labels.productionIcon} {' '} Factory
+        </h4>
+        <h3 className="text-base font-medium text-white mt-1">{productionStakeholder.name}</h3>
       </div>
 
       {/* Production Stakeholder Info Card */}
-      <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-6">
+      <div className="border border-[#3a3a3a] rounded-lg p-6 relative overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: 'url(/fact.jpeg)' }}
+        />
+        <div className="absolute inset-0 bg-black/70"></div>
+        <div className="relative z-10">
         {/* Header with Name */}
         <div className="mb-4">
-          <h3 className="text-lg font-semibold text-white mb-2 text-center">
-            {productionStakeholder.name}
-          </h3>
           
           {/* Layout: Left div (Country/Since) and Right div (Certifications) */}
           <div className="flex items-start justify-between">
@@ -364,40 +365,6 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
           </div>
         </div>
 
-        {/* About Section */}
-        {('description' in productionStakeholder && productionStakeholder.description) || 
-         ('capacity' in productionStakeholder && productionStakeholder.capacity) ? (
-          <div className="mb-3 p-3 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg">
-            <button
-              onClick={() => setShowAbout(!showAbout)}
-              className="w-full flex items-center justify-between mb-2 hover:opacity-80 transition-opacity"
-            >
-              <span className="text-xs text-zinc-500">About</span>
-              <div className="flex items-center gap-2">
-                <span className="text-lg">📖</span>
-                {showAbout ? (
-                  <ChevronUp className="w-4 h-4 text-zinc-400" />
-                ) : (
-                  <ChevronDown className="w-4 h-4 text-zinc-400" />
-                )}
-              </div>
-            </button>
-            {showAbout && (
-              <div className="space-y-2">
-                {'capacity' in productionStakeholder && productionStakeholder.capacity && (
-                  <div className="flex items-center gap-2 text-xs">
-                    <span className="text-white">⚡ Capacity:</span>
-                    <span className="text-zinc-200">{productionStakeholder.capacity}</span>
-                  </div>
-                )}
-                {'description' in productionStakeholder && productionStakeholder.description && (
-                  <p className="text-xs text-white leading-relaxed">{productionStakeholder.description}</p>
-                )}
-              </div>
-            )}
-          </div>
-        ) : null}
-
         {/* Location with Mini Map */}
         {'coordinates' in productionStakeholder && productionStakeholder.coordinates ? (
           <div className="mb-3 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg overflow-hidden">
@@ -429,6 +396,41 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
             </div>
           </div>
         )}
+
+        {/* About Section */}
+        {('description' in productionStakeholder && productionStakeholder.description) || 
+         ('capacity' in productionStakeholder && productionStakeholder.capacity) ? (
+          <div className="mb-3 p-3 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg">
+            <button
+              onClick={() => setShowAbout(!showAbout)}
+              className="w-full flex items-center justify-between mb-2 hover:opacity-80 transition-opacity"
+            >
+              <span className="text-xs text-zinc-500">More</span>
+              <div className="flex items-center gap-2">
+                <span className="text-lg">📖</span>
+                {showAbout ? (
+                  <ChevronUp className="w-4 h-4 text-zinc-400" />
+                ) : (
+                  <ChevronDown className="w-4 h-4 text-zinc-400" />
+                )}
+              </div>
+            </button>
+            {showAbout && (
+              <div className="space-y-2">
+                {'capacity' in productionStakeholder && productionStakeholder.capacity && (
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="text-white">⚡ Capacity:</span>
+                    <span className="text-zinc-200">{productionStakeholder.capacity}</span>
+                  </div>
+                )}
+                {'description' in productionStakeholder && productionStakeholder.description && (
+                  <p className="text-xs text-white leading-relaxed">{productionStakeholder.description}</p>
+                )}
+              </div>
+            )}
+          </div>
+        ) : null}
+        </div>
       </div>
 
       {!productionCredential && (

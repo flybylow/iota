@@ -105,7 +105,7 @@ export function Tabs({
                   ${tab.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                 `}
               >
-                <span className="flex items-center gap-1.5">
+                <span className="flex items-center gap-2">
                   {tab.icon && (
                     <span className="flex items-center text-sm">{tab.icon}</span>
                   )}
