@@ -85,13 +85,13 @@ function HeroCarousel() {
             transform transition-all duration-700
             border-2 border-white/30
             flex flex-col justify-between
-            overflow-hidden
-          `}>
+          `}
+          style={{ borderRadius: '1rem', overflow: 'hidden' }}>
           {/* Animated Gradient Overlay */}
           <div className={`absolute inset-0 bg-gradient-to-br ${currentCard.gradientOverlay} animate-pulse`} />
           
           {/* Shine Effect - More Pronounced */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/50 to-white/0 rounded-3xl opacity-60" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/50 to-white/0 opacity-60" />
           
           {/* Card Pattern Background - Enhanced */}
           <div className="absolute inset-0 opacity-[0.05]">
