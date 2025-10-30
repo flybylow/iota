@@ -375,48 +375,48 @@ export default function HomePage() {
             </p>
             
             {/* Horizontal Flow with Arrows */}
-            <div className="w-full flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-4">
+            <div className="w-full flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-6">
               {/* Step 1: Farmer */}
               <div className="card card-tertiary border-green-500/30 p-4 md:p-6 flex-1 w-full text-center hover:border-green-500/50 transition-all">
                 <div className="flex justify-center mb-3 md:mb-4">
-                  <Sprout className="w-6 h-6 md:w-8 md:h-8 text-green-400" />
+                  <Sprout className="w-8 h-8 md:w-10 md:h-10 text-green-400" />
                 </div>
-                <p className="text-sm md:text-base font-semibold text-dpp-text-primary mb-2 md:mb-3">Farmer Issues Certificate</p>
-                <p className="text-xs md:text-sm text-dpp-text-tertiary leading-relaxed">Origin, harvest date, certifications—all verified on blockchain</p>
+                <p className="text-base md:text-lg font-semibold text-dpp-text-primary mb-2 md:mb-3">1. Farmer</p>
+                <p className="text-sm md:text-base text-dpp-text-tertiary leading-relaxed">Issues origin certificate with blockchain identity</p>
               </div>
               
               {/* Arrow 1 */}
-              <div className="hidden md:flex items-center justify-center text-blue-400 flex-shrink-0 px-2">
-                <ChevronRight className="w-6 h-6" />
+              <div className="hidden md:flex items-center justify-center text-blue-400 flex-shrink-0">
+                <ChevronRight className="w-8 h-8" />
               </div>
               <div className="md:hidden flex items-center justify-center text-blue-400 py-2">
-                <ChevronRight className="w-6 h-6 rotate-90" />
+                <ChevronRight className="w-8 h-8 rotate-90" />
               </div>
               
               {/* Step 2: Factory */}
               <div className="card card-tertiary border-blue-500/30 p-4 md:p-6 flex-1 w-full text-center hover:border-blue-500/50 transition-all">
                 <div className="flex justify-center mb-3 md:mb-4">
-                  <Factory className="w-6 h-6 md:w-8 md:h-8 text-blue-400" />
+                  <Factory className="w-8 h-8 md:w-10 md:h-10 text-blue-400" />
                 </div>
-                <p className="text-sm md:text-base font-semibold text-dpp-text-primary mb-2 md:mb-3">Factory Verifies & Produces</p>
-                <p className="text-xs md:text-sm text-dpp-text-tertiary leading-relaxed">Checks origin certificate, adds production data, chains credentials</p>
+                <p className="text-base md:text-lg font-semibold text-dpp-text-primary mb-2 md:mb-3">2. Factory</p>
+                <p className="text-sm md:text-base text-dpp-text-tertiary leading-relaxed">Verifies origin and adds production data</p>
               </div>
               
               {/* Arrow 2 */}
-              <div className="hidden md:flex items-center justify-center text-blue-400 flex-shrink-0 px-2">
-                <ChevronRight className="w-6 h-6" />
+              <div className="hidden md:flex items-center justify-center text-blue-400 flex-shrink-0">
+                <ChevronRight className="w-8 h-8" />
               </div>
               <div className="md:hidden flex items-center justify-center text-blue-400 py-2">
-                <ChevronRight className="w-6 h-6 rotate-90" />
+                <ChevronRight className="w-8 h-8 rotate-90" />
               </div>
               
               {/* Step 3: Consumer */}
               <div className="card card-tertiary border-purple-500/30 p-4 md:p-6 flex-1 w-full text-center hover:border-purple-500/50 transition-all">
                 <div className="flex justify-center mb-3 md:mb-4">
-                  <Shield className="w-6 h-6 md:w-8 md:h-8 text-purple-400" />
+                  <Shield className="w-8 h-8 md:w-10 md:h-10 text-purple-400" />
                 </div>
-                <p className="text-sm md:text-base font-semibold text-dpp-text-primary mb-2 md:mb-3">Consumer Scans QR Code</p>
-                <p className="text-xs md:text-sm text-dpp-text-tertiary leading-relaxed">2 seconds later—entire supply chain verified with cryptographic proof</p>
+                <p className="text-base md:text-lg font-semibold text-dpp-text-primary mb-2 md:mb-3">3. Consumer</p>
+                <p className="text-sm md:text-base text-dpp-text-tertiary leading-relaxed">Scans QR code → sees verified chain</p>
               </div>
             </div>
           </div>
