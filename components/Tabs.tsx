@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { Tooltip } from './Tooltip';
 
 interface Tab {
   id: string;
@@ -56,14 +55,14 @@ export function Tabs({
   onTabChange,
   controlledActiveTab,
 }: TabsProps) {
+  const [internalActiveTab, setInternalActiveTab] = React.useState(
+    defaultTab || tabs[0]?.id || ''
+  );
+
   // Safety check
   if (!tabs || tabs.length === 0) {
     return null;
   }
-
-  const [internalActiveTab, setInternalActiveTab] = React.useState(
-    defaultTab || tabs[0]?.id || ''
-  );
 
   // Use controlled or internal state
   const activeTab = controlledActiveTab ?? internalActiveTab;
@@ -91,7 +90,7 @@ export function Tabs({
         {/* Tab header - can be placed outside card */}
         <div className="w-[80%] mx-auto">
           <div className="flex items-center justify-center gap-3">
-            {tabs.map((tab, index) => (
+            {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => handleTabChange(tab.id)}

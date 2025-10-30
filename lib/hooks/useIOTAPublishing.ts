@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 import { useWalletStatus } from './useWalletStatus';
-import { useSignAndExecuteTransaction } from '@iota/dapp-kit';
-import { Transaction } from '@iota/iota-sdk';
 import { publishDIDToBlockchain, checkWalletBalance } from '@/lib/publishDID';
 
 /**
@@ -26,7 +24,6 @@ export interface PublishResult {
 
 export function useIOTAPublishing() {
   const { isConnected, address } = useWalletStatus();
-  const { mutate: signAndExecute } = useSignAndExecuteTransaction();
   const [publishing, setPublishing] = useState(false);
 
   /**

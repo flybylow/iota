@@ -1,6 +1,5 @@
 'use client';
 
-import { useSignAndExecuteTransaction } from '@iota/dapp-kit';
 import { useWalletStatus } from './useWalletStatus';
 
 /**
@@ -11,7 +10,6 @@ import { useWalletStatus } from './useWalletStatus';
  */
 export function useDIDPublishing() {
   const { isConnected, address } = useWalletStatus();
-  const { mutate: _signAndExecute } = useSignAndExecuteTransaction();
 
   /**
    * Publish a DID to the blockchain
@@ -21,9 +19,12 @@ export function useDIDPublishing() {
    * IOTA Identity SDK's DID publishing methods.
    */
   const publishDID = async (
-    _document: unknown,
-    _privateKey: Uint8Array
+    document: unknown,
+    privateKey: Uint8Array
   ): Promise<{ published: boolean; transactionId?: string; error?: string }> => {
+    // Parameters are kept for API compatibility but not used in this simplified version
+    void document;
+    void privateKey;
     if (!isConnected || !address) {
       return {
         published: false,

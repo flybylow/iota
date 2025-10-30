@@ -39,7 +39,7 @@ export default function TestDAppKitPage() {
       if (isConnected && account) {
         addLog('✅ dApp Kit is working!');
         addLog(`   Address: ${account.address}`);
-        addLog(`   Chains: ${account.chains.map(c => c.id).join(', ')}`);
+        addLog(`   Chains: ${account.chains.map(c => String(c)).join(', ')}`);
       } else {
         addLog('⚠️ Not connected. Click "Connect Wallet" first.');
       }

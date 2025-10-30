@@ -157,7 +157,7 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
         
         try {
           // Use existing DIDs from stakeholder data
-          let manufacturerDID = productionStakeholder.did;
+          const manufacturerDID = productionStakeholder.did;
           let productDID = product.did;
           
           console.log('📋 Using manufacturer DID:', manufacturerDID);
@@ -186,6 +186,7 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
                 did: manufacturerDID,
               },
             },
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             certificationData as any // Type conversion for UNTP
           );
           
@@ -217,7 +218,8 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
               console.log('✅ Sign and execute available');
               
               // Create DID for manufacturer
-              const { did: factoryDID, secretManager } = await createDID();
+              const didResult = await createDID();
+              const factoryDID = didResult.did;
               console.log('📝 Factory DID:', factoryDID);
               
               // Create a proper Transaction object
@@ -236,6 +238,7 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
                 signAndExecute(
                   { transaction: tx },
                   {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     onSuccess: (result: any) => {
                       console.log('✅ Transaction submitted to blockchain!');
                       console.log('📋 Result:', result);
@@ -369,11 +372,11 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
         </div>
 
         {/* Location with Mini Map */}
-        {'coordinates' in productionStakeholder && productionStakeholder.coordinates ? (
+        {'coordinates' in productionStakeholder && productionStakeholder.coordinates && typeof productionStakeholder.coordinates === 'object' && 'lat' in productionStakeholder.coordinates && 'lng' in productionStakeholder.coordinates ? (
           <div className="mb-3 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg overflow-hidden">
             <div className="h-32 bg-zinc-800 relative">
               <iframe
-                src={`https://www.openstreetmap.org/export/embed.html?bbox=${productionStakeholder.coordinates.lng - 0.05},${productionStakeholder.coordinates.lat - 0.05},${productionStakeholder.coordinates.lng + 0.05},${productionStakeholder.coordinates.lat + 0.05}&layer=mapnik&marker=${productionStakeholder.coordinates.lat},${productionStakeholder.coordinates.lng}`}
+                src={`https://www.openstreetmap.org/export/embed.html?bbox=${(productionStakeholder.coordinates as { lat: number; lng: number }).lng - 0.05},${(productionStakeholder.coordinates as { lat: number; lng: number }).lat - 0.05},${(productionStakeholder.coordinates as { lat: number; lng: number }).lng + 0.05},${(productionStakeholder.coordinates as { lat: number; lng: number }).lat + 0.05}&layer=mapnik&marker=${(productionStakeholder.coordinates as { lat: number; lng: number }).lat},${(productionStakeholder.coordinates as { lat: number; lng: number }).lng}`}
                 width="100%"
                 height="128"
                 frameBorder="0"
@@ -387,7 +390,7 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
                 📍 {productionStakeholder.location}
               </div>
               <div className="absolute bottom-2 left-2 bg-black/70 backdrop-blur-sm px-2 py-1 rounded text-xs text-white">
-                Lat: {productionStakeholder.coordinates.lat.toFixed(2)}° | Lng: {productionStakeholder.coordinates.lng.toFixed(2)}°
+                Lat: {(productionStakeholder.coordinates as { lat: number; lng: number }).lat.toFixed(2)}° | Lng: {(productionStakeholder.coordinates as { lat: number; lng: number }).lng.toFixed(2)}°
               </div>
             </div>
           </div>

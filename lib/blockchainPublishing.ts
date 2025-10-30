@@ -5,11 +5,10 @@
  * using IOTA Identity SDK and dApp Kit.
  */
 
-import { useSignAndExecuteTransaction } from '@iota/dapp-kit';
-import { useIotaClient } from '@iota/dapp-kit';
 import { initWasm } from './iotaIdentityReal';
 import type { DIDCreationResult } from '@/types';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let Identity: any = null;
 
 /**
@@ -17,6 +16,7 @@ let Identity: any = null;
  * This creates a proper IotaDocument ready for on-chain submission
  */
 export async function createBlockchainDID(): Promise<{
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   doc: any;
   did: string;
   packedDoc: Uint8Array;
@@ -60,16 +60,20 @@ export async function createBlockchainDID(): Promise<{
  * 4. Submits to blockchain
  */
 export async function publishDIDToChain(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   signAndExecute: (params: any, callbacks: any) => void,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   client: any,
   address: string
 ): Promise<{ success: boolean; blockId?: string; error?: string }> {
+  void client;
+  void address;
   try {
     console.log('📤 Starting blockchain publishing...');
     
     // Step 1: Create IOTA Identity document
     console.log('📦 Step 1: Creating IOTA Identity document...');
-    const { doc, did, packedDoc } = await createBlockchainDID();
+    const { did, packedDoc } = await createBlockchainDID();
     
     console.log('✅ Document created:', did);
     
@@ -96,6 +100,7 @@ export async function publishDIDToChain(
       signAndExecute(
         transactionPayload,
         {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onSuccess: (result: any) => {
             console.log('✅ Transaction submitted to blockchain!', result);
             resolve({
@@ -127,13 +132,15 @@ export async function publishDIDToChain(
  * Simplified blockchain publishing - creates and publishes a DID in one step
  */
 export async function createAndPublishDID(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   signAndExecute: (params: any, callbacks: any) => void,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   client: any,
   address: string
 ): Promise<DIDCreationResult> {
   try {
     // Create the DID
-    const { did, packedDoc } = await createBlockchainDID();
+    const { did } = await createBlockchainDID();
     
     // Publish to blockchain
     const result = await publishDIDToChain(signAndExecute, client, address);
@@ -141,20 +148,21 @@ export async function createAndPublishDID(
     if (result.success) {
       return {
         did,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         document: {} as any,
-        privateKey: new Uint8Array(),
+        privateKey: [] as number[],
         needsPublishing: false,
         keyStored: false,
         onChain: true,
         transactionId: result.blockId,
-        explorerUrl: `https://explorer.iota.org/search/${did}?network=testnet`,
         note: 'DID published to IOTA blockchain successfully',
       };
     } else {
       return {
         did,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         document: {} as any,
-        privateKey: new Uint8Array(),
+        privateKey: [] as number[],
         needsPublishing: true,
         keyStored: false,
         onChain: false,

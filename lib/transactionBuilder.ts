@@ -4,7 +4,6 @@
  * Builds proper transaction objects that can be submitted via dApp Kit
  */
 
-import { IOTA_CONFIG } from './config';
 
 /**
  * Build an alias output for DID publishing using dApp Kit
@@ -25,6 +24,7 @@ import { IOTA_CONFIG } from './config';
 export async function buildAliasOutputForDID(
   packedDocument: Uint8Array,
   didString: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> {
   console.log('📦 Building transaction for DID publishing...');
   console.log('📝 DID:', didString);

@@ -15,8 +15,8 @@ const loadIotaClient = async () => {
   if (getFullnodeUrl) return;
   
   try {
-    const module = await import('@iota/iota-sdk/client');
-    getFullnodeUrl = module.getFullnodeUrl;
+    const iotaModule = await import('@iota/iota-sdk/client');
+    getFullnodeUrl = iotaModule.getFullnodeUrl;
   } catch (error) {
     console.error('Failed to load IOTA SDK client:', error);
   }

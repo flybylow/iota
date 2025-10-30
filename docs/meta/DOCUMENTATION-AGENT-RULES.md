@@ -283,7 +283,7 @@ const code = reference.code;
 | Implementation details | `onchain/`, `dpp/`, `untp/` | Feature-specific |
 | Problem solving | `knowledge/problems-solved/` | wasm-integration.md |
 | Historical | `history/`, `archive/` | Milestones, completed work |
-| Status updates | Root or relevant folder | STATUS.md, BLOCKCHAIN-SUCCESS.md |
+| Status updates | Root or relevant folder | STATUS.md, onchain/BLOCKCHAIN-SUCCESS.md |
 | Meta docs | `meta/` | This file, NEXT-STEPS.md |
 | Guides | Root or topic folder | DEPLOYMENT-GUIDE.md |
 

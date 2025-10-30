@@ -8,6 +8,8 @@ export interface DIDCreationResult {
   keyStored?: boolean;
   onChain?: boolean;
   transactionId?: string;
+  explorerUrl?: string;
+  error?: string;
   note?: string;
 }
 

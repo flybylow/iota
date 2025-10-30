@@ -19,7 +19,7 @@
 - [`onchain/DID-vs-BLOCKCHAIN-ADDRESS.md`](onchain/DID-vs-BLOCKCHAIN-ADDRESS.md) - DID explanation
 
 ### Guides
-- [`EXPLORER-LINK-FORMATS.md`](EXPLORER-LINK-FORMATS.md) - Explorer API
+- [`onchain/EXPLORER-LINK-FORMATS.md`](onchain/EXPLORER-LINK-FORMATS.md) - Explorer API
 - [`getting-started/QUICK-START.md`](getting-started/QUICK-START.md) - Quick start
 - [`deployment/DEPLOYMENT-GUIDE.md`](deployment/DEPLOYMENT-GUIDE.md) - Deployment
 
@@ -28,10 +28,13 @@
 - **`archive/`** - Historical documentation
 - **`changelog/`** - Complete changelog history
 - **`deployment/`** - Deployment guides
-- **`onchain/`** - Blockchain implementation details
+- **`onchain/`** - Blockchain implementation details (34 files)
 - **`getting-started/`** - Getting started guides
-- **`knowledge/`** - Knowledge base
-- **`ux/`** - UX documentation
+- **`knowledge/`** - Knowledge base (problems solved, cross-project patterns)
+- **`history/`** - Project milestones and completion summaries
+- **`untp/`** - UNTP compliance documentation
+- **`ux/`** - UX documentation and fixes
+- **`meta/`** - Meta documentation (documentation rules, audits)
 
 ## Quick Links
 

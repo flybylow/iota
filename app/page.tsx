@@ -167,7 +167,7 @@ export default function Home() {
                   label: '🌱 Farmer',
                   description: tabs[0].description,
                   content: selectedIndustry ? (
-                    <div className="w-full m-4 border-4 border-white rounded-[2rem] overflow-hidden bg-[#0f0f0f]">
+                    <div className="w-full m-4 border-4 border-white/90 rounded-[2rem] overflow-hidden bg-[#0f0f0f] shadow-[0_0_0_2px_rgba(255,255,255,0.1)] ring-2 ring-white/20">
                       <div className="px-6 py-6">
                         <FarmerOrigin industry={selectedIndustry} onNextStep={() => {
                           setActiveMainTab('factory');
@@ -176,7 +176,7 @@ export default function Home() {
                       </div>
                     </div>
                   ) : (
-                    <div className="w-full m-4 border-4 border-white rounded-[2rem] overflow-hidden bg-[#0f0f0f]">
+                    <div className="w-full m-4 border-4 border-white/90 rounded-[2rem] overflow-hidden bg-[#0f0f0f] shadow-[0_0_0_2px_rgba(255,255,255,0.1)] ring-2 ring-white/20">
                       <div className="px-6 py-4">
                         <p className="text-white text-center py-8">Please select an industry first</p>
                       </div>

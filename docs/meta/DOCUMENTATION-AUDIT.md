@@ -59,7 +59,7 @@ This document tracks documentation health, organization issues, and maintenance 
 
 **Files following pattern:**
 - ✅ `STATUS.md`, `CHANGELOG.md`, `PROJECT-OVERVIEW.md`
-- ✅ `BLOCKCHAIN-SUCCESS.md`, `TRANSACTION-ERROR-FIX.md`
+- ✅ `onchain/BLOCKCHAIN-SUCCESS.md`, `onchain/TRANSACTION-ERROR-FIX.md`
 
 **Files not following pattern:**
 - ⚠️ Some files in `onchain/` mix patterns (e.g., `ON-CHAIN-STEPS.md` vs `api-proxy-fix-applied.md`)

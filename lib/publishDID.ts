@@ -10,11 +10,10 @@
  */
 
 import { initWasm } from './iotaIdentityReal';
-import type { DIDCreationResult } from '@/types';
 
 // Dynamic imports for client-side only modules
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let Identity: any = null;
-let IotaSDK: any = null;
 
 /**
  * Prepare DID document for blockchain publishing
@@ -104,7 +103,7 @@ export async function publishDIDToBlockchain(
     console.log('✅ Step 2: IOTA Identity SDK loaded');
     
     // Create IotaDocument
-    const { IotaDocument, IotaDID } = Identity;
+    const { IotaDocument } = Identity;
     
     console.log('📦 Creating IOTA Identity Document...');
     const doc = new IotaDocument('iota');
@@ -134,7 +133,7 @@ export async function publishDIDToBlockchain(
     // IotaDocument doesn't have serialize(), use JSON.stringify instead
     const docJson = JSON.stringify({
       id: didString,
-      verificationMethod: doc.methods().map((m: any) => ({
+      verificationMethod: doc.methods().map((m: { id: () => { toString: () => string }; type: () => { toString: () => string }; controller: () => { toString: () => string } }) => ({
         id: m.id().toString(),
         type: m.type().toString(),
         controller: m.controller().toString()
@@ -186,9 +185,12 @@ export async function checkWalletBalance(address: string): Promise<number> {
  * This creates an Alias Output transaction with the DID document
  */
 export async function buildDIDTransaction(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   preparedDID: { did: string; document: any; packedDoc: any },
   walletAddress: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> {
+  void walletAddress;
   try {
     console.log('📦 Building transaction for DID publishing...');
     

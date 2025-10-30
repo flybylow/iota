@@ -296,7 +296,7 @@ const packedDoc = new TextEncoder().encode(docJson);
 
 **Cost:** $0.00 (local mode, no actual blockchain transactions)
 
-**See:** `docs/ERROR-TOJSON-FIX.md` for full details on the transaction error
+**See:** `docs/knowledge/problems-solved/ERROR-TOJSON-FIX.md` for full details on the transaction error
 
 ---
 

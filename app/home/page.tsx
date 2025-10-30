@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Sprout, Factory, Shield, Globe, ShieldCheck, Link as LinkIcon, Network, Zap, ChevronRight, CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
+import { Sprout, Factory, Shield, ShieldCheck, Link as LinkIcon, Zap, ChevronRight, CheckCircle2, XCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { ModeToggle } from '@/components/ModeToggle';
 import { setDPPMode, isBlockchainMode } from '@/lib/dppMode';
@@ -477,7 +476,7 @@ export default function HomePage() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-green-400 mt-0.5">✓</span>
-                <span><strong>Verifiable Credentials (VCs):</strong> Cryptographically signed certificates that can't be faked</span>
+                <span><strong>Verifiable Credentials (VCs):</strong> Cryptographically signed certificates that can&apos;t be faked</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-green-400 mt-0.5">✓</span>

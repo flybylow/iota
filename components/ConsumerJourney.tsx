@@ -43,6 +43,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
   const getUNTPData = (credential: DPPCredential) => {
     try {
       const parsed = typeof credential.jwt === 'string' ? JSON.parse(credential.jwt) : credential.jwt;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (parsed as any).untpCredential || null;
     } catch {
       return null;
@@ -152,7 +153,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
       </div>
 
       {/* Consumer Info Card with Background */}
-      <div className="border border-[#3a3a3a] rounded-lg p-6 relative overflow-hidden">
+      <div className="border-2 border-purple-500/80 rounded-lg p-6 relative overflow-hidden ring-2 ring-purple-500/20">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
           style={{ 
@@ -163,7 +164,6 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
         <div className="absolute inset-0 bg-purple-900/40 z-[1]"></div>
         <div className="relative z-10">
           <div className="text-center mb-4">
-            <h3 className="text-xl md:text-2xl font-bold text-white mb-2">Product Verification</h3>
             <p className="text-sm text-zinc-300">Scan QR code to verify complete supply chain</p>
           </div>
         </div>
@@ -246,7 +246,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
             <div className="space-y-2 text-xs text-zinc-300 leading-relaxed">
               <p>
                 <strong className="text-white">Verification confirmed:</strong> All supply chain steps have been 
-                cryptographically verified. Each certificate's signature proves authenticity.
+                cryptographically verified. Each certificate&apos;s signature proves authenticity.
               </p>
               <p>
                 <strong className="text-white">Storage:</strong> The complete chain is permanently stored on the <a 
@@ -254,7 +254,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-green-400 hover:text-green-300 underline"
-                >IOTA network</a>. Anyone can verify this product's history anytime, anywhere.
+                >IOTA network</a>. Anyone can verify this product&apos;s history anytime, anywhere.
               </p>
               <p>
                 <strong className="text-white">Why it matters:</strong> You can trust this product. The blockchain 
@@ -333,7 +333,9 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
                         {/* Display UNTP fields if available */}
                         {step.credentialType === 'OrganicOriginCertification' && (() => {
                           const data = step.certificationData as unknown as OriginCertificationData;
+                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
                           const untpData = step as any;
+                          void untpData;
                           return (
                             <>
                               {/* UNTP Fields */}

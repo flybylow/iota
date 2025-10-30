@@ -4,9 +4,9 @@
  * This module implements actual blockchain publishing of DIDs to IOTA Tangle
  */
 
-import type { DIDCreationResult } from '@/types';
 import { initWasm } from './iotaIdentityReal';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let Identity: any = null;
 
 /**
@@ -14,9 +14,12 @@ let Identity: any = null;
  * This creates a real IotaDocument and publishes it to the Tangle
  */
 export async function createAndPublishDIDToBlockchain(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   signAndExecute: (params: any, callbacks: any) => void,
   walletAddress: string
 ): Promise<{ success: boolean; did: string; blockId?: string; error?: string }> {
+  void signAndExecute;
+  void walletAddress;
   try {
     console.log('🚀 Starting blockchain DID publishing...');
     

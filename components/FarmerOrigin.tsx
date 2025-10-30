@@ -18,6 +18,7 @@ import type { DPPCredential, OriginCertificationData } from '@/types/dpp';
 import { publishDIDToBlockchain, prepareDIDForPublishing } from '@/lib/publishDID';
 
 // Import AliasOutputBuilder for transaction building
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let IotaSDK: any = null;
 
 /**
@@ -98,8 +99,8 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
         
         try {
           // Step 1: Create new DIDs for this certificate (or use existing ones)
-          let issuerDID = originStakeholder.did;
-          let productDID = product.did;
+          const issuerDID = originStakeholder.did;
+          const productDID = product.did;
           
           console.log('📋 Using stakeholder DID:', issuerDID);
           console.log('📋 Using product DID:', productDID);
@@ -231,6 +232,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                       signAndExecute(
                         { transaction: tx },
                         {
+                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
                           onSuccess: (result: any) => {
                             console.log('✅ Transaction submitted to blockchain!');
                             console.log('📋 Result:', result);
