@@ -127,7 +127,7 @@ function HeroCarousel() {
               {/* Certificate Title */}
               <div>
                 <p className="text-white/70 text-[10px] font-semibold tracking-[0.2em] uppercase mb-1">
-                  {currentCard.title}
+                  {currentCard.title} ({currentIndex + 1}/{heroCards.length})
                 </p>
                 <p className="text-white text-xs font-medium mb-2">
                   {currentCard.subtitle}
