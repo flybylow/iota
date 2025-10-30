@@ -285,8 +285,10 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Hero Section */}
-          <div className="bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-green-500/10 border border-blue-500/20 rounded-xl p-8 md:p-12 mb-8 md:mb-12 text-center">
+          {/* Content Container - 800px max width */}
+          <div className="max-w-[800px] mx-auto">
+            {/* Hero Section */}
+            <div className="bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-green-500/10 border border-blue-500/20 rounded-xl p-8 md:p-12 mb-8 md:mb-12 text-center">
             <h1 className="text-3xl md:text-4xl font-bold text-dpp-text-primary mb-4 md:mb-6">
               Digital Product Passport
             </h1>
@@ -747,6 +749,7 @@ export default function HomePage() {
               size="lg"
               active={true}
             />
+          </div>
           </div>
         </main>
 
