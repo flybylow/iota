@@ -276,7 +276,7 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/60 via-purple-900/50 to-green-900/60 z-[1]"></div>
             <div className="relative z-10 text-center">
               <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 md:mb-6">
-                Digital Product Passport
+                Transparent Supply-Chains
               </h1>
               <p className="text-base md:text-xl text-zinc-200 leading-relaxed mb-6 md:mb-8 max-w-2xl mx-auto">
                 Verify your product&apos;s entire supply chain in <strong className="text-green-400">2 seconds</strong> with blockchain-powered credentials.
@@ -290,7 +290,7 @@ export default function HomePage() {
             {/* Hero Section */}
             <div className="bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-green-500/10 border border-blue-500/20 rounded-xl p-8 md:p-12 mb-8 md:mb-12 text-center">
             <h1 className="text-3xl md:text-4xl font-bold text-dpp-text-primary mb-4 md:mb-6">
-              Digital Product Passport
+              Transparent Supply-Chains
             </h1>
             <p className="text-base md:text-lg text-dpp-text-secondary leading-relaxed mb-6 md:mb-8 max-w-md md:max-w-[700px] mx-auto">
               Verify your product&apos;s entire supply chain in <strong className="text-green-400">2 seconds</strong> with blockchain-powered credentials. Every product gets a unique identity (DID) that follows it from farm → factory → consumer. Each step creates cryptographically signed certificates that can&apos;t be faked.
