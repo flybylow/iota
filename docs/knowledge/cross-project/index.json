@@ -1,0 +1,19 @@
+{
+  "sources": [
+    {
+      "name": "iota",
+      "type": "local",
+      "indexes": [
+        "../problems-solved/index.json"
+      ]
+    },
+    {
+      "name": "aigo",
+      "type": "github",
+      "url": "https://github.com/flybylow/aigo",
+      "notes": "Add extracted problems→solutions when available. Use templates in cross-project/templates.",
+      "indexes": []
+    }
+  ]
+}
+

@@ -88,7 +88,7 @@ export function Tabs({
     return (
       <div className={`w-full ${className}`}>
         {/* Tab header - can be placed outside card */}
-        <div className="w-[80%] mx-auto">
+        <div className="w-[85%] mx-auto">
           <div className="flex items-center justify-center gap-3">
             {tabs.map((tab) => (
               <button
@@ -96,17 +96,17 @@ export function Tabs({
                 onClick={() => handleTabChange(tab.id)}
                 disabled={tab.disabled}
                 className={`
-                  relative px-5 py-2.5 rounded-full text-sm font-semibold transition-all whitespace-nowrap
+                  relative px-6 py-3 rounded-full text-base font-bold transition-all whitespace-nowrap
                   ${activeTab === tab.id
-                    ? 'bg-black text-white border-2 border-white shadow-lg shadow-white/20'
-                    : 'bg-[#1a1a1a] text-zinc-400 border-2 border-transparent hover:bg-[#2a2a2a] hover:text-zinc-300'
+                    ? 'bg-white text-black border border-white/50 shadow-[0_4px_24px_rgba(255,255,255,0.15)]'
+                    : 'bg-[#1a1a1a] text-zinc-200 border border-white/10 hover:bg-[#242424] hover:text-white'
                   }
                   ${tab.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                 `}
               >
                 <span className="flex items-center gap-2">
                   {tab.icon && (
-                    <span className="flex items-center text-sm">{tab.icon}</span>
+                    <span className="flex items-center text-base">{tab.icon}</span>
                   )}
                   {tab.label}
                 </span>

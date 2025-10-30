@@ -1,0 +1,44 @@
+[
+  {
+    "project": "iota",
+    "title": "WASM Integration - IOTA Identity SDK",
+    "problem": "WASM module import/init failures and SSR/webpack conflicts in Next.js when integrating @iota/identity-wasm.",
+    "solution_summary": "Dynamic import of @iota/identity-wasm/web with init(), enable asyncWebAssembly in Next.js config, add browser fallbacks, and handle errors gracefully.",
+    "tags": ["WASM", "Next.js", "IOTA", "SDK", "TypeScript"],
+    "source_files": [
+      "docs/knowledge/problems-solved/wasm-integration.md"
+    ]
+  },
+  {
+    "project": "iota",
+    "title": "On-Chain Implementation - IOTA Identity",
+    "problem": "Transition from mock/local demo to real blockchain publishing with DID creation, key storage, wallet integration, and network handling.",
+    "solution_summary": "Phased framework: complete local DID/key management and network checks; provide publish stub with graceful fallback; defer wallet/alias outputs to later.",
+    "tags": ["Blockchain", "IOTA", "DID", "Wallet", "Framework"],
+    "source_files": [
+      "docs/knowledge/problems-solved/onchain-implementation.md"
+    ]
+  },
+  {
+    "project": "iota",
+    "title": "Transaction Error: toJSON undefined",
+    "problem": "dApp Kit signAndExecute() expects an SDK transaction object with toJSON(); passing a plain object caused runtime failure.",
+    "solution_summary": "Skip submission for now; when implementing, use @iota/iota-sdk to build a proper AliasOutput/transaction that implements toJSON, then pass it to signAndExecute().",
+    "tags": ["IOTA SDK", "dApp Kit", "Transactions"],
+    "source_files": [
+      "docs/knowledge/problems-solved/ERROR-TOJSON-FIX.md",
+      "docs/onchain/TRANSACTION-ERROR-FIX.md"
+    ]
+  },
+  {
+    "project": "iota",
+    "title": "Exhaustive Search: Publishing Not Feasible With Current Stack",
+    "problem": "API mismatch and unclear docs prevent building a valid transaction object for DID publishing with current versions.",
+    "solution_summary": "Stay in local mode; plan for wallet SDK or lower-level transaction building and/or community guidance to complete on-chain publishing later.",
+    "tags": ["SDK mismatch", "dApp Kit", "Strategy"],
+    "source_files": [
+      "docs/knowledge/problems-solved/EXHAUSTIVE-SEARCH-COMPLETE.md"
+    ]
+  }
+]
+

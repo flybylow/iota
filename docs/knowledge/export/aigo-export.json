@@ -1,0 +1,10 @@
+{
+  "generatedAt": "${ISO_TIMESTAMP}",
+  "source": "iota",
+  "indexes": {
+    "problemsSolved": "../problems-solved/index.json",
+    "didLocalToBlockchain": "../problems-solved/did-local-to-blockchain.json"
+  },
+  "notes": "Import this into the AIGO knowledge repo. Keep JSON structure as-is for portability."
+}
+

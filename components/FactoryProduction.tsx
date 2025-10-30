@@ -462,30 +462,30 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
               {showVerificationDetails && (
                 <div className="space-y-4">
                   <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-5">
-                    <p className="text-xs text-white mb-4 font-medium">Origin Certificate Detected:</p>
+                    <p className="typ-label text-white mb-3">Origin Certificate Detected:</p>
                     <div className="space-y-2.5 text-xs">
                       <div className="flex justify-between">
-                        <span className="text-zinc-500">From:</span>
+                        <span className="typ-label text-zinc-500">From:</span>
                         <span className="text-zinc-200">{farmerCredential.issuer}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-zinc-500">Product:</span>
+                        <span className="typ-label text-zinc-500">Product:</span>
                         <span className="text-zinc-200">{product.name}</span>
                       </div>
                       {farmerCredential.certificationData && 'batchWeight' in farmerCredential.certificationData && (
                         <div className="flex justify-between">
-                          <span className="text-zinc-500">Weight:</span>
+                          <span className="typ-label text-zinc-500">Weight:</span>
                           <span className="text-zinc-200">
                             {(farmerCredential.certificationData.batchWeight as number).toLocaleString()} kg
                           </span>
                         </div>
                       )}
                       <div className="flex justify-between">
-                        <span className="text-zinc-500">Type:</span>
+                        <span className="typ-label text-zinc-500">Type:</span>
                         <span className="text-zinc-200">{farmerCredential.credentialType}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-zinc-500">Issued:</span>
+                        <span className="typ-label text-zinc-500">Issued:</span>
                         <span className="text-zinc-200">
                           {new Date(farmerCredential.issuedAt).toLocaleDateString('en-GB', { 
                             day: '2-digit', 
@@ -573,12 +573,12 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
               <h4 className="text-base font-medium text-white">2. Record Production</h4>
 
               <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-5">
-                <p className="text-sm font-medium text-white mb-3">
+                <p className="typ-subtitle mb-3">
                   {industryKey === 'food-beverage' ? 'Recipe:' : 
                    industryKey === 'electronics' ? 'Components:' : 
                    'Materials:'}
                 </p>
-                <ul className="space-y-1.5 text-xs text-zinc-300">
+                <ul className="space-y-1.5 typ-small text-zinc-300">
                   {/* Food & Beverage - ingredients */}
                   {'ingredients' in product && (product.ingredients as Array<{percentage: number, name: string, origin: string}>).map((ingredient, idx: number) => (
                     <li key={idx}>
@@ -607,15 +607,15 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
 
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div>
-                  <p className="text-white text-xs mb-1">Batch Number:</p>
+                  <p className="typ-label text-white mb-1">Batch Number:</p>
                   <p className="text-white font-mono text-xs">{product.batchNumber}</p>
                 </div>
                 <div>
-                  <p className="text-white text-xs mb-1">Production Date:</p>
+                  <p className="typ-label text-white mb-1">Production Date:</p>
                   <p className="text-white font-mono text-xs">{product.productionDate}</p>
                 </div>
                 <div className="col-span-2">
-                  <p className="text-white text-xs mb-1">Input → Output:</p>
+                  <p className="typ-label text-white mb-1">Input → Output:</p>
                   <p className="text-white font-mono text-xs">
                     {industryKey === 'food-beverage' ? (
                       <>

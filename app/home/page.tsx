@@ -6,6 +6,9 @@ import { useRouter } from 'next/navigation';
 import { ModeToggle } from '@/components/ModeToggle';
 import { setDPPMode, isBlockchainMode } from '@/lib/dppMode';
 import { CTAButton } from '@/components/CTAButton';
+import './home.css';
+import { Fold } from '@/components/Fold';
+import { Footer } from '@/components/Footer';
 
 /**
  * Home Page - Marketing Page
@@ -17,7 +20,7 @@ const heroCards = [
     icon: '🌱', 
     label: 'Farm', 
     title: 'ORIGIN CERTIFICATE',
-    subtitle: 'Maria\'s Organic Farm',
+    subtitle: '🌱 Maria\'s Organic Farm',
     action: 'is issuing a certificate, 400kg of Organic cacao she harvested',
     details: 'As a farmer, she proofs the harvest and quality of origin product on-chain.',
     gradient: 'from-green-600 via-emerald-700 to-teal-800',
@@ -28,7 +31,7 @@ const heroCards = [
     icon: '🏭', 
     label: 'Factory', 
     title: 'PRODUCTION CERTIFICATE',
-    subtitle: 'Chocolate Dreams Factory',
+    subtitle: '🏭 Chocolate Dreams Factory',
     action: 'verifies the origin certificate and certifies production of 50,000 bars',
     details: 'They proof on-chain that they verified the origin certificate and produced 50,000 quality chocolate bars.',
     gradient: 'from-blue-600 via-indigo-700 to-purple-800',
@@ -39,7 +42,7 @@ const heroCards = [
     icon: '✅', 
     label: 'Consumer', 
     title: 'VERIFICATION COMPLETE',
-    subtitle: 'Blockchain Verified',
+    subtitle: '✅ Blockchain Verified',
     action: 'scans QR code and verifies the complete supply chain in 2 seconds',
     details: 'Consumers can instantly verify that the chocolate comes from Maria\'s certified harvest and was produced by the factory.',
     gradient: 'from-purple-600 via-pink-700 to-rose-800',
@@ -76,17 +79,15 @@ function HeroCarousel() {
         </button>
         
         <div className="group perspective-1000 flex justify-center">
-          {/* Credit Card Style Container */}
+          {/* Credit Card Style Container using home-step-card visuals */}
           <div className={`
-            relative bg-gradient-to-br ${currentCard.gradient}
-            rounded-3xl p-6
+            relative home-step-card p-6
             w-[340px] aspect-[1.586/1]
             shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)]
             transform transition-all duration-700
-            border-2 border-white/30
             flex flex-col justify-between
           `}
-          style={{ borderRadius: '1rem', overflow: 'hidden' }}>
+          style={{ overflow: 'hidden' }}>
           {/* Animated Gradient Overlay */}
           <div className={`absolute inset-0 bg-gradient-to-br ${currentCard.gradientOverlay} animate-pulse`} />
           
@@ -114,25 +115,17 @@ function HeroCarousel() {
           <div className="relative z-10 flex flex-col justify-between h-full">
             {/* Top Section */}
             <div className="space-y-4">
-              {/* Issuer Badge */}
-              <div className="flex justify-between items-start">
-                <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full border border-white/30">
-                  <p className="text-white text-[10px] font-bold tracking-wider uppercase">
-                    DPP
-                  </p>
-                </div>
-                <div className="text-3xl">{currentCard.icon}</div>
-              </div>
+              {/* Issuer Badge removed per request */}
               
               {/* Certificate Title */}
               <div>
-                <p className="text-white/70 text-[10px] font-semibold tracking-[0.2em] uppercase mb-1">
+                <p className="text-white/70 text-[11px] font-semibold tracking-[0.2em] uppercase mb-1">
                   {currentCard.title} ({currentIndex + 1}/{heroCards.length})
                 </p>
-                <p className="text-white text-xs font-medium mb-2">
+                <p className="text-white text-[13px] font-medium mb-2">
                   {currentCard.subtitle}
                 </p>
-                <p className="text-white text-[11px] leading-relaxed opacity-90">
+                <p className="text-white text-[12px] leading-relaxed opacity-90">
                   {currentCard.action}
                 </p>
               </div>
@@ -165,17 +158,17 @@ function HeroCarousel() {
             {/* Bottom Section */}
             <div className="flex flex-col gap-2">
               <div className="space-y-1">
-                <p className="text-white/80 text-[9px] font-bold uppercase tracking-wider">
+                <p className="text-white/80 text-[10px] font-bold uppercase tracking-wider">
                   What This Means:
                 </p>
-                <p className="text-white text-[10px] leading-relaxed">
+                <p className="text-white text-[11px] leading-relaxed">
                   {currentCard.details}
                 </p>
               </div>
               
               {/* Chip Effect - Enhanced */}
               <div className="flex justify-end">
-                <div className="w-12 h-8 bg-gradient-to-br from-white/50 via-white/20 to-white/5 rounded-lg border-2 border-white/40 shadow-[0_4px_12px_rgba(0,0,0,0.2)] backdrop-blur-sm flex items-center justify-center relative overflow-hidden">
+                <div className="home-hero-chip w-12 h-8 bg-gradient-to-br from-white/50 via-white/20 to-white/5 rounded-lg border-2 border-white/40 shadow-[0_4px_12px_rgba(0,0,0,0.2)] backdrop-blur-sm flex items-center justify-center relative overflow-hidden">
                   {/* Chip shine effect */}
                   <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/30 to-transparent" />
                   <div className="grid grid-cols-2 gap-0.5 p-1.5 z-10">
@@ -222,6 +215,30 @@ function HeroCarousel() {
   );
 }
 
+function KeywordGrid({ keywords }) {
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 items-stretch">
+      {keywords.map((kw, i) => (
+        <div
+          key={i}
+          className="flex flex-col items-start gap-2 group bg-dpp-bg-secondary/60 rounded-xl p-4 md:p-5 transition-colors duration-200 hover:bg-dpp-bg-tertiary/80"
+          tabIndex={0}
+          aria-label={kw.label + ': ' + kw.info}
+        >
+          <span className="font-semibold text-dpp-text-primary flex items-center gap-2 text-base">
+            <span className="text-green-400">✓</span> {kw.label}
+          </span>
+          <div className="w-full">
+            <div className="mt-1 bg-black/40 text-white text-sm px-3 py-2 rounded-md leading-snug hidden group-hover:block transition-opacity duration-150" role="tooltip">
+              {kw.info}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function HomePage() {
   const router = useRouter();
   // Use state to avoid hydration mismatch - start with false, update after mount
@@ -242,10 +259,52 @@ export default function HomePage() {
     router.push('/');
   };
 
+  function StepsCarousel() {
+    const steps = ['/1.png','/2.png','/3.png','/4.png','/5.png','/6.png','/7.png','/8.png'];
+    const [index, setIndex] = React.useState(0);
+    const next = () => setIndex((p) => (p + 1) % steps.length);
+    const prev = () => setIndex((p) => (p - 1 + steps.length) % steps.length);
+
+    return (
+      <section className="relative w-full mt-6 mb-8">
+        <div className="relative bg-black/90 rounded-2xl w-[95%] md:w-[60%] mx-auto h-[420px] md:h-[600px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.4)] border border-white/10 overflow-hidden">
+          <img
+            src={steps[index]}
+            alt={`Step ${index + 1}`}
+            className="absolute inset-0 w-full h-full object-contain object-left block"
+          />
+          <div className="absolute top-3 right-3 text-sm md:text-base px-3 py-1.5 rounded bg-black/80 text-white border border-white/30 shadow">
+            Step {index + 1} / {steps.length}
+          </div>
+
+          <button onClick={prev} aria-label="Previous"
+            className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-black rounded-full w-9 h-9 md:w-12 md:h-12 grid place-items-center shadow focus:outline-none focus:ring-2 focus:ring-blue-400/60">
+            <ChevronRight size={20} className="rotate-180" />
+          </button>
+          <button onClick={next} aria-label="Next"
+            className="absolute right-2 md:right-3 top-[calc(50%+40px)] -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-black rounded-full w-9 h-9 md:w-12 md:h-12 grid place-items-center shadow focus:outline-none focus:ring-2 focus:ring-blue-400/60">
+            <ChevronRight size={20} />
+          </button>
+        </div>
+
+        <div className="flex justify-center gap-2 mt-3">
+          {steps.map((_, i) => (
+            <button
+              key={i}
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => setIndex(i)}
+              className={`transition-all rounded-full ${i === index ? 'w-10 bg-blue-500 h-2' : 'w-2 bg-gray-300 h-2 hover:bg-blue-400'}`}
+            />
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-dpp-bg-primary w-full">
       {/* Desktop-optimized marketing page container - 800px max width */}
-      <div className="min-h-screen bg-dpp-bg-primary w-full max-w-md md:max-w-[800px] mx-auto shadow-2xl overflow-x-hidden">
+      <div className="min-h-screen bg-dpp-bg-primary w-full max-w-md md:max-w-[800px] mx-auto shadow-2xl">
         {/* Header */}
         <header className="bg-gradient-to-b from-dpp-bg-card to-dpp-bg-primary border-b border-dpp-border-default mb-8 md:mb-12 w-full">
           <div className="w-full px-4 md:px-8 py-6 md:py-8">
@@ -263,9 +322,9 @@ export default function HomePage() {
         </header>
 
         {/* Main Content */}
-        <main className="w-full px-4 md:px-8 py-8 md:py-12 overflow-x-hidden">
+        <main className="w-full px-4 md:px-8 py-8 md:py-12">
           {/* Hero Section */}
-          <div className="border border-[#3a3a3a] rounded-lg p-8 md:p-12 mb-8 md:mb-12 relative overflow-hidden">
+          <div className="rounded-lg p-8 md:p-12 mb-8 md:mb-12 relative overflow-hidden shadow-sm shadow-black/20">
             <div 
               className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
               style={{ 
@@ -275,14 +334,13 @@ export default function HomePage() {
             />
             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/60 via-purple-900/50 to-green-900/60 z-[1]"></div>
             <div className="relative z-10 text-center">
-              <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 md:mb-6">
-                Transparent Supply-Chains
+              <h1 className="text-3xl md:text-5xl font-bold text-white mb-3 md:mb-5">
+                Transparent Supply Chains
               </h1>
-              <p className="text-base md:text-xl text-zinc-200 leading-relaxed mb-6 md:mb-8 max-w-2xl mx-auto">
-                Verify your product&apos;s entire supply chain <strong className="text-green-400">(2 sec)</strong>
-                <br />
+              <p className="text-lg md:text-2xl font-semibold text-zinc-100 leading-relaxed mb-4 md:mb-6 max-w-2xl mx-auto">
                 with IOTA blockchain-powered credentials.
               </p>
+              {/* badge hidden per request */}
               <HeroCarousel />
             </div>
           </div>
@@ -290,18 +348,7 @@ export default function HomePage() {
           {/* Content Container - 800px max width */}
           <div className="max-w-[800px] mx-auto">
             {/* Hero Section */}
-            <div className="bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-green-500/10 border border-blue-500/20 rounded-xl p-8 md:p-12 mb-8 md:mb-12 text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-dpp-text-primary mb-4 md:mb-6">
-              Transparent Supply-Chains
-            </h1>
-            <p className="text-base md:text-lg text-dpp-text-secondary leading-relaxed mb-6 md:mb-8 max-w-md md:max-w-[700px] mx-auto">
-              Verify your product&apos;s entire supply chain <strong className="text-green-400">(2 sec)</strong>
-              <br />
-              with IOTA blockchain-powered credentials.
-              <br />
-              <br />
-              Every product gets a unique identity (DID) that follows it from farm → factory → consumer. Each step creates cryptographically signed certificates that can&apos;t be faked.
-            </p>
+            <div className="bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-green-500/10 rounded-xl p-8 md:p-12 mb-8 md:mb-12 text-center shadow-sm shadow-black/10">
             
             {/* How It Works */}
             <div className="mb-6 md:mb-8">
@@ -311,14 +358,14 @@ export default function HomePage() {
               </h3>
               
               {/* Horizontal Flow with Arrows */}
-              <div className="w-full flex flex-col md:flex-row items-center md:items-center gap-4 md:gap-2 justify-center">
+              <div className="home-how-it-works">
                 {/* Step 1: Farmer */}
-                <div className="bg-dpp-card-bg-tertiary border border-dpp-card-border-primary rounded-lg p-4 md:p-6 text-center w-full md:w-[200px]">
+                <div className="home-step-card">
                   <div className="flex justify-center mb-3">
                     <Sprout className="w-8 h-8 text-green-400" />
                   </div>
                   <p className="text-base md:text-lg font-semibold text-dpp-text-primary mb-2">1. Farmer</p>
-                  <p className="text-sm md:text-base text-dpp-text-tertiary leading-relaxed">Issues origin certificate with blockchain identity</p>
+                  <p className="text-sm md:text-base text-dpp-text-tertiary leading-relaxed">Issues origin certificate on-chain for product and harvest</p>
                 </div>
                 
                 {/* Arrow 1 */}
@@ -326,16 +373,16 @@ export default function HomePage() {
                   <ChevronRight className="w-8 h-8" />
                 </div>
                 <div className="md:hidden flex items-center justify-center text-blue-400 py-2">
-                  <ChevronRight className="w-8 h-8 rotate-90" />
+                  <ChevronRight className="w-8 h-8" />
                 </div>
                 
                 {/* Step 2: Factory */}
-                <div className="bg-dpp-card-bg-tertiary border border-dpp-card-border-primary rounded-lg p-4 md:p-6 text-center w-full md:w-[200px]">
+                <div className="home-step-card">
                   <div className="flex justify-center mb-3">
                     <Factory className="w-8 h-8 text-blue-400" />
                   </div>
                   <p className="text-base md:text-lg font-semibold text-dpp-text-primary mb-2">2. Factory</p>
-                  <p className="text-sm md:text-base text-dpp-text-tertiary leading-relaxed">Verifies origin and adds production data</p>
+                  <p className="text-sm md:text-base text-dpp-text-tertiary leading-relaxed">Verifies origin, adds production data and certifies output</p>
                 </div>
                 
                 {/* Arrow 2 */}
@@ -343,339 +390,238 @@ export default function HomePage() {
                   <ChevronRight className="w-8 h-8" />
                 </div>
                 <div className="md:hidden flex items-center justify-center text-blue-400 py-2">
-                  <ChevronRight className="w-8 h-8 rotate-90" />
+                  <ChevronRight className="w-8 h-8" />
                 </div>
                 
                 {/* Step 3: Consumer */}
-                <div className="bg-dpp-card-bg-tertiary border border-dpp-card-border-primary rounded-lg p-4 md:p-6 text-center w-full md:w-[200px]">
+                <div className="home-step-card">
                   <div className="flex justify-center mb-3">
                     <Shield className="w-8 h-8 text-purple-400" />
                   </div>
                   <p className="text-base md:text-lg font-semibold text-dpp-text-primary mb-2">3. Consumer</p>
-                  <p className="text-sm md:text-base text-dpp-text-tertiary leading-relaxed">Scans QR code → sees verified chain</p>
+                  <p className="text-sm md:text-base text-dpp-text-tertiary leading-relaxed">Scans QR → sees supply chain instantly</p>
                 </div>
               </div>
             </div>
 
-            {/* Mode Selection */}
-            <div className="space-y-8 mb-4 md:mb-6">
-              {/* Title */}
-              <h2 className="text-2xl md:text-3xl font-bold text-dpp-text-primary text-center">
-                Choose your Mode
-              </h2>
-
-              {/* Demo Mode */}
-              <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-                <div className="flex-shrink-0">
-                  <CTAButton
-                    icon="⚡"
-                    label="Demo Mode"
-                    onClick={handleDemoMode}
-                    variant="secondary"
-                    size="md"
-                    active={!isBlockchain}
-                    className="border-2 border-white"
-                  />
+            {/* Mode Selection - Visual Card */}
+            <div className="mb-6 md:mb-8">
+              <div className="home-step-card">
+                <h2 className="text-2xl md:text-3xl font-bold text-dpp-text-primary text-center mt-1 mb-2">DEMO</h2>
+                <div className="grid grid-cols-2 gap-6 md:gap-10 items-start">
+                  <div className="flex justify-center">
+                    <button
+                      onClick={handleDemoMode}
+                      aria-label="Demo Mode"
+                      style={{
+                        transition: '0.3s',
+                        padding: '0.5rem 1rem',
+                        background: 'linear-gradient(135deg, #38bdf8 0%, #3b82f6 50%, #06b6d4 100%)',
+                        boxShadow: '0 0 20px rgba(56,189,248,0.5), 0 6px 20px rgba(59,130,246,0.35)'
+                      }}
+                      className="font-bold rounded-full flex items-center gap-3 justify-start disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden bg-gradient-to-r from-sky-400 via-blue-500 to-cyan-500 hover:from-sky-300 hover:via-blue-400 hover:to-cyan-400 text-white border-0 shadow-[0_0_20px_rgba(56,189,248,0.5)] hover:shadow-[0_0_40px_rgba(56,189,248,0.8)] transition-all"
+                    >
+                      <span className="text-xl">⚡</span>
+                      <span className="text-base md:text-lg">Demo Mode</span>
+                    </button>
+                  </div>
+                  <div className="flex justify-center">
+                    <button
+                      onClick={handleBlockchainMode}
+                      aria-label="Blockchain Mode"
+                      style={{
+                        transition: '0.3s',
+                        padding: '0.5rem 1rem',
+                        background: 'linear-gradient(135deg, #38bdf8 0%, #3b82f6 50%, #06b6d4 100%)',
+                        boxShadow: '0 0 20px rgba(56,189,248,0.5), 0 6px 20px rgba(59,130,246,0.35)'
+                      }}
+                      className="font-bold rounded-full flex items-center gap-3 justify-start disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden bg-gradient-to-r from-sky-400 via-blue-500 to-cyan-500 hover:from-sky-300 hover:via-blue-400 hover:to-cyan-400 text-white border-0 shadow-[0_0_20px_rgba(56,189,248,0.5)] hover:shadow-[0_0_40px_rgba(56,189,248,0.8)] transition-all"
+                    >
+                      <span className="text-xl">🌐</span>
+                      <span className="text-base md:text-lg">Blockchain Mode</span>
+                    </button>
+                  </div>
                 </div>
-                <div className="text-left">
-                  <ul className="text-sm md:text-base text-dpp-text-secondary space-y-1.5 list-disc list-inside">
-                    <li>No wallet connection required</li>
-                    <li>Instant access to all features</li>
-                    <li>Mock blockchain data</li>
-                  </ul>
-                </div>
-              </div>
-              
-              {/* Blockchain Mode */}
-              <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-                <div className="flex-shrink-0">
-                  <CTAButton
-                    icon="🌐"
-                    label="Blockchain Mode"
-                    onClick={handleBlockchainMode}
-                    variant="primary"
-                    size="md"
-                    active={isBlockchain}
-                  />
-                </div>
-                <div className="text-left">
-                  <p className="text-sm md:text-base text-dpp-text-secondary leading-relaxed mb-3">
-                    Real IOTA blockchain transactions with wallet connection. Experience actual DID publishing and credential verification on the testnet.
-                  </p>
-                  <ul className="text-sm md:text-base text-dpp-text-secondary space-y-1.5 list-disc list-inside">
-                    <li>Connect IOTA wallet</li>
-                    <li>Real blockchain transactions</li>
-                    <li>On-chain DID resolution</li>
-                  </ul>
+                <div className="grid grid-cols-2 gap-4 md:gap-6 mt-6">
+                  <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4">
+                    <ul className="space-y-1.5 list-none text-dpp-text-secondary text-sm">
+                      <li>No wallet connection required</li>
+                      <li>Instant access to all features</li>
+                      <li>Mock data</li>
+                    </ul>
+                  </div>
+                  <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4">
+                    <ul className="space-y-1.5 list-none text-dpp-text-secondary text-sm">
+                      <li>Real blockchain transactions</li>
+                      <li>Connect with IOTA wallet</li>
+                      <li>On-chain DID publishing on IOTA testnet</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* What It Does - Simple Explanation */}
-          <div className="card card-secondary p-6 md:p-8 mb-6 md:mb-8">
-            <h2 className="text-lg md:text-xl font-semibold text-dpp-text-primary mb-4 md:mb-6 flex items-center gap-2">
-              <Shield className="w-5 h-5 md:w-6 md:h-6 text-blue-400" />
-              What It Does
+            {/* Steps Carousel - below demo buttons */}
+            <h2 className="text-2xl md:text-3xl font-bold text-dpp-text-primary text-center mb-2">
+              SCREENSHOTS
             </h2>
-            <p className="text-sm md:text-base text-dpp-text-secondary leading-relaxed mb-6 md:mb-8">
-              Every product gets a unique blockchain identity (DID). As it moves through your supply chain—from farm to factory to consumer—each step creates a cryptographically signed certificate that can&apos;t be faked.
-            </p>
-            
-            {/* Horizontal Flow with Arrows */}
-            <div className="w-full flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-6">
-              {/* Step 1: Farmer */}
-              <div className="card card-tertiary border-green-500/30 p-4 md:p-6 flex-1 w-full text-center hover:border-green-500/50 transition-all">
-                <div className="flex justify-center mb-3 md:mb-4">
-                  <Sprout className="w-8 h-8 md:w-10 md:h-10 text-green-400" />
-                </div>
-                <p className="text-base md:text-lg font-semibold text-dpp-text-primary mb-2 md:mb-3">1. Farmer</p>
-                <p className="text-sm md:text-base text-dpp-text-tertiary leading-relaxed">Issues origin certificate with blockchain identity</p>
+            <StepsCarousel />
+          </div>
+
+          {/* FAQ Title */}
+          <h2 className="text-2xl md:text-3xl font-bold text-dpp-text-primary text-center mb-3">
+            FAQ
+          </h2>
+
+          {/* About Ward - Personal Intro */}
+          <div className="max-w-[800px] mx-auto mb-6 md:mb-8">
+            <div className="card card-secondary p-5 md:p-6 flex items-start gap-4">
+              <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-2xl select-none">
+                👋
               </div>
-              
-              {/* Arrow 1 */}
-              <div className="hidden md:flex items-center justify-center text-blue-400 flex-shrink-0">
-                <ChevronRight className="w-8 h-8" />
-              </div>
-              <div className="md:hidden flex items-center justify-center text-blue-400 py-2">
-                <ChevronRight className="w-8 h-8 rotate-90" />
-              </div>
-              
-              {/* Step 2: Factory */}
-              <div className="card card-tertiary border-blue-500/30 p-4 md:p-6 flex-1 w-full text-center hover:border-blue-500/50 transition-all">
-                <div className="flex justify-center mb-3 md:mb-4">
-                  <Factory className="w-8 h-8 md:w-10 md:h-10 text-blue-400" />
-                </div>
-                <p className="text-base md:text-lg font-semibold text-dpp-text-primary mb-2 md:mb-3">2. Factory</p>
-                <p className="text-sm md:text-base text-dpp-text-tertiary leading-relaxed">Verifies origin and adds production data</p>
-              </div>
-              
-              {/* Arrow 2 */}
-              <div className="hidden md:flex items-center justify-center text-blue-400 flex-shrink-0">
-                <ChevronRight className="w-8 h-8" />
-              </div>
-              <div className="md:hidden flex items-center justify-center text-blue-400 py-2">
-                <ChevronRight className="w-8 h-8 rotate-90" />
-              </div>
-              
-              {/* Step 3: Consumer */}
-              <div className="card card-tertiary border-purple-500/30 p-4 md:p-6 flex-1 w-full text-center hover:border-purple-500/50 transition-all">
-                <div className="flex justify-center mb-3 md:mb-4">
-                  <Shield className="w-8 h-8 md:w-10 md:h-10 text-purple-400" />
-                </div>
-                <p className="text-base md:text-lg font-semibold text-dpp-text-primary mb-2 md:mb-3">3. Consumer</p>
-                <p className="text-sm md:text-base text-dpp-text-tertiary leading-relaxed">Scans QR code → sees verified chain</p>
+              <div className="flex-1">
+                <h3 className="text-base md:text-lg font-semibold text-dpp-text-primary mb-1">About Ward</h3>
+                <p className="text-sm md:text-base text-dpp-text-secondary leading-relaxed">
+                  Hi, I’m Ward — building trustworthy digital identities and product passport. This demo shows how any product can have verifiable origin and production data that’s fast to check and impossible to fake.
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Comparison Table */}
-          <div className="card card-secondary p-6 md:p-8 mb-6 md:mb-8">
-            <h2 className="text-lg md:text-xl font-semibold text-dpp-text-primary mb-4 md:mb-6 text-center">
-              Traditional vs Blockchain Identity
-            </h2>
-            
-            <div className="overflow-x-auto">
-              <div className="min-w-full">
-                {/* Header Row */}
-                <div className="grid grid-cols-3 gap-px bg-dpp-card-border-primary rounded-t-lg overflow-hidden">
-                  <div className="bg-dpp-card-bg-tertiary p-3"></div>
-                  <div className="bg-dpp-card-bg-tertiary p-3">
-                    <p className="text-xs font-medium text-dpp-text-primary text-center">Traditional Method</p>
-                  </div>
-                  <div className="bg-blue-500/10 p-3 border border-blue-500/20">
-                    <p className="text-xs font-semibold text-blue-400 text-center">With DIDs</p>
-                  </div>
-                </div>
-                
-                {/* Data Rows */}
-                <div className="grid grid-cols-3 gap-px bg-dpp-card-border-primary">
-                  <div className="bg-dpp-card-bg-tertiary p-3">
-                    <p className="text-xs font-medium text-dpp-text-secondary">Speed</p>
-                  </div>
-                  <div className="bg-dpp-card-bg-tertiary p-3">
-                    <p className="text-xs text-dpp-text-primary">3-5 business days</p>
-                  </div>
-                  <div className="bg-green-500/5 p-3 border border-green-500/10">
-                    <p className="text-xs font-medium text-green-400">2 seconds ⚡</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-px bg-dpp-card-border-primary">
-                  <div className="bg-dpp-card-bg-tertiary p-3">
-                    <p className="text-xs font-medium text-dpp-text-secondary">Cost</p>
-                  </div>
-                  <div className="bg-dpp-card-bg-tertiary p-3">
-                    <p className="text-xs text-dpp-text-primary">Phone calls, emails, labor</p>
-                  </div>
-                  <div className="bg-green-500/5 p-3 border border-green-500/10">
-                    <p className="text-xs font-medium text-green-400">$0.001 per verification</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-px bg-dpp-card-border-primary">
-                  <div className="bg-dpp-card-bg-tertiary p-3">
-                    <p className="text-xs font-medium text-dpp-text-secondary">Trust Model</p>
-                  </div>
-                  <div className="bg-dpp-card-bg-tertiary p-3">
-                    <p className="text-xs text-dpp-text-primary">Rely on reputation</p>
-                  </div>
-                  <div className="bg-green-500/5 p-3 border border-green-500/10">
-                    <p className="text-xs font-medium text-green-400">Cryptographically verifiable ✅</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-px bg-dpp-card-border-primary">
-                  <div className="bg-dpp-card-bg-tertiary p-3">
-                    <p className="text-xs font-medium text-dpp-text-secondary">Forgery Risk</p>
-                  </div>
-                  <div className="bg-dpp-card-bg-tertiary p-3">
-                    <p className="text-xs text-dpp-text-primary">Paper certificates can be faked</p>
-                  </div>
-                  <div className="bg-green-500/5 p-3 border border-green-500/10">
-                    <p className="text-xs font-medium text-green-400">Mathematically impossible ✅</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-px bg-dpp-card-border-primary rounded-b-lg overflow-hidden">
-                  <div className="bg-dpp-card-bg-tertiary p-3">
-                    <p className="text-xs font-medium text-dpp-text-secondary">Availability</p>
-                  </div>
-                  <div className="bg-dpp-card-bg-tertiary p-3">
-                    <p className="text-xs text-dpp-text-primary">9-5 business hours</p>
-                  </div>
-                  <div className="bg-green-500/5 p-3 border border-green-500/10">
-                    <p className="text-xs font-medium text-green-400">24/7 global access ✅</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* On-Chain Verification Note */}
-            <div className="mt-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-              <p className="text-xs text-blue-400 leading-relaxed">
-                💡 <strong>Full Cryptographic Verification:</strong> For complete on-chain DID resolution and verification, DIDs must be published to the blockchain. This enables independent verification without trusting any server.
-              </p>
-            </div>
-          </div>
-
-          {/* Advantages */}
-          <div className="mb-6 md:mb-8">
-            <div className="card card-secondary p-6 md:p-8">
-              <h2 className="text-lg md:text-xl font-semibold text-dpp-text-primary mb-4 md:mb-6 flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 text-green-400" />
-                Advantages
-              </h2>
-              <ul className="space-y-3 md:space-y-4 text-sm md:text-base text-dpp-text-secondary">
-                <li className="flex items-start gap-2">
-                  <span className="text-green-400 mt-0.5">✓</span>
-                  <span><strong className="text-dpp-text-primary">Instant Verification:</strong> 2 seconds vs 3-5 days</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-green-400 mt-0.5">✓</span>
-                  <span><strong className="text-dpp-text-primary">Ultra-Low Cost:</strong> $0.001 per verification</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-green-400 mt-0.5">✓</span>
-                  <span><strong className="text-dpp-text-primary">Tamper-Proof:</strong> Mathematically impossible to fake</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-green-400 mt-0.5">✓</span>
-                  <span><strong className="text-dpp-text-primary">Always Available:</strong> 24/7 global access</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-green-400 mt-0.5">✓</span>
-                  <span><strong className="text-dpp-text-primary">EU Compliant:</strong> UN/CEFACT UNTP standard</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-green-400 mt-0.5">✓</span>
-                  <span><strong className="text-dpp-text-primary">No Middleman:</strong> Direct verification, no trusted parties needed</span>
-                </li>
-              </ul>
-            </div>
+          {/* Highlights: Advantages + Key Features in grid with hover info */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 md:mb-8">
+            <Fold title={<>Advantages</>} defaultOpen={false}>
+              <KeywordGrid
+                keywords={[
+                  { label: 'Instant Verification', info: '2 seconds vs 3-5 days' },
+                  { label: 'Ultra-Low Cost', info: '$0.001 per verification' },
+                  { label: 'Tamper-Proof', info: 'Mathematically impossible to fake' },
+                  { label: 'Always Available', info: '24/7 global access' },
+                  { label: 'EU Compliant', info: 'UN/CEFACT UNTP standard' },
+                  { label: 'No Middleman', info: 'Direct verification, no trusted parties needed' },
+                ]}
+              />
+            </Fold>
+            <Fold title={<>Key Features</>} defaultOpen={false}>
+              <KeywordGrid
+                keywords={[
+                  { label: 'Decentralized Identifiers (DIDs)', info: 'Unique blockchain addresses for every stakeholder and product' },
+                  { label: 'Verifiable Credentials (VCs)', info: 'Cryptographically signed certificates that can\'t be faked' },
+                  { label: 'UNTP Compliance', info: 'UN/CEFACT Digital Product Passport schema for standardized data' },
+                  { label: 'Credential Chaining', info: 'Each credential references the previous, creating an immutable chain' },
+                  { label: 'Blockchain Publishing', info: 'Real transactions on IOTA testnet with explorer links' },
+                  { label: 'Multi-Industry Support', info: 'Food & Beverage, Battery, Fashion, Electronics' },
+                ]}
+              />
+            </Fold>
           </div>
 
           {/* Why This Matters */}
-          <details className="card card-primary overflow-hidden group mb-6 md:mb-8">
-            <summary className="p-5 md:p-6 cursor-pointer list-none hover:bg-dpp-bg-tertiary transition-colors flex items-center gap-3">
-              <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-purple-400 transition-transform group-open:rotate-90 flex-shrink-0" />
-              <h4 className="text-base md:text-lg font-medium text-purple-400">
-                💡 What happens here?
-              </h4>
-            </summary>
-            <div className="px-5 md:px-6 pb-5 md:pb-6 pt-2 space-y-4 md:space-y-5">
-              <div>
-                <h4 className="text-sm md:text-base font-medium text-dpp-text-primary mb-2 md:mb-3">For Consumers</h4>
-                <p className="text-sm md:text-base text-dpp-text-secondary leading-relaxed">
-                  You can instantly verify product authenticity with your phone. No more wondering if claims 
-                  about organic, fair trade, or origin are true. Get complete transparency in seconds, not days.
-                </p>
+          <Fold title={<><span className="text-purple-400">Traditional vs DIDs</span></>}>
+            {/* Horizontal Comparison Table */}
+            <div className="mb-6 bg-zinc-800/70 rounded-xl shadow-md overflow-hidden">
+              <div className="grid grid-cols-3 text-center font-semibold text-zinc-300 text-xs md:text-base">
+                <div></div>
+                <div>Traditional Method</div>
+                <div className="text-green-400">With DIDs</div>
               </div>
-              <div>
-                <h4 className="text-sm md:text-base font-medium text-blue-400 mb-2 md:mb-3">For Your Business</h4>
-                <p className="text-sm md:text-base text-dpp-text-secondary leading-relaxed">
-                  You can build trust with customers by showing verified supply chain data. Meet EU Digital 
-                  Product Passport requirements, prevent fraud, and differentiate your products with 
-                  blockchain-backed transparency.
-                </p>
+              <div className="divide-y divide-zinc-700/70">
+                {/* Speed */}
+                <div className="grid grid-cols-3 py-2 text-xs md:text-sm text-zinc-100 items-center">
+                  <div className="text-zinc-400 font-medium text-left pl-2">Speed</div>
+                  <div>3-5 business days</div>
+                  <div className="text-green-400 font-semibold">2 seconds ⚡</div>
+                </div>
+                {/* Cost */}
+                <div className="grid grid-cols-3 py-2 text-xs md:text-sm text-zinc-100 items-center">
+                  <div className="text-zinc-400 font-medium text-left pl-2">Cost</div>
+                  <div>Phone calls, emails, labor</div>
+                  <div className="text-green-400 font-semibold">$0.001 per verification</div>
+                </div>
+                {/* Trust Model */}
+                <div className="grid grid-cols-3 py-2 text-xs md:text-sm text-zinc-100 items-center">
+                  <div className="text-zinc-400 font-medium text-left pl-2">Trust Model</div>
+                  <div>Rely on reputation</div>
+                  <div className="text-green-400 font-semibold">Cryptographically verifiable ✅</div>
+                </div>
+                {/* Forgery Risk */}
+                <div className="grid grid-cols-3 py-2 text-xs md:text-sm text-zinc-100 items-center">
+                  <div className="text-zinc-400 font-medium text-left pl-2">Forgery Risk</div>
+                  <div>Paper certificates can be faked</div>
+                  <div className="text-green-400 font-semibold">Mathematically impossible ✅</div>
+                </div>
+                {/* Availability */}
+                <div className="grid grid-cols-3 py-2 text-xs md:text-sm text-zinc-100 items-center">
+                  <div className="text-zinc-400 font-medium text-left pl-2">Availability</div>
+                  <div>9-5 business hours</div>
+                  <div className="text-green-400 font-semibold">24/7 global access ✅</div>
+                </div>
               </div>
             </div>
-          </details>
+          </Fold>
 
           {/* Technical & Legal Info */}
-          <details className="card card-purple overflow-hidden group mb-6 md:mb-8">
-            <summary className="p-5 md:p-6 cursor-pointer list-none hover:bg-purple-500/10 transition-colors flex items-center gap-3">
-              <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-purple-400 transition-transform group-open:rotate-90 flex-shrink-0" />
-              <div className="flex items-center gap-4 flex-1">
-                <div className="w-12 h-12 md:w-14 md:h-14 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="text-2xl md:text-3xl">🍫</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-base md:text-lg font-semibold text-dpp-text-primary">
-                    Technical & Legal Info
-                  </h3>
-                </div>
+          <Fold title={<><span className="text-purple-400">Technical & Legal Info</span></>}>
+            <div className="card card-nested p-4 md:p-5 space-y-3 md:space-y-4">
+              <div>
+                <p className="text-xs md:text-sm font-medium text-purple-400 mb-1 md:mb-2">🔧 Technical Standards:</p>
+                <p className="text-xs md:text-sm text-dpp-text-secondary leading-relaxed">
+                  <strong>W3C Verifiable Credentials:</strong> Industry-standard format for digital certificates.
+                  <br />
+                  <strong>Ed25519 Signatures:</strong> Cryptographic proof of authenticity. 
+                  <br />
+                  <strong>IOTA Identity SDK:</strong> Decentralized identity on IOTA network.
+                </p>
               </div>
-            </summary>
-            <div className="px-5 md:px-6 pb-5 md:pb-6 pt-2 space-y-4 md:space-y-5">
-              <div className="card card-nested p-4 md:p-5 space-y-3 md:space-y-4">
-                <div>
-                  <p className="text-xs md:text-sm font-medium text-purple-400 mb-1 md:mb-2">🔧 Technical Standards:</p>
-                  <p className="text-xs md:text-sm text-dpp-text-secondary leading-relaxed">
-                    <strong>W3C Verifiable Credentials:</strong> Industry-standard format for digital certificates.
-                    <br />
-                    <strong>Ed25519 Signatures:</strong> Cryptographic proof of authenticity. 
-                    <br />
-                    <strong>IOTA Identity SDK:</strong> Decentralized identity on IOTA network.
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs md:text-sm font-medium text-blue-400 mb-1 md:mb-2">⚖️ Legal Compliance:</p>
-                  <p className="text-xs md:text-sm text-dpp-text-secondary leading-relaxed">
-                    <strong>EU Digital Product Passport:</strong> Complies with upcoming 2027 regulations for batteries, textiles, and electronics.
-                    <br />
-                    <strong>UN/CEFACT UNTP:</strong> Standardized data schema for global trade.
-                    <br />
-                    <strong>GDPR Compliant:</strong> Privacy-preserving identity without centralized data storage.
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs md:text-sm font-medium text-green-400 mb-1 md:mb-2">🔐 Security & Immutability:</p>
-                  <p className="text-xs md:text-sm text-dpp-text-secondary leading-relaxed">
-                    Each certificate is cryptographically signed and stored on the <a 
-                      href="https://docs.iota.org/developer/iota-identity/" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-green-400 hover:text-green-300 underline"
-                    >IOTA Tangle</a>, creating an immutable chain that cannot be altered or falsified once recorded.
-                  </p>
-                </div>
+              <div>
+                <p className="text-xs md:text-sm font-medium text-blue-400 mb-1 md:mb-2">⚖️ Legal Compliance:</p>
+                <p className="text-xs md:text-sm text-dpp-text-secondary leading-relaxed">
+                  <strong>EU Digital Product Passport:</strong> Complies with upcoming 2027 regulations for batteries, textiles, and electronics.
+                  <br />
+                  <strong>UN/CEFACT UNTP:</strong> Standardized data schema for global trade.
+                  <br />
+                  <strong>GDPR Compliant:</strong> Privacy-preserving identity without centralized data storage.
+                </p>
+              </div>
+              <div>
+                <p className="text-xs md:text-sm font-medium text-green-400 mb-1 md:mb-2">🔐 Security & Immutability:</p>
+                <p className="text-xs md:text-sm text-dpp-text-secondary leading-relaxed">
+                  Each certificate is cryptographically signed and stored on the <a 
+                    href="https://docs.iota.org/developer/iota-identity/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-green-400 hover:text-green-300 underline"
+                  >IOTA Tangle</a>, creating an immutable chain that cannot be altered or falsified once recorded.
+                </p>
               </div>
             </div>
-          </details>
+          </Fold>
+
+          {/* Built With - moved here under Technical & Legal Info */}
+          <Fold title="Built With" defaultOpen={false} className="mb-6 md:mb-8">
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div className="card card-tertiary p-3">
+                <p className="font-semibold text-dpp-text-primary mb-1">Next.js 15</p>
+                <p className="text-dpp-text-tertiary">React framework</p>
+              </div>
+              <div className="card card-tertiary p-3">
+                <p className="font-semibold text-dpp-text-primary mb-1">IOTA Identity</p>
+                <p className="text-dpp-text-tertiary">DID & VCs</p>
+              </div>
+              <div className="card card-tertiary p-3">
+                <p className="font-semibold text-dpp-text-primary mb-1">dApp Kit</p>
+                <p className="text-dpp-text-tertiary">Wallet connection</p>
+              </div>
+              <div className="card card-tertiary p-3">
+                <p className="font-semibold text-dpp-text-primary mb-1">TypeScript</p>
+                <p className="text-dpp-text-tertiary">Type safety</p>
+              </div>
+            </div>
+          </Fold>
 
           {/* Features */}
-          <div className="card card-secondary p-6 mb-6">
+          {/* This section is now redundant as features are moved to the new Highlights section */}
+          {/* <div className="card card-secondary p-6 mb-6">
             <h2 className="text-lg font-semibold text-dpp-text-primary mb-4 flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-green-400" />
               Key Features
@@ -707,43 +653,10 @@ export default function HomePage() {
                 <span><strong>Multi-Industry Support:</strong> Food & Beverage, Battery, Fashion, Electronics</span>
               </li>
             </ul>
-          </div>
-
-          {/* Tech Stack */}
-          <div className="card card-secondary p-6 mb-6">
-            <h2 className="text-lg font-semibold text-dpp-text-primary mb-4 flex items-center gap-2">
-              <LinkIcon className="w-5 h-5 text-blue-400" />
-              Built With
-            </h2>
-            
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="card card-tertiary p-3">
-                <p className="font-semibold text-dpp-text-primary mb-1">Next.js 15</p>
-                <p className="text-dpp-text-tertiary">React framework</p>
-              </div>
-              <div className="card card-tertiary p-3">
-                <p className="font-semibold text-dpp-text-primary mb-1">IOTA Identity</p>
-                <p className="text-dpp-text-tertiary">DID & VCs</p>
-              </div>
-              <div className="card card-tertiary p-3">
-                <p className="font-semibold text-dpp-text-primary mb-1">dApp Kit</p>
-                <p className="text-dpp-text-tertiary">Wallet connection</p>
-              </div>
-              <div className="card card-tertiary p-3">
-                <p className="font-semibold text-dpp-text-primary mb-1">TypeScript</p>
-                <p className="text-dpp-text-tertiary">Type safety</p>
-              </div>
-            </div>
-          </div>
+          </div> */}
 
           {/* Documentation Section - Foldable */}
-          <details className="card card-secondary mb-6 md:mb-8 overflow-hidden group">
-            <summary className="p-5 md:p-6 cursor-pointer list-none hover:bg-dpp-bg-tertiary transition-colors flex items-center gap-3">
-              <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-blue-400 transition-transform group-open:rotate-90 flex-shrink-0" />
-              <h4 className="text-base md:text-lg font-medium text-blue-400">
-                📚 Technical Documentation
-              </h4>
-            </summary>
+          <Fold title={<><span className="text-blue-400">📚 Technical Documentation</span></>} defaultOpen={false}>
             <div className="px-5 md:px-6 pb-5 md:pb-6 pt-2 space-y-4 md:space-y-5">
               <div>
                 <h4 className="text-sm md:text-base font-medium text-dpp-text-primary mb-2 md:mb-3">Architecture Overview</h4>
@@ -781,54 +694,14 @@ export default function HomePage() {
                 </p>
               </div>
             </div>
-          </details>
+          </Fold>
 
-          {/* Start Journey Button - Big CTA */}
-          <div className="flex justify-center mb-6 md:mb-8">
-            <CTAButton
-              icon="→"
-              label="Start Journey"
-              onClick={() => router.push('/')}
-              variant="primary"
-              size="lg"
-              active={true}
-            />
-          </div>
+          {/* Removed Start Journey CTA */}
           </div>
         </main>
 
         {/* Footer */}
-        <footer className="border-t border-dpp-border-default mt-8 w-full">
-          <div className="w-full px-4 py-6">
-            <div className="flex items-center justify-center gap-3 text-xs text-dpp-text-tertiary">
-              <span className="flex items-center gap-1.5">
-                <span className="text-base">⚡</span>
-                <span>Built with</span>
-              </span>
-              <span className="flex items-center gap-1.5 hover:text-dpp-text-primary transition-colors">
-                <svg className="w-4 h-4" viewBox="0 0 394 80" fill="currentColor">
-                  <path d="M262 0h68.5v12.7h-27.2v66.6h-13.6V12.7H262V0zM81 0L53 24v56h14V28l11-11 11 11v52h14V24L81 0zm151 0v12.7h-35v53.9h-13.6V12.7h-35V0h83.6zm46.3 0L237 24v56h13.6V28L258 19l7.6 9v52h13.6V24L278.3 0zm73.8 0v79.3h-13.7V0h13.7z"/>
-                </svg>
-                <span>Next.js</span>
-              </span>
-              <span className="text-dpp-text-tertiary opacity-50">•</span>
-              <span className="flex items-center gap-1.5 hover:text-dpp-text-primary transition-colors">
-                <span className="text-base">🌐</span>
-                <span>IOTA</span>
-              </span>
-              <span className="text-dpp-text-tertiary opacity-50">•</span>
-              <span className="flex items-center gap-1.5 hover:text-dpp-text-primary transition-colors">
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                  <circle cx="12" cy="12" r="2" opacity="0.3"/>
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-                  <circle cx="12" cy="12" r="1.5"/>
-                  <path d="M7 12c0-2.76 2.24-5 5-5s5 2.24 5 5M17 12c0 2.76-2.24 5-5 5s-5-2.24-5-5" opacity="0.5"/>
-                </svg>
-                <span>React</span>
-              </span>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </div>
   );

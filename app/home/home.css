@@ -1,0 +1,51 @@
+/* Local styles for Home page components */
+
+.home-how-it-works {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px; /* increased spacing between items on mobile */
+}
+
+@media (min-width: 768px) {
+  .home-how-it-works {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 24px; /* increased spacing between items on desktop */
+  }
+}
+
+.home-step-card {
+  flex: 1 1 0;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .home-step-card {
+    padding: 18px;
+    border-radius: 14px;
+  }
+}
+
+/* Subtle hover affordance on larger screens */
+@media (hover: hover) and (pointer: fine) {
+  .home-step-card:hover {
+    border-color: rgba(99, 102, 241, 0.25); /* indigo-ish */
+    background: rgba(99, 102, 241, 0.06);
+    transition: background 200ms ease, border-color 200ms ease, transform 200ms ease;
+    transform: translateY(-1px);
+  }
+}
+
+/* Only affect the chip inside the hero slider */
+.home-hero-chip {
+  border-style: var(--tw-border-style);
+  border-width: 1px;
+  margin: 43px;
+}
+
+
