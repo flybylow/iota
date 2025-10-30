@@ -311,9 +311,9 @@ export default function HomePage() {
               </h3>
               
               {/* Horizontal Flow with Arrows */}
-              <div className="w-full flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-6">
+              <div className="w-full flex flex-col md:flex-row items-stretch md:items-stretch gap-4 md:gap-2">
                 {/* Step 1: Farmer */}
-                <div className="bg-dpp-card-bg-tertiary border border-dpp-card-border-primary rounded-lg p-4 md:p-6 flex-1 w-full text-center">
+                <div className="bg-dpp-card-bg-tertiary border border-dpp-card-border-primary rounded-lg p-4 md:p-6 flex-1 min-w-0 text-center">
                   <div className="flex justify-center mb-3">
                     <Sprout className="w-8 h-8 text-green-400" />
                   </div>
@@ -322,7 +322,7 @@ export default function HomePage() {
                 </div>
                 
                 {/* Arrow 1 */}
-                <div className="hidden md:flex items-center justify-center text-blue-400 flex-shrink-0">
+                <div className="hidden md:flex items-center justify-center text-blue-400 flex-shrink-0 px-1">
                   <ChevronRight className="w-8 h-8" />
                 </div>
                 <div className="md:hidden flex items-center justify-center text-blue-400 py-2">
@@ -330,7 +330,7 @@ export default function HomePage() {
                 </div>
                 
                 {/* Step 2: Factory */}
-                <div className="bg-dpp-card-bg-tertiary border border-dpp-card-border-primary rounded-lg p-4 md:p-6 flex-1 w-full text-center">
+                <div className="bg-dpp-card-bg-tertiary border border-dpp-card-border-primary rounded-lg p-4 md:p-6 flex-1 min-w-0 text-center">
                   <div className="flex justify-center mb-3">
                     <Factory className="w-8 h-8 text-blue-400" />
                   </div>
@@ -339,7 +339,7 @@ export default function HomePage() {
                 </div>
                 
                 {/* Arrow 2 */}
-                <div className="hidden md:flex items-center justify-center text-blue-400 flex-shrink-0">
+                <div className="hidden md:flex items-center justify-center text-blue-400 flex-shrink-0 px-1">
                   <ChevronRight className="w-8 h-8" />
                 </div>
                 <div className="md:hidden flex items-center justify-center text-blue-400 py-2">
@@ -347,7 +347,7 @@ export default function HomePage() {
                 </div>
                 
                 {/* Step 3: Consumer */}
-                <div className="bg-dpp-card-bg-tertiary border border-dpp-card-border-primary rounded-lg p-4 md:p-6 flex-1 w-full text-center">
+                <div className="bg-dpp-card-bg-tertiary border border-dpp-card-border-primary rounded-lg p-4 md:p-6 flex-1 min-w-0 text-center">
                   <div className="flex justify-center mb-3">
                     <Shield className="w-8 h-8 text-purple-400" />
                   </div>
