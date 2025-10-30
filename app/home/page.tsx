@@ -79,31 +79,36 @@ function HeroCarousel() {
           {/* Credit Card Style Container */}
           <div className={`
             relative bg-gradient-to-br ${currentCard.gradient}
-            rounded-2xl p-6
+            rounded-3xl p-6
             w-full max-w-[340px] aspect-[1.586/1]
-            shadow-[0_8px_30px_rgb(0,0,0,0.12)]
+            shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)]
             transform transition-all duration-700
-            border border-white/20
+            border-2 border-white/30
             flex flex-col justify-between
             overflow-hidden
           `}>
           {/* Animated Gradient Overlay */}
           <div className={`absolute inset-0 bg-gradient-to-br ${currentCard.gradientOverlay} animate-pulse`} />
           
-          {/* Shine Effect */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 rounded-2xl" />
+          {/* Shine Effect - More Pronounced */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/50 to-white/0 rounded-3xl opacity-60" />
           
-          {/* Card Pattern Background */}
-          <div className="absolute inset-0 opacity-[0.03]">
-            <div className="absolute top-0 right-0 w-40 h-40 bg-white rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-white rounded-full blur-3xl" />
+          {/* Card Pattern Background - Enhanced */}
+          <div className="absolute inset-0 opacity-[0.05]">
+            <div className="absolute top-0 right-0 w-52 h-52 bg-white rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-white rounded-full blur-3xl" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-white rounded-full blur-3xl" />
           </div>
           
-          {/* Decorative Circles */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-8 left-8 w-24 h-24 border border-white/30 rounded-full" />
-            <div className="absolute bottom-12 right-12 w-16 h-16 border border-white/30 rounded-full" />
+          {/* Decorative Pattern - Geometric */}
+          <div className="absolute inset-0 opacity-15">
+            <div className="absolute top-6 left-6 w-32 h-32 border-2 border-white/40 rounded-full" />
+            <div className="absolute bottom-8 right-8 w-20 h-20 border-2 border-white/40 rounded-full" />
+            <div className="absolute top-1/2 left-8 w-24 h-24 border border-white/30 rounded-2xl rotate-45" />
           </div>
+          
+          {/* Subtle Mesh Overlay */}
+          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_50%,_white_1px,_transparent_1px)] bg-[length:12px_12px]" />
           
           {/* Card Content */}
           <div className="relative z-10 flex flex-col justify-between h-full">
@@ -132,26 +137,26 @@ function HeroCarousel() {
                 </p>
               </div>
               
-              {/* Card Number Style */}
-              <div className="flex items-center gap-1.5 pt-2 border-t border-white/20">
+              {/* Card Number Style - Enhanced */}
+              <div className="flex items-center gap-1 pt-3 border-t border-white/30">
                 <div className="flex gap-1">
                   {[1,2,3,4].map((num) => (
-                    <div key={num} className="w-2 h-2 rounded-full bg-white/70" />
+                    <div key={num} className="w-2.5 h-2.5 rounded-full bg-white/80 shadow-md" />
                   ))}
                 </div>
                 <div className="flex gap-1">
                   {[1,2,3,4].map((num) => (
-                    <div key={num} className="w-2 h-2 rounded-full bg-white/70" />
+                    <div key={num} className="w-2.5 h-2.5 rounded-full bg-white/80 shadow-md" />
                   ))}
                 </div>
                 <div className="flex gap-1">
                   {[1,2,3,4].map((num) => (
-                    <div key={num} className="w-2 h-2 rounded-full bg-white/70" />
+                    <div key={num} className="w-2.5 h-2.5 rounded-full bg-white/80 shadow-md" />
                   ))}
                 </div>
                 <div className="flex gap-1">
                   {[1,2,3,4].map((num) => (
-                    <div key={num} className="w-2 h-2 rounded-full bg-white/70" />
+                    <div key={num} className="w-2.5 h-2.5 rounded-full bg-white/80 shadow-md" />
                   ))}
                 </div>
               </div>
@@ -168,12 +173,14 @@ function HeroCarousel() {
                 </p>
               </div>
               
-              {/* Chip Effect */}
+              {/* Chip Effect - Enhanced */}
               <div className="flex justify-end">
-                <div className="w-9 h-7 bg-gradient-to-br from-white/40 to-white/10 rounded-md border border-white/30 shadow-lg backdrop-blur-sm flex items-center justify-center">
-                  <div className="grid grid-cols-2 gap-0.5 p-1">
+                <div className="w-12 h-8 bg-gradient-to-br from-white/50 via-white/20 to-white/5 rounded-lg border-2 border-white/40 shadow-[0_4px_12px_rgba(0,0,0,0.2)] backdrop-blur-sm flex items-center justify-center relative overflow-hidden">
+                  {/* Chip shine effect */}
+                  <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/30 to-transparent" />
+                  <div className="grid grid-cols-2 gap-0.5 p-1.5 z-10">
                     {[...Array(6)].map((_, i) => (
-                      <div key={i} className="w-1.5 h-1.5 bg-white/60 rounded-sm" />
+                      <div key={i} className="w-2 h-2 bg-white/70 rounded-sm shadow-sm" />
                     ))}
                   </div>
                 </div>
