@@ -309,14 +309,19 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Mode Selection - Grid Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-4 md:mb-6">
-              {/* Demo Mode Card */}
-              <div className="bg-dpp-card-bg-secondary border border-dpp-card-border-primary rounded-lg p-6 md:p-8">
-                <div className="flex items-center justify-center mb-6">
+            {/* Mode Selection */}
+            <div className="space-y-8 mb-4 md:mb-6">
+              {/* Title */}
+              <h2 className="text-2xl md:text-3xl font-bold text-dpp-text-primary text-center">
+                Choose your Mode
+              </h2>
+
+              {/* Demo Mode */}
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+                <div className="flex-shrink-0">
                   <CTAButton
                     icon="⚡"
-                    label="Try Demo Mode"
+                    label="Demo Mode"
                     onClick={handleDemoMode}
                     variant="secondary"
                     size="md"
@@ -324,14 +329,8 @@ export default function HomePage() {
                     className="border-2 border-white"
                   />
                 </div>
-                <div className="space-y-3 text-left">
-                  <h3 className="text-base md:text-lg font-semibold text-dpp-text-primary">
-                    Demo Mode
-                  </h3>
-                  <p className="text-sm md:text-base text-dpp-text-secondary leading-relaxed">
-                    Try it instantly with mock data—no setup needed. Perfect for exploring the supply chain journey without wallet configuration.
-                  </p>
-                  <ul className="text-xs md:text-sm text-dpp-text-tertiary space-y-1.5 list-disc list-inside">
+                <div className="text-left">
+                  <ul className="text-sm md:text-base text-dpp-text-secondary space-y-1.5 list-disc list-inside">
                     <li>No wallet connection required</li>
                     <li>Instant access to all features</li>
                     <li>Mock blockchain data</li>
@@ -339,26 +338,23 @@ export default function HomePage() {
                 </div>
               </div>
               
-              {/* Blockchain Mode Card */}
-              <div className="bg-dpp-card-bg-secondary border border-dpp-card-border-primary rounded-lg p-6 md:p-8">
-                <div className="flex items-center justify-center mb-6">
+              {/* Blockchain Mode */}
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+                <div className="flex-shrink-0">
                   <CTAButton
                     icon="🌐"
-                    label="Start Blockchain Mode"
+                    label="Blockchain Mode"
                     onClick={handleBlockchainMode}
                     variant="primary"
                     size="md"
                     active={isBlockchain}
                   />
                 </div>
-                <div className="space-y-3 text-left">
-                  <h3 className="text-base md:text-lg font-semibold text-dpp-text-primary">
-                    Blockchain Mode
-                  </h3>
-                  <p className="text-sm md:text-base text-dpp-text-secondary leading-relaxed">
+                <div className="text-left">
+                  <p className="text-sm md:text-base text-dpp-text-secondary leading-relaxed mb-3">
                     Real IOTA blockchain transactions with wallet connection. Experience actual DID publishing and credential verification on the testnet.
                   </p>
-                  <ul className="text-xs md:text-sm text-dpp-text-tertiary space-y-1.5 list-disc list-inside">
+                  <ul className="text-sm md:text-base text-dpp-text-secondary space-y-1.5 list-disc list-inside">
                     <li>Connect IOTA wallet</li>
                     <li>Real blockchain transactions</li>
                     <li>On-chain DID resolution</li>
