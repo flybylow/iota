@@ -279,7 +279,9 @@ export default function HomePage() {
                 Transparent Supply-Chains
               </h1>
               <p className="text-base md:text-xl text-zinc-200 leading-relaxed mb-6 md:mb-8 max-w-2xl mx-auto">
-                Verify your product&apos;s entire supply chain in <strong className="text-green-400">2 seconds</strong> with blockchain-powered credentials.
+                Verify your product&apos;s entire supply chain <strong className="text-green-400">(2 sec)</strong>
+                <br />
+                with IOTA blockchain-powered credentials.
               </p>
               <HeroCarousel />
             </div>
@@ -293,7 +295,12 @@ export default function HomePage() {
               Transparent Supply-Chains
             </h1>
             <p className="text-base md:text-lg text-dpp-text-secondary leading-relaxed mb-6 md:mb-8 max-w-md md:max-w-[700px] mx-auto">
-              Verify your product&apos;s entire supply chain in <strong className="text-green-400">2 seconds</strong> with blockchain-powered credentials. Every product gets a unique identity (DID) that follows it from farm → factory → consumer. Each step creates cryptographically signed certificates that can&apos;t be faked.
+              Verify your product&apos;s entire supply chain <strong className="text-green-400">(2 sec)</strong>
+              <br />
+              with IOTA blockchain-powered credentials.
+              <br />
+              <br />
+              Every product gets a unique identity (DID) that follows it from farm → factory → consumer. Each step creates cryptographically signed certificates that can&apos;t be faked.
             </p>
             
             {/* How It Works */}
