@@ -61,8 +61,8 @@ function HeroCarousel() {
   const currentCard = heroCards[currentIndex];
   
   return (
-    <>
-      <div className="relative w-full mt-6 mb-6 flex items-center justify-center gap-4">
+    <div className="relative w-full mt-6 mb-6">
+      <div className="flex items-center justify-center gap-4 mb-6">
         {/* Previous Button */}
         <button
           onClick={prevCard}
@@ -188,23 +188,23 @@ function HeroCarousel() {
             </div>
           </div>
         </div>
-      </div>
-      
-      {/* Next Button */}
-      <button
-        onClick={nextCard}
-        className="bg-white/90 hover:bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all hover:scale-110 flex-shrink-0 z-10"
-        aria-label="Next card"
-      >
-        <ChevronRight 
-          size={24} 
-          className="text-gray-800" 
-        />
-      </button>
+        </div>
+        
+        {/* Next Button */}
+        <button
+          onClick={nextCard}
+          className="bg-white/90 hover:bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all hover:scale-110 flex-shrink-0 z-10"
+          aria-label="Next card"
+        >
+          <ChevronRight 
+            size={24} 
+            className="text-gray-800" 
+          />
+        </button>
       </div>
       
       {/* Dots Indicator */}
-      <div className="flex justify-center gap-2 mt-6">
+      <div className="flex justify-center gap-2">
         {heroCards.map((_, idx) => (
           <button
             key={idx}
@@ -218,7 +218,7 @@ function HeroCarousel() {
           />
         ))}
       </div>
-    </>
+    </div>
   );
 }
 
