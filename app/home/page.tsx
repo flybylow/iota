@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Sprout, Factory, Shield, ShieldCheck, Link as LinkIcon, Zap, ChevronRight, CheckCircle2, XCircle } from 'lucide-react';
+import { Sprout, Factory, Shield, ShieldCheck, Link as LinkIcon, Zap, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { ModeToggle } from '@/components/ModeToggle';
 import { setDPPMode, isBlockchainMode } from '@/lib/dppMode';
@@ -506,9 +506,8 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Pros and Cons */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-6 md:mb-8">
-            {/* Pros */}
+          {/* Advantages */}
+          <div className="mb-6 md:mb-8">
             <div className="card card-secondary p-6 md:p-8">
               <h2 className="text-lg md:text-xl font-semibold text-dpp-text-primary mb-4 md:mb-6 flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 text-green-400" />
@@ -538,32 +537,6 @@ export default function HomePage() {
                 <li className="flex items-start gap-2">
                   <span className="text-green-400 mt-0.5">✓</span>
                   <span><strong className="text-dpp-text-primary">No Middleman:</strong> Direct verification, no trusted parties needed</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Cons */}
-            <div className="card card-secondary p-6 md:p-8">
-              <h2 className="text-lg md:text-xl font-semibold text-dpp-text-primary mb-4 md:mb-6 flex items-center gap-2">
-                <XCircle className="w-5 h-5 md:w-6 md:h-6 text-yellow-400" />
-                Considerations
-              </h2>
-              <ul className="space-y-3 md:space-y-4 text-sm md:text-base text-dpp-text-secondary">
-                <li className="flex items-start gap-2">
-                  <span className="text-yellow-400 mt-0.5">⚠</span>
-                  <span><strong className="text-dpp-text-primary">Initial Setup:</strong> Requires blockchain infrastructure</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-yellow-400 mt-0.5">⚠</span>
-                  <span><strong className="text-dpp-text-primary">Data Entry:</strong> Suppliers need to adopt new systems</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-yellow-400 mt-0.5">⚠</span>
-                  <span><strong className="text-dpp-text-primary">Internet Required:</strong> Verification needs network connection</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-yellow-400 mt-0.5">⚠</span>
-                  <span><strong className="text-dpp-text-primary">Learning Curve:</strong> Team training on DIDs/VCs</span>
                 </li>
               </ul>
             </div>
