@@ -165,10 +165,15 @@ After:  Create Identity → Verify Identity
 - **Desktop Max Width:** 800px (`max-w-md md:max-w-[800px]`)
 - **Mobile Max Width:** 448px (matches container)
 - **Centered:** All content centered with `mx-auto`
-- **Carousel:** Also constrained to 800px max width for consistency
 - **Responsive Breakpoint:** 768px (md)
 
-This ensures the entire home page, including the credit card carousel, stays within a readable 800px width on desktop screens while remaining fully responsive on mobile devices.
+### Credit Card Carousel
+- **Card Width:** Fixed 340px (credit card size)
+- **Aspect Ratio:** 1.586:1 (standard credit card ratio)
+- **Container:** Full width, content naturally constrained
+- **Buttons:** Positioned on left/right of card
+
+The credit card carousel maintains its standard 340px width regardless of the page container, while the home page body content is constrained to 800px for optimal readability.
 
 ---
 

@@ -62,7 +62,7 @@ function HeroCarousel() {
   
   return (
     <>
-      <div className="relative w-full max-w-[800px] mx-auto mt-6 mb-6 flex items-center justify-center gap-4">
+      <div className="relative w-full mt-6 mb-6 flex items-center justify-center gap-4">
         {/* Previous Button */}
         <button
           onClick={prevCard}
@@ -80,7 +80,7 @@ function HeroCarousel() {
           <div className={`
             relative bg-gradient-to-br ${currentCard.gradient}
             rounded-3xl p-6
-            w-full max-w-[340px] aspect-[1.586/1]
+            w-[340px] aspect-[1.586/1]
             shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)]
             transform transition-all duration-700
             border-2 border-white/30
