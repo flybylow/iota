@@ -18,8 +18,8 @@ const heroCards = [
     label: 'Farm', 
     title: 'ORIGIN CERTIFICATE',
     subtitle: 'Maria\'s Organic Farm',
-    action: 'is issuing a certificate for 400kg of Organic cacao she harvested',
-    details: 'She proofs on-chain that she as a farmer registered the harvest and quality of origin product.',
+    action: 'is issuing a certificate, 400kg of Organic cacao she harvested',
+    details: 'As a farmer, she proofs the harvest and quality of origin product on-chain.',
     gradient: 'from-green-600 via-emerald-700 to-teal-800',
     gradientOverlay: 'from-green-400/20 via-emerald-500/20 to-teal-600/20',
     accent: 'green'
