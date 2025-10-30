@@ -297,15 +297,56 @@ export default function HomePage() {
             </p>
             
             {/* How It Works */}
-            <div className="bg-dpp-card-bg-tertiary/50 border border-dpp-card-border-primary rounded-lg p-4 md:p-6 mb-6 md:mb-8 text-left max-w-md md:max-w-[700px] mx-auto">
-              <h3 className="text-sm md:text-base font-semibold text-dpp-text-primary mb-3 md:mb-4 flex items-center gap-2">
-                <Zap className="w-4 h-4 md:w-5 md:h-5 text-blue-400" />
+            <div className="mb-6 md:mb-8">
+              <h3 className="text-base md:text-lg font-semibold text-dpp-text-primary mb-4 md:mb-6 flex items-center gap-2">
+                <Zap className="w-5 h-5 md:w-6 md:h-6 text-blue-400" />
                 How It Works
               </h3>
-              <div className="space-y-2 md:space-y-3 text-xs md:text-sm text-dpp-text-secondary">
-                <p>1. <strong className="text-dpp-text-primary">Farmer</strong> issues origin certificate with blockchain identity</p>
-                <p>2. <strong className="text-dpp-text-primary">Factory</strong> verifies origin and adds production data</p>
-                <p>3. <strong className="text-dpp-text-primary">Consumer</strong> scans QR code → sees verified chain in 2 seconds</p>
+              
+              {/* Horizontal Flow with Arrows */}
+              <div className="w-full flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-6">
+                {/* Step 1: Farmer */}
+                <div className="bg-dpp-card-bg-tertiary border border-dpp-card-border-primary rounded-lg p-4 md:p-6 flex-1 w-full text-center">
+                  <div className="flex justify-center mb-3">
+                    <Sprout className="w-8 h-8 text-green-400" />
+                  </div>
+                  <p className="text-base md:text-lg font-semibold text-dpp-text-primary mb-2">1. Farmer</p>
+                  <p className="text-sm md:text-base text-dpp-text-tertiary leading-relaxed">Issues origin certificate with blockchain identity</p>
+                </div>
+                
+                {/* Arrow 1 */}
+                <div className="hidden md:flex items-center justify-center text-blue-400 flex-shrink-0">
+                  <ChevronRight className="w-8 h-8" />
+                </div>
+                <div className="md:hidden flex items-center justify-center text-blue-400 py-2">
+                  <ChevronRight className="w-8 h-8 rotate-90" />
+                </div>
+                
+                {/* Step 2: Factory */}
+                <div className="bg-dpp-card-bg-tertiary border border-dpp-card-border-primary rounded-lg p-4 md:p-6 flex-1 w-full text-center">
+                  <div className="flex justify-center mb-3">
+                    <Factory className="w-8 h-8 text-blue-400" />
+                  </div>
+                  <p className="text-base md:text-lg font-semibold text-dpp-text-primary mb-2">2. Factory</p>
+                  <p className="text-sm md:text-base text-dpp-text-tertiary leading-relaxed">Verifies origin and adds production data</p>
+                </div>
+                
+                {/* Arrow 2 */}
+                <div className="hidden md:flex items-center justify-center text-blue-400 flex-shrink-0">
+                  <ChevronRight className="w-8 h-8" />
+                </div>
+                <div className="md:hidden flex items-center justify-center text-blue-400 py-2">
+                  <ChevronRight className="w-8 h-8 rotate-90" />
+                </div>
+                
+                {/* Step 3: Consumer */}
+                <div className="bg-dpp-card-bg-tertiary border border-dpp-card-border-primary rounded-lg p-4 md:p-6 flex-1 w-full text-center">
+                  <div className="flex justify-center mb-3">
+                    <Shield className="w-8 h-8 text-purple-400" />
+                  </div>
+                  <p className="text-base md:text-lg font-semibold text-dpp-text-primary mb-2">3. Consumer</p>
+                  <p className="text-sm md:text-base text-dpp-text-tertiary leading-relaxed">Scans QR code → sees verified chain</p>
+                </div>
               </div>
             </div>
 
