@@ -30,7 +30,7 @@ const heroCards = [
     title: 'PRODUCTION CERTIFICATE',
     subtitle: 'Chocolate Dreams Factory',
     action: 'verifies the origin certificate and certifies production of 50,000 bars',
-    details: 'They proof on-chain that they verified Maria\'s certificate and produced 50,000 quality chocolate bars.',
+    details: 'They proof on-chain that they verified the origin certificate and produced 50,000 quality chocolate bars.',
     gradient: 'from-blue-600 via-indigo-700 to-purple-800',
     gradientOverlay: 'from-blue-400/20 via-indigo-500/20 to-purple-600/20',
     accent: 'blue'
