@@ -62,7 +62,7 @@ function HeroCarousel() {
   
   return (
     <>
-      <div className="relative w-full max-w-2xl mx-auto mt-6 mb-6 flex items-center justify-center gap-4">
+      <div className="relative w-full max-w-[800px] mx-auto mt-6 mb-6 flex items-center justify-center gap-4">
         {/* Previous Button */}
         <button
           onClick={prevCard}

@@ -159,6 +159,17 @@ After:  Create Identity → Verify Identity
 - **Padding:** Reduced on small screens
 - **Scroll:** Smooth, no horizontal overflow
 
+## 🎨 Layout Specifications
+
+### Home Page Layout
+- **Desktop Max Width:** 800px (`max-w-md md:max-w-[800px]`)
+- **Mobile Max Width:** 448px (matches container)
+- **Centered:** All content centered with `mx-auto`
+- **Carousel:** Also constrained to 800px max width for consistency
+- **Responsive Breakpoint:** 768px (md)
+
+This ensures the entire home page, including the credit card carousel, stays within a readable 800px width on desktop screens while remaining fully responsive on mobile devices.
+
 ---
 
 ## 🔍 Testing Checklist
