@@ -6,12 +6,214 @@ import { useRouter } from 'next/navigation';
 import { ModeToggle } from '@/components/ModeToggle';
 import { setDPPMode, isBlockchainMode } from '@/lib/dppMode';
 import { CTAButton } from '@/components/CTAButton';
-import { BlockchainCarousel } from '@/components/BlockchainCarousel';
 
 /**
  * Home Page - Marketing Page
  * Comparison table, pros/cons, and what it does explained simply
  */
+
+const heroCards = [
+  { 
+    icon: '🌱', 
+    label: 'Farm', 
+    title: 'ORIGIN CERTIFICATE',
+    subtitle: 'Maria\'s Organic Farm',
+    action: 'is issuing a certificate for 400kg of Organic cacao she harvested',
+    details: 'She proofs on-chain that she as a farmer registered the harvest and quality of origin product.',
+    gradient: 'from-green-600 via-emerald-700 to-teal-800',
+    gradientOverlay: 'from-green-400/20 via-emerald-500/20 to-teal-600/20',
+    accent: 'green'
+  },
+  { 
+    icon: '🏭', 
+    label: 'Factory', 
+    title: 'PRODUCTION CERTIFICATE',
+    subtitle: 'Chocolate Dreams Factory',
+    action: 'verifies the origin certificate and certifies production of 50,000 bars',
+    details: 'They proof on-chain that they verified Maria\'s certificate and produced 50,000 quality chocolate bars.',
+    gradient: 'from-blue-600 via-indigo-700 to-purple-800',
+    gradientOverlay: 'from-blue-400/20 via-indigo-500/20 to-purple-600/20',
+    accent: 'blue'
+  },
+  { 
+    icon: '✅', 
+    label: 'Consumer', 
+    title: 'VERIFICATION COMPLETE',
+    subtitle: 'Blockchain Verified',
+    action: 'scans QR code and verifies the complete supply chain in 2 seconds',
+    details: 'Consumers can instantly verify that the chocolate comes from Maria\'s certified harvest and was produced by the factory.',
+    gradient: 'from-purple-600 via-pink-700 to-rose-800',
+    gradientOverlay: 'from-purple-400/20 via-pink-500/20 to-rose-600/20',
+    accent: 'purple'
+  }
+];
+function HeroCarousel() {
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+  
+  const nextCard = () => {
+    setCurrentIndex((prev) => (prev + 1) % heroCards.length);
+  };
+  
+  const prevCard = () => {
+    setCurrentIndex((prev) => (prev - 1 + heroCards.length) % heroCards.length);
+  };
+  
+  const currentCard = heroCards[currentIndex];
+  
+  return (
+    <>
+      <div className="relative w-full max-w-2xl mx-auto mt-6 mb-6 flex items-center justify-center gap-4">
+        {/* Previous Button */}
+        <button
+          onClick={prevCard}
+          className="bg-white/90 hover:bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all hover:scale-110 flex-shrink-0 z-10"
+          aria-label="Previous card"
+        >
+          <ChevronRight 
+            size={24} 
+            className="text-gray-800 rotate-180" 
+          />
+        </button>
+        
+        <div className="group perspective-1000 flex justify-center">
+          {/* Credit Card Style Container */}
+          <div className={`
+            relative bg-gradient-to-br ${currentCard.gradient}
+            rounded-2xl p-6
+            w-full max-w-[340px] aspect-[1.586/1]
+            shadow-[0_8px_30px_rgb(0,0,0,0.12)]
+            transform transition-all duration-700
+            border border-white/20
+            flex flex-col justify-between
+            overflow-hidden
+          `}>
+          {/* Animated Gradient Overlay */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${currentCard.gradientOverlay} animate-pulse`} />
+          
+          {/* Shine Effect */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 rounded-2xl" />
+          
+          {/* Card Pattern Background */}
+          <div className="absolute inset-0 opacity-[0.03]">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-white rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-white rounded-full blur-3xl" />
+          </div>
+          
+          {/* Decorative Circles */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-8 left-8 w-24 h-24 border border-white/30 rounded-full" />
+            <div className="absolute bottom-12 right-12 w-16 h-16 border border-white/30 rounded-full" />
+          </div>
+          
+          {/* Card Content */}
+          <div className="relative z-10 flex flex-col justify-between h-full">
+            {/* Top Section */}
+            <div className="space-y-4">
+              {/* Issuer Badge */}
+              <div className="flex justify-between items-start">
+                <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full border border-white/30">
+                  <p className="text-white text-[10px] font-bold tracking-wider uppercase">
+                    DPP
+                  </p>
+                </div>
+                <div className="text-3xl">{currentCard.icon}</div>
+              </div>
+              
+              {/* Certificate Title */}
+              <div>
+                <p className="text-white/70 text-[10px] font-semibold tracking-[0.2em] uppercase mb-1">
+                  {currentCard.title}
+                </p>
+                <p className="text-white text-xs font-medium mb-2">
+                  {currentCard.subtitle}
+                </p>
+                <p className="text-white text-[11px] leading-relaxed opacity-90">
+                  {currentCard.action}
+                </p>
+              </div>
+              
+              {/* Card Number Style */}
+              <div className="flex items-center gap-1.5 pt-2 border-t border-white/20">
+                <div className="flex gap-1">
+                  {[1,2,3,4].map((num) => (
+                    <div key={num} className="w-2 h-2 rounded-full bg-white/70" />
+                  ))}
+                </div>
+                <div className="flex gap-1">
+                  {[1,2,3,4].map((num) => (
+                    <div key={num} className="w-2 h-2 rounded-full bg-white/70" />
+                  ))}
+                </div>
+                <div className="flex gap-1">
+                  {[1,2,3,4].map((num) => (
+                    <div key={num} className="w-2 h-2 rounded-full bg-white/70" />
+                  ))}
+                </div>
+                <div className="flex gap-1">
+                  {[1,2,3,4].map((num) => (
+                    <div key={num} className="w-2 h-2 rounded-full bg-white/70" />
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            {/* Bottom Section */}
+            <div className="flex flex-col gap-2">
+              <div className="space-y-1">
+                <p className="text-white/80 text-[9px] font-bold uppercase tracking-wider">
+                  What This Means:
+                </p>
+                <p className="text-white text-[10px] leading-relaxed">
+                  {currentCard.details}
+                </p>
+              </div>
+              
+              {/* Chip Effect */}
+              <div className="flex justify-end">
+                <div className="w-9 h-7 bg-gradient-to-br from-white/40 to-white/10 rounded-md border border-white/30 shadow-lg backdrop-blur-sm flex items-center justify-center">
+                  <div className="grid grid-cols-2 gap-0.5 p-1">
+                    {[...Array(6)].map((_, i) => (
+                      <div key={i} className="w-1.5 h-1.5 bg-white/60 rounded-sm" />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Next Button */}
+      <button
+        onClick={nextCard}
+        className="bg-white/90 hover:bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all hover:scale-110 flex-shrink-0 z-10"
+        aria-label="Next card"
+      >
+        <ChevronRight 
+          size={24} 
+          className="text-gray-800" 
+        />
+      </button>
+      </div>
+      
+      {/* Dots Indicator */}
+      <div className="flex justify-center gap-2 mt-6">
+        {heroCards.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrentIndex(idx)}
+            className={`transition-all rounded-full ${
+              currentIndex === idx
+                ? 'w-12 bg-blue-500 h-2'
+                : 'w-2 bg-gray-300 h-2 hover:bg-blue-500/50'
+            }`}
+            aria-label={`Go to card ${idx + 1}`}
+          />
+        ))}
+      </div>
+    </>
+  );
+}
 
 export default function HomePage() {
   const router = useRouter();
@@ -72,24 +274,8 @@ export default function HomePage() {
               <p className="text-base md:text-xl text-zinc-200 leading-relaxed mb-6 md:mb-8 max-w-2xl mx-auto">
                 Verify your product&apos;s entire supply chain in <strong className="text-green-400">2 seconds</strong> with blockchain-powered credentials.
               </p>
-              <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-                <div className="flex items-center gap-2 text-white">
-                  <span className="text-2xl">🌱</span>
-                  <span className="text-sm md:text-base">Farm</span>
-                  <span className="text-zinc-400">→</span>
-                  <span className="text-2xl">🏭</span>
-                  <span className="text-sm md:text-base">Factory</span>
-                  <span className="text-zinc-400">→</span>
-                  <span className="text-2xl">✅</span>
-                  <span className="text-sm md:text-base">Consumer</span>
-                </div>
-              </div>
+              <HeroCarousel />
             </div>
-          </div>
-
-          {/* Blockchain Carousel */}
-          <div className="mb-8 md:mb-12 w-full">
-            <BlockchainCarousel />
           </div>
 
           {/* Hero Section */}
