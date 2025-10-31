@@ -125,10 +125,18 @@ The project includes a **centralized design system** documented in:
 #### Screenshots Slider Image Positioning
 
 The `StepsCarousel` component on the home page requires specific image positioning:
-- **X Position:** `objectPosition: 'left center'` - Image aligned flush with the left border of the slider container
-- **Container:** Uses `absolute inset-0` with `object-contain` to fill container while maintaining aspect ratio
+
+**Working Solution:**
+- **Image Class:** `absolute inset-0 w-full h-full object-contain object-left block`
+- **Container:** Uses `home-step-card` class (no padding override needed)
+- **X Position:** The `object-left` Tailwind class correctly aligns the image flush with the left border
 - **Image Path:** Images from `/public/1.png` through `/8.png` are displayed in sequence
-- **Important:** The left edge of the image should always align with `x=0` of the slider container (left border)
+
+**Important Notes:**
+- Do NOT override padding with `p-0` - the `home-step-card` padding works correctly with absolute positioning
+- Do NOT use inline `style={{ objectPosition }}` - use Tailwind's `object-left` class instead
+- The `absolute inset-0` positions the image relative to the container, and `object-left` aligns it to the left edge
+- This solution was verified working in commit `0d44b27` and restored in commit `046afe2`
 
 ---
 
