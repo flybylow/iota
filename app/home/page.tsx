@@ -252,7 +252,7 @@ function StepsCarousel() {
     const steps = ['/1.png','/2.png','/3.png','/4.png','/5.png','/6.png','/7.png','/8.png'];
     const [index, setIndex] = React.useState(0);
     const [imageError, setImageError] = React.useState<Record<number, boolean>>({});
-    const [imageLoading, setImageLoading] = React.useState<Record<number, boolean>>({});
+    const [imageLoaded, setImageLoaded] = React.useState<Record<number, boolean>>({});
     const next = () => setIndex((p) => (p + 1) % steps.length);
     const prev = () => setIndex((p) => (p - 1 + steps.length) % steps.length);
 
@@ -262,33 +262,25 @@ function StepsCarousel() {
       const prevIndex = (index - 1 + steps.length) % steps.length;
       
       [nextIndex, prevIndex].forEach((idx) => {
-        if (!imageError[idx]) {
+        if (!imageError[idx] && !imageLoaded[idx]) {
           const img = new Image();
+          img.onload = () => setImageLoaded((prev) => ({ ...prev, [idx]: true }));
+          img.onerror = () => setImageError((prev) => ({ ...prev, [idx]: true }));
           img.src = steps[idx];
         }
       });
-    }, [index, steps, imageError]);
+    }, [index, steps, imageError, imageLoaded]);
 
     const handleImageLoad = () => {
-      setImageLoading((prev) => ({ ...prev, [index]: false }));
+      setImageLoaded((prev) => ({ ...prev, [index]: true }));
     };
 
     const handleImageError = () => {
       setImageError((prev) => ({ ...prev, [index]: true }));
-      setImageLoading((prev) => ({ ...prev, [index]: false }));
     };
-
-    const handleImageStartLoad = () => {
-      setImageLoading((prev) => ({ ...prev, [index]: true }));
-    };
-
-    // Reset loading state when index changes
-    React.useEffect(() => {
-      setImageLoading((prev) => ({ ...prev, [index]: true }));
-    }, [index]);
 
     const currentImageError = imageError[index];
-    const currentImageLoading = imageLoading[index];
+    const currentImageLoaded = imageLoaded[index];
 
     return (
       <section className="relative w-full mt-6 mb-8">
@@ -306,19 +298,18 @@ function StepsCarousel() {
             </div>
           ) : (
             <>
-              {currentImageLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+              {!currentImageLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/30 z-10">
                   <div className="text-white text-lg">Loading...</div>
                 </div>
               )}
               <img
+                key={index}
                 src={steps[index]}
                 alt={`Step ${index + 1}`}
-                className="absolute inset-0 w-full h-full object-contain object-left block"
+                className="absolute inset-0 w-full h-full object-contain object-left"
                 onLoad={handleImageLoad}
                 onError={handleImageError}
-                onLoadStart={handleImageStartLoad}
-                style={{ display: currentImageLoading ? 'none' : 'block' }}
               />
             </>
           )}
