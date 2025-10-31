@@ -271,17 +271,37 @@ export default function HomePage() {
   function StepsCarousel() {
     const steps = ['/1.png','/2.png','/3.png','/4.png','/5.png','/6.png','/7.png','/8.png'];
     const [index, setIndex] = React.useState(0);
+    const [imageError, setImageError] = React.useState(false);
     const next = () => setIndex((p) => (p + 1) % steps.length);
     const prev = () => setIndex((p) => (p - 1 + steps.length) % steps.length);
 
+    // Reset error when index changes
+    React.useEffect(() => {
+      setImageError(false);
+    }, [index]);
+
     return (
       <section className="relative w-full mt-6 mb-8">
-        <div className="relative home-step-card w-[95%] md:w-[60%] mx-auto h-[460px] md:h-[640px] overflow-hidden">
-          <img
-            src={steps[index]}
-            alt={`Step ${index + 1}`}
-            className="absolute inset-0 w-full h-full object-contain object-left block"
-          />
+        <div className="relative home-step-card w-[95%] md:w-[60%] mx-auto h-[460px] md:h-[640px] overflow-hidden bg-black/20">
+          {!imageError ? (
+            <img
+              src={steps[index]}
+              alt={`Step ${index + 1}`}
+              className="absolute inset-0 w-full h-full object-contain object-left block"
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+              <div className="text-6xl mb-4">📸</div>
+              <p className="text-lg text-white mb-2">Screenshot {index + 1} / {steps.length}</p>
+              <p className="text-sm text-zinc-400">
+                Image not found: {steps[index]}
+              </p>
+              <p className="text-xs text-zinc-500 mt-4">
+                Please add {steps[index]} to the /public directory
+              </p>
+            </div>
+          )}
           <div className="absolute top-3 right-3 text-sm md:text-base px-3 py-1.5 rounded bg-black/80 text-white border border-white/30 shadow">
             Step {index + 1} / {steps.length}
           </div>
