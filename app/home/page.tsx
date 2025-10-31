@@ -307,7 +307,8 @@ function StepsCarousel() {
                 key={index}
                 src={steps[index]}
                 alt={`Step ${index + 1}`}
-                className="absolute inset-0 w-full h-full object-contain object-left"
+                className="absolute inset-0 w-full h-full object-contain"
+                style={{ objectPosition: 'left center' }}
                 onLoad={handleImageLoad}
                 onError={handleImageError}
               />

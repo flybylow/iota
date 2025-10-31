@@ -122,6 +122,14 @@ The project includes a **centralized design system** documented in:
 - `docs/ux/CARD-DESIGN-SYSTEM.md` - Card patterns and dot indicators
 - Consistent typography, colors, and component styles throughout
 
+#### Screenshots Slider Image Positioning
+
+The `StepsCarousel` component on the home page requires specific image positioning:
+- **X Position:** `objectPosition: 'left center'` - Image aligned flush with the left border of the slider container
+- **Container:** Uses `absolute inset-0` with `object-contain` to fill container while maintaining aspect ratio
+- **Image Path:** Images from `/public/1.png` through `/8.png` are displayed in sequence
+- **Important:** The left edge of the image should always align with `x=0` of the slider container (left border)
+
 ---
 
 ## 📖 How It Works - Chocolate Supply Chain
