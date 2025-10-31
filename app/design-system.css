@@ -134,3 +134,49 @@
 
 /* Easy editing: Just change CSS variables above to update all cards globally */
 
+/* Default Card - matches home-step-card visuals (documented in docs/ux/CARD-DESIGN-SYSTEM.md) */
+.card-default {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+/* Typography Utilities - Centralized font system */
+.typ-title {
+  font-family: var(--font-family);
+  font-size: var(--font-size-title);
+  line-height: var(--line-height-tight);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.typ-subtitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-subtitle);
+  line-height: var(--line-height-normal);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.typ-body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-normal);
+  color: var(--text-secondary);
+}
+
+.typ-small {
+  font-family: var(--font-family);
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-normal);
+  color: var(--text-secondary);
+}
+
+.typ-label {
+  font-family: var(--font-family);
+  font-size: var(--font-size-label);
+  line-height: var(--line-height-tight);
+  color: var(--text-secondary);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}

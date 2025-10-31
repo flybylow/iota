@@ -274,9 +274,9 @@ export const BlockchainCarousel = () => {
                 }}
                 className={`transition-all ${
                   currentIndex === idx
-                    ? 'w-8 md:w-12 bg-blue-500'
-                    : 'w-2 md:w-3 bg-dpp-card-border-primary hover:bg-blue-500/50'
-                } h-2 md:h-3 rounded-full`}
+                    ? 'w-10 md:w-14 bg-blue-500'
+                    : 'w-3 md:w-3 bg-dpp-card-border-primary hover:bg-blue-500/50'
+                } h-3 md:h-3 rounded-full`}
                 aria-label={`Go to slide ${idx + 1}`}
               />
             ))}
