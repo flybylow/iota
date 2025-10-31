@@ -44,6 +44,27 @@ const nextConfig: NextConfig = {
       };
     }
 
+    // Optimize chunk splitting for better loading
+    if (!isServer) {
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            default: false,
+            vendors: false,
+            // IOTA SDK vendor chunk
+            iota: {
+              name: 'iota-vendor',
+              test: /[\\/]node_modules[\\/](@iota)[\\/]/,
+              priority: 20,
+              reuseExistingChunk: true,
+            },
+          },
+        },
+      };
+    }
+
     return config;
   },
 };
