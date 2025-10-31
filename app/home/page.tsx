@@ -215,7 +215,16 @@ function HeroCarousel() {
   );
 }
 
-function KeywordGrid({ keywords }) {
+interface Keyword {
+  label: string;
+  info: string;
+}
+
+interface KeywordGridProps {
+  keywords: Keyword[];
+}
+
+function KeywordGrid({ keywords }: KeywordGridProps) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 items-stretch">
       {keywords.map((kw, i) => (

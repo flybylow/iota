@@ -106,13 +106,15 @@ export default function TestWasmPage() {
                   </details>
                 )}
                 
-                {initResult.error && (
+                {initResult.error !== undefined && (
                   <details className="mt-2">
                     <summary className="text-xs text-zinc-400 cursor-pointer hover:text-zinc-300">
                       Error Details
                     </summary>
                     <pre className="text-xs text-zinc-500 mt-2 overflow-auto max-h-48 bg-[#0a0a0a] p-2 rounded">
-                      {JSON.stringify(initResult.error, null, 2)}
+                      {typeof initResult.error === 'string' 
+                        ? initResult.error 
+                        : JSON.stringify(initResult.error, null, 2)}
                     </pre>
                   </details>
                 )}
@@ -160,13 +162,15 @@ export default function TestWasmPage() {
                   {didResult.message}
                 </p>
                 
-                {didResult.error && (
+                {didResult.error !== undefined && (
                   <details className="mt-2">
                     <summary className="text-xs text-zinc-400 cursor-pointer hover:text-zinc-300">
                       Error Details
                     </summary>
                     <pre className="text-xs text-zinc-500 mt-2 overflow-auto max-h-48 bg-[#0a0a0a] p-2 rounded">
-                      {JSON.stringify(didResult.error, null, 2)}
+                      {typeof didResult.error === 'string' 
+                        ? didResult.error 
+                        : JSON.stringify(didResult.error, null, 2)}
                     </pre>
                   </details>
                 )}
