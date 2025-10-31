@@ -1,30 +1,36 @@
-# 🍫 Digital Product Passport - Chocolate Supply Chain Demo
+# 🌍 Digital Product Passport (DPP) - Supply Chain Transparency Platform
 
-Interactive demonstration of blockchain-powered supply chain transparency using **IOTA Decentralized Identifiers (DIDs)** and **Verifiable Credentials**.
+Production-ready implementation of blockchain-powered supply chain transparency using **IOTA Decentralized Identifiers (DIDs)** and **Verifiable Credentials** for **EU Digital Product Passport** compliance.
 
-![Next.js](https://img.shields.io/badge/Next.js-15-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![IOTA](https://img.shields.io/badge/IOTA-Identity-teal) ![DPP](https://img.shields.io/badge/DPP-EU%20Ready-green)
+![Next.js](https://img.shields.io/badge/Next.js-15-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![IOTA](https://img.shields.io/badge/IOTA-Identity-teal) ![DPP](https://img.shields.io/badge/DPP-EU%20Ready-green) ![Vercel](https://img.shields.io/badge/Vercel-Deployed-black)
 
 ## 🌐 Live Demo
 
-**[View Live Demo →](https://iota-snowy-nine.vercel.app)**
+**[View Live Demo →](https://iota-snowy-nine.vercel.app)**  
+**[Home / Marketing Page →](https://iota-snowy-nine.vercel.app/home)**
+
+**Deployment:** Automated via Vercel from `dev` branch
 
 ---
 
 ## 🎯 What This Demonstrates
 
-A **working reference implementation** showing how **W3C Decentralized Identifiers** and **Verifiable Credentials** enable transparent, verifiable supply chains for **EU Digital Product Passport** compliance.
+A **production-ready reference implementation** showing how **W3C Decentralized Identifiers** and **Verifiable Credentials** enable transparent, verifiable supply chains for **EU Digital Product Passport** compliance.
 
 **Journey:** Ecuador farm → Belgian factory → Dutch consumer  
-**Tech:** IOTA Tangle + W3C DID standards + Next.js  
-**Purpose:** Prove DPP implementation expertise for consulting clients
+**Tech:** IOTA Tangle + W3C DID standards + Next.js 15  
+**Purpose:** Prove DPP implementation expertise for consulting clients  
+**Deployment:** Automated Vercel builds from `dev` branch
 
 ### Real-World Business Value
 
-This demo proves you can build production DPP solutions. Perfect for showing:
+This platform proves you can build production DPP solutions. Perfect for showing:
 - 🍫 Food & Beverage manufacturers (chocolate, coffee, wine)
-- 🔋 Battery producers (EU mandatory 2027)
-- 👕 Fashion brands (textile transparency)
-- 📱 Electronics companies (ESPR compliance)
+- 🔋 Battery producers (EU mandatory Feb 2027)
+- 👕 Fashion brands (textile transparency - 2027)
+- 📱 Electronics companies (ESPR compliance - 2028)
+- 🪑 Furniture manufacturers (2028)
+- 🏗️ Construction materials (2028)
 
 ---
 
@@ -44,17 +50,24 @@ npm run dev
 
 Then open: **http://localhost:3000**
 
-### 🔗 New: Blockchain Integration Mode
+### 🔗 Blockchain Integration Modes
 
-This demo now includes **real IOTA Identity SDK integration**! Toggle between:
+The platform includes **real IOTA Identity SDK integration** with mode toggling:
 
-- **🎭 Demo Mode** (default): Instant operation with mock data
-- **⛓️ Blockchain Mode**: Real DID creation with IOTA Identity SDK
+- **🎭 Demo Mode** (default): Instant operation with mock data - no wallet required
+- **⛓️ Blockchain Mode**: Real DID creation with IOTA Identity SDK on Shimmer testnet
 
-Access blockchain features:
-- **Main App with Mode Toggle:** http://localhost:3000
+**Access Points:**
+- **Main App:** http://localhost:3000 (supply chain journey with mode toggle)
+- **Home / Marketing:** http://localhost:3000/home (landing page with hero, demo section, screenshots)
 - **Integration Tests:** http://localhost:3000/integration-test
 - **Simple Tests:** http://localhost:3000/simple-test
+
+**Features:**
+- Real blockchain transactions on IOTA Shimmer testnet
+- On-chain DID publishing and credential issuance
+- Verifiable credential chain validation
+- QR code generation for consumer verification
 
 See `docs/onchain/IMPLEMENTATION-STATUS.md` for full details.
 
@@ -97,9 +110,17 @@ See `docs/onchain/IMPLEMENTATION-STATUS.md` for full details.
 | **Framework** | Next.js 15 + TypeScript |
 | **Blockchain** | IOTA Tangle (Shimmer Testnet) |
 | **Identity** | IOTA Identity SDK (W3C compliant) |
-| **Styling** | Tailwind CSS |
+| **Styling** | Tailwind CSS + Design System |
 | **Icons** | Lucide React |
 | **State** | React Hooks + LocalStorage |
+| **Deployment** | Vercel (automated from `dev` branch) |
+
+### Design System
+
+The project includes a **centralized design system** documented in:
+- `app/design-system.css` - CSS variables and utility classes
+- `docs/ux/CARD-DESIGN-SYSTEM.md` - Card patterns and dot indicators
+- Consistent typography, colors, and component styles throughout
 
 ---
 
@@ -440,4 +461,42 @@ Perfect for:
 
 **Built with ❤️ for a more transparent, sustainable supply chain future**
 
-*Last Updated: October 16, 2025*
+---
+
+## 🚀 Deployment
+
+The application is automatically deployed to Vercel from the `dev` branch:
+
+- **Main Deployment:** https://iota-snowy-nine.vercel.app
+- **Home Page:** https://iota-snowy-nine.vercel.app/home
+- **Build Status:** Check Vercel dashboard for latest builds
+
+### Building Locally
+
+```bash
+# Install dependencies
+npm install
+
+# Build for production
+npm run build
+
+# Run production build locally
+npm start
+```
+
+### Development
+
+```bash
+# Run development server
+npm run dev
+
+# Lint code
+npm run lint
+
+# Type check
+npm run type-check
+```
+
+---
+
+*Last Updated: January 2025*

@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { ModeToggle } from '@/components/ModeToggle';
 import { setDPPMode, isBlockchainMode } from '@/lib/dppMode';
 import { CTAButton } from '@/components/CTAButton';
-import './home.css';
 import { Fold } from '@/components/Fold';
 import { Footer } from '@/components/Footer';
 
