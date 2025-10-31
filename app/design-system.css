@@ -141,6 +141,37 @@
   border-radius: 12px;
 }
 
+/* Home Page Specific Styles */
+/* Horizontal How It Works Layout */
+.home-how-it-works {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .home-how-it-works {
+    gap: 24px;
+    flex-wrap: nowrap;
+  }
+}
+
+/* Home Step Card - matches card-default but with specific styling */
+.home-step-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.5rem;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Hero Chip Styling */
+.home-hero-chip {
+  /* Chip effect for hero carousel - already has inline styles */
+}
+
 /* Typography Utilities - Centralized font system */
 .typ-title {
   font-family: var(--font-family);
