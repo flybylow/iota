@@ -248,27 +248,7 @@ function KeywordGrid({ keywords }: KeywordGridProps) {
   );
 }
 
-export default function HomePage() {
-  const router = useRouter();
-  // Use state to avoid hydration mismatch - start with false, update after mount
-  const [isBlockchain, setIsBlockchain] = useState(false);
-
-  useEffect(() => {
-    // Only check localStorage after component mounts (client-side)
-    setIsBlockchain(isBlockchainMode());
-  }, []);
-
-  const handleDemoMode = () => {
-    setDPPMode('demo');
-    router.push('/');
-  };
-
-  const handleBlockchainMode = () => {
-    setDPPMode('blockchain');
-    router.push('/');
-  };
-
-  function StepsCarousel() {
+function StepsCarousel() {
     const steps = ['/1.png','/2.png','/3.png','/4.png','/5.png','/6.png','/7.png','/8.png'];
     const [index, setIndex] = React.useState(0);
     const [imageError, setImageError] = React.useState(false);
@@ -332,7 +312,27 @@ export default function HomePage() {
         </div>
       </section>
     );
-  }
+}
+
+export default function HomePage() {
+  const router = useRouter();
+  // Use state to avoid hydration mismatch - start with false, update after mount
+  const [isBlockchain, setIsBlockchain] = useState(false);
+
+  useEffect(() => {
+    // Only check localStorage after component mounts (client-side)
+    setIsBlockchain(isBlockchainMode());
+  }, []);
+
+  const handleDemoMode = () => {
+    setDPPMode('demo');
+    router.push('/');
+  };
+
+  const handleBlockchainMode = () => {
+    setDPPMode('blockchain');
+    router.push('/');
+  };
 
   return (
     <div className="min-h-screen bg-dpp-bg-primary w-full">
