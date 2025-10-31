@@ -284,7 +284,7 @@ function StepsCarousel() {
 
     return (
       <section className="relative w-full mt-6 mb-8">
-        <div className="relative home-step-card w-[95%] md:w-[60%] mx-auto h-[460px] md:h-[640px] overflow-hidden bg-black/20">
+        <div className="relative home-step-card w-[95%] md:w-[60%] mx-auto h-[460px] md:h-[640px] overflow-hidden bg-black/20 p-0">
           {currentImageError ? (
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
               <div className="text-6xl mb-4">📸</div>
