@@ -1,9 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/no-unescaped-entities */
 'use client';
 
 import { useState } from 'react';
 import { testWasmInit, testCreateDID } from '@/lib/wasm-test';
+import Link from 'next/link';
+
+interface TestResult {
+  success: boolean;
+  message: string;
+  exports?: string[];
+  error?: unknown;
+}
 
 /**
  * WASM Test Page
@@ -11,8 +18,8 @@ import { testWasmInit, testCreateDID } from '@/lib/wasm-test';
  */
 
 export default function TestWasmPage() {
-  const [initResult, setInitResult] = useState<any>(null);
-  const [didResult, setDidResult] = useState<any>(null);
+  const [initResult, setInitResult] = useState<TestResult | null>(null);
+  const [didResult, setDidResult] = useState<TestResult | null>(null);
   const [loading, setLoading] = useState<string | null>(null);
 
   const runInitTest = async () => {
