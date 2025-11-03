@@ -9,11 +9,13 @@ import { CTAButton } from './CTAButton';
 import { isBlockchainMode } from '@/lib/dppMode';
 import { createDID, issueCredential, verifyCredential } from '@/lib/iotaIdentityReal';
 import { buildUNTPDPPCredential } from '@/lib/schemas/untp/dpp-builder';
-import { getBlockExplorerURL } from '@/lib/iotaExplorer';
+import { getBlockExplorerURL, getDIDExplorerURL, getDIDViewerURL } from '@/lib/iotaExplorer';
 import { useWalletStatus } from '@/lib/hooks/useWalletStatus';
-import { useSignAndExecuteTransaction } from '@iota/dapp-kit';
-import { Transaction } from '@iota/iota-sdk/transactions';
+import { useSignAndExecuteTransaction, useIotaClient } from '@iota/dapp-kit';
+// Note: No longer using Transaction from @iota/iota-sdk
+// Using object-based Identity model instead (no Alias Outputs)
 import type { DPPCredential, ProductionCertificationData } from '@/types/dpp';
+import { initWasm } from '@/lib/iotaIdentityReal';
 
 /**
  * Production Component
@@ -53,6 +55,7 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
   // Wallet status for blockchain publishing
   const { isConnected, address } = useWalletStatus();
   const { mutate: signAndExecute } = useSignAndExecuteTransaction();
+  const client = useIotaClient();
 
   // Calculate production units from harvest data
   const calculateProductionUnits = () => {
@@ -210,54 +213,13 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
           // Store block ID from blockchain submission
           let blockchainBlockId: string | null = null;
           
-          // Publish to blockchain if wallet is connected
-          if (isConnected && address && signAndExecute) {
-            try {
-              console.log('📤 Publishing factory credential to blockchain...');
-              console.log('✅ Wallet connected:', address);
-              console.log('✅ Sign and execute available');
-              
-              // Create DID for manufacturer
-              const didResult = await createDID();
-              const factoryDID = didResult.did;
-              console.log('📝 Factory DID:', factoryDID);
-              
-              // Create a proper Transaction object
-              const tx = new Transaction();
-              
-              // Add the UNTP credential data to the transaction
-              console.log('💡 Adding UNTP credential data to transaction...');
-              const credentialData = JSON.stringify(untpCredential);
-              const credentialBytes = Array.from(new TextEncoder().encode(credentialData));
-              console.log('📦 Credential data size:', credentialBytes.length, 'bytes');
-              
-              console.log('📤 Submitting via signAndExecute...');
-              
-              // Submit transaction
-              await new Promise<void>((resolve, reject) => {
-                signAndExecute(
-                  { transaction: tx },
-                  {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    onSuccess: (result: any) => {
-                      console.log('✅ Transaction submitted to blockchain!');
-                      console.log('📋 Result:', result);
-                      blockchainBlockId = result.blockId || result.id || result.digest || null;
-                      console.log('🔗 Block ID:', blockchainBlockId);
-                      resolve();
-                    },
-                    onError: (error: Error) => {
-                      console.error('❌ Transaction failed:', error);
-                      reject(error);
-                    }
-                  }
-                );
-              });
-            } catch (error) {
-              console.error('❌ Blockchain publishing failed:', error);
-              // Continue without blocking
-            }
-          }
+          // Note: Certificate creation doesn't require blockchain publishing
+          // DIDs and credentials are created locally and stored
+          // Publishing DIDs to blockchain is optional and requires wallet signing
+          // Credentials work locally without blockchain publishing
+          console.log('✅ Certificate created successfully (local)');
+          console.log('💡 Credential is ready to use - no blockchain publishing needed');
+          console.log('📋 DID publishing to blockchain is optional and requires wallet signing');
           
           dppCredential = {
             jwt: credentialJWT,
@@ -737,27 +699,111 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
             </div>
           )}
 
-          {/* Explorer Link */}
-          {productionCredential.transactionId && (
-            <div className="bg-[#1a1a1a] border-2 border-white rounded-lg p-5">
+          {/* Publish DID to Blockchain Button */}
+          {productionCredential.issuerDID && isConnected && address && (
+            <div className="mb-4">
+              <button
+                onClick={async () => {
+                  if (!signAndExecute) {
+                    alert('Wallet signing not available');
+                    return;
+                  }
+                  
+                  try {
+                    setLoading(true);
+                    console.log('📤 Publishing Factory DID to blockchain...');
+                    
+                    const { publishIdentityToChain } = await import('@/lib/publishIdentityToChain');
+                    const result = await publishIdentityToChain(
+                      productionCredential.issuerDID,
+                      address,
+                      signAndExecute
+                    );
+                    
+                    if (result.success && result.blockId) {
+                      console.log('✅ Factory DID published to blockchain!');
+                      console.log('🔗 Block ID:', result.blockId);
+                      alert(`DID published successfully!\nBlock ID: ${result.blockId}\n${result.explorerUrl ? `View: ${result.explorerUrl}` : ''}`);
+                      
+                      // Update credential with transaction ID
+                      setProductionCredential({
+                        ...productionCredential,
+                        transactionId: result.blockId,
+                        onChain: true
+                      });
+                    } else {
+                      console.error('❌ Publishing failed:', result.error);
+                      alert(`Failed to publish DID: ${result.error || 'Unknown error'}`);
+                    }
+                  } catch (error) {
+                    console.error('❌ Publishing error:', error);
+                    alert(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                disabled={loading}
+                className="block w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:opacity-50 text-white font-bold py-3.5 px-6 rounded-lg transition-all duration-200 text-center mb-2"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 inline-block mr-2 mb-0.5 animate-spin" />
+                    Publishing DID...
+                  </>
+                ) : (
+                  <>
+                    📡 Publish DID to Blockchain
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+
+          {/* DID and Transaction Links */}
+          {productionCredential.issuerDID && (
+            <div className="bg-[#1a1a1a] border-2 border-white rounded-lg p-5 space-y-3">
+              {/* DID Link */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Factory className="w-4 h-4 text-blue-400" />
                   <div>
-                    <p className="text-xs font-medium text-white">Blockchain Verification</p>
-                    <p className="text-xs text-zinc-500">Transaction: {productionCredential.transactionId.substring(0, 20)}...</p>
+                    <p className="text-xs font-medium text-white">Your Factory DID</p>
+                    <p className="text-xs text-zinc-500 font-mono break-all">
+                      {productionCredential.issuerDID.substring(0, 30)}...
+                    </p>
                   </div>
                 </div>
                 <a
-                  href={getBlockExplorerURL(productionCredential.transactionId, 'testnet')}
+                  href={getDIDViewerURL(productionCredential.issuerDID, 'testnet')}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                  className="flex items-center gap-2 text-xs text-blue-400 hover:text-blue-300 transition-colors whitespace-nowrap"
                 >
                   <ExternalLink className="w-3 h-3" />
-                  <span>View Transaction</span>
+                  <span>View DID</span>
                 </a>
               </div>
+              
+              {/* Transaction Link (if available) */}
+              {productionCredential.transactionId && (
+                <div className="flex items-center justify-between pt-3 border-t border-[#3a3a3a]">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-zinc-400">Transaction:</span>
+                    <span className="text-xs text-zinc-500 font-mono">
+                      {productionCredential.transactionId.substring(0, 20)}...
+                    </span>
+                  </div>
+                  <a
+                    href={getBlockExplorerURL(productionCredential.transactionId, 'testnet')}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                  >
+                    <ExternalLink className="w-3 h-3" />
+                    <span>View Transaction</span>
+                  </a>
+                </div>
+              )}
             </div>
           )}
 

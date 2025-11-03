@@ -1,65 +1,57 @@
 /**
- * IOTA SDK Transaction Builder
+ * IOTA Identity Object Builder (DEPRECATED)
  * 
- * Builds proper transaction objects that can be submitted via dApp Kit
+ * ⚠️ This file is deprecated - no longer using Alias Outputs or transaction building!
+ * 
+ * IOTA now uses an object-based model:
+ * - No more Alias Outputs
+ * - Use IdentityClient.create_identity() to create Identity objects
+ * - Everything is object-based now
+ * 
+ * See: https://docs.iota.org/developer/iota-identity/how-tos/decentralized-identifiers/create
+ * 
+ * This file is kept for reference but should not be used.
+ * Use IdentityClient from lib/iotaClient.ts instead.
  */
 
-
 /**
- * Build an alias output for DID publishing using dApp Kit
- * 
- * Note: We don't create a separate Client here because dApp Kit
- * provides its own client via useIotaClient() hook in components.
- */
-
-/**
- * Build an alias output for DID publishing
- * 
- * This creates a transaction payload that dApp Kit can handle.
- * 
- * NOTE: dApp Kit's signAndExecute expects a specific format.
- * For now, we're returning a simple object that the wallet
- * can potentially work with.
+ * @deprecated No longer using Alias Outputs - use IdentityClient.create_identity() instead
  */
 export async function buildAliasOutputForDID(
   packedDocument: Uint8Array,
   didString: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> {
-  console.log('📦 Building transaction for DID publishing...');
-  console.log('📝 DID:', didString);
-  console.log('📦 Document size:', packedDocument.length, 'bytes');
-
-  // Convert Uint8Array to hex string for transaction metadata
-  const hexDocument = Array.from(packedDocument)
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
+  console.warn('⚠️ buildAliasOutputForDID is deprecated');
+  console.warn('💡 Use IdentityClient.create_identity() instead (object-based model)');
+  console.warn('📋 See: https://docs.iota.org/developer/iota-identity/how-tos/decentralized-identifiers/create');
   
-  console.log('💡 Transaction format for dApp Kit...');
-  console.log('📋 This will be passed to signAndExecute()');
-
-  // Return payload - wallet will handle the rest
   return {
-    accountIndex: 0,
-    outputs: {
-      type: 'alias',
-      stateMetadata: hexDocument, // Hex string
-    }
+    deprecated: true,
+    message: 'Use IdentityClient.create_identity() instead - object-based model, no Alias Outputs'
   };
 }
 
 /**
- * Check if a DID is already published on-chain
+ * @deprecated No longer using Alias IDs - use Identity object resolution instead
  */
 export async function isDIDPublished(did: string): Promise<boolean> {
-  // Try to resolve the DID from blockchain
-  const aliasId = did.split(':').pop() || '';
+  console.warn('⚠️ isDIDPublished is deprecated');
+  console.warn('💡 Use IdentityClient.resolve() instead (object-based model)');
   
-  console.log('🔍 Checking if DID is published:', did);
-  console.log('🔑 Alias ID:', aliasId);
-  
-  // For now, return false (not checking actual on-chain)
-  // In production, would need to use dApp Kit's client to resolve
-  return false;
+  // Try to resolve the DID from blockchain using IdentityClient
+  try {
+    const { initIdentityClient } = await import('./iotaClient');
+    const identityClient = await initIdentityClient();
+    
+    if (!identityClient) {
+      return false;
+    }
+    
+    // Note: Use IdentityClient.resolve() when available
+    return false;
+  } catch (error) {
+    console.error('❌ Error checking DID:', error);
+    return false;
+  }
 }
-

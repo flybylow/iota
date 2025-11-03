@@ -197,15 +197,15 @@ function HeroCarousel() {
       </div>
       
       {/* Dots Indicator */}
-      <div className="flex justify-center gap-3">
+      <div className="flex justify-center items-center gap-2.5">
         {heroCards.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentIndex(idx)}
             className={`transition-all rounded-full ${
               currentIndex === idx
-                ? 'w-14 h-3 bg-blue-500 md:w-16 md:h-3'
-                : 'w-3 h-3 bg-gray-300 hover:bg-blue-500/60 md:w-3 md:h-3'
+                ? 'w-16 h-[15px] bg-blue-500 md:w-20 md:h-[15px] shadow-[0_10px_15px_-3px_rgba(59,130,246,0.5),0_4px_6px_-2px_rgba(59,130,246,0.3),0_0_0_2px_rgba(96,165,250,1),inset_0_0_0_1px_rgba(255,255,255,1)]'
+                : 'w-3 h-[15px] bg-gray-400/60 hover:bg-gray-400 opacity-50 hover:opacity-75'
             }`}
             aria-label={`Go to card ${idx + 1}`}
           />
@@ -327,7 +327,7 @@ function StepsCarousel() {
           </button>
         </div>
 
-        <div className="flex justify-center gap-3 mt-3">
+        <div className="flex justify-center items-center gap-2.5 mt-3">
           {steps.map((_, i) => (
             <button
               key={i}
@@ -335,8 +335,8 @@ function StepsCarousel() {
               onClick={() => setIndex(i)}
               className={`transition-all rounded-full ${
                 i === index
-                  ? 'w-12 h-3 bg-blue-500'
-                  : 'w-3 h-3 bg-gray-300 hover:bg-blue-400'
+                  ? 'w-16 h-[15px] bg-blue-500 shadow-[0_10px_15px_-3px_rgba(59,130,246,0.5),0_4px_6px_-2px_rgba(59,130,246,0.3),0_0_0_2px_rgba(96,165,250,1),inset_0_0_0_1px_rgba(255,255,255,1)]'
+                  : 'w-3 h-[15px] bg-gray-400/60 hover:bg-gray-400 opacity-50 hover:opacity-75'
               }`}
             />
           ))}
@@ -475,7 +475,7 @@ export default function HomePage() {
 
             {/* Mode Selection - Visual Card */}
             <div className="mb-6 md:mb-8">
-              <div className="home-step-card">
+              <div className="home-step-card pt-6 md:pt-8">
                 <h2 className="text-2xl md:text-3xl font-bold text-dpp-text-primary text-center mt-0 mb-0">DEMO</h2>
                 <div className="grid grid-cols-2 gap-6 md:gap-10 items-start">
                   <div className="flex justify-center">

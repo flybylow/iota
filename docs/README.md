@@ -1,43 +1,64 @@
 # Project Documentation
 
-## Quick Start
+## 🚀 Quick Start
 - **New developer?** → [`DEVELOPER-ONBOARDING.md`](DEVELOPER-ONBOARDING.md) ⭐ **START HERE**
-- **New to project?** → [`getting-started/START-HERE.md`](getting-started/START-HERE.md)
 - **Current status?** → [`STATUS.md`](STATUS.md)
 - **Recent changes?** → [`CHANGELOG.md`](CHANGELOG.md)
 
-## Main Documentation
+---
 
-### Status & Overview
-- [`STATUS.md`](STATUS.md) - Current project status
-- [`CHANGELOG.md`](CHANGELOG.md) - Recent changes
-- [`PROJECT-OVERVIEW.md`](PROJECT-OVERVIEW.md) - Project overview
+## 📚 Main Documentation
 
-### Implementation
-- [`onchain/BLOCKCHAIN-COMPLETE.md`](onchain/BLOCKCHAIN-COMPLETE.md) - Blockchain implementation
-- [`onchain/TRANSACTION-ERROR-FIX.md`](onchain/TRANSACTION-ERROR-FIX.md) - Error fixes
+### Essential Reading
+- [`DEVELOPER-ONBOARDING.md`](DEVELOPER-ONBOARDING.md) - Complete developer guide
+- [`DEVELOPER-CONNECT-IOTA-VERIFY-DIDS.md`](DEVELOPER-CONNECT-IOTA-VERIFY-DIDS.md) - DID verification & SDK status
+- [`STATUS.md`](STATUS.md) - Current project status and limitations
+
+### IOTA 2.0 Publishing
+- [`onchain/IOTA-2.0-DID-PUBLISHING-GUIDE.md`](onchain/IOTA-2.0-DID-PUBLISHING-GUIDE.md) - ⭐ **Complete guide for IOTA 2.0 (Rust)**
+- [`onchain/EXPLORER-LINK-FORMATS.md`](onchain/EXPLORER-LINK-FORMATS.md) - Explorer API formats
 - [`onchain/DID-vs-BLOCKCHAIN-ADDRESS.md`](onchain/DID-vs-BLOCKCHAIN-ADDRESS.md) - DID explanation
 
-### Guides
-- [`onchain/EXPLORER-LINK-FORMATS.md`](onchain/EXPLORER-LINK-FORMATS.md) - Explorer API
-- [`getting-started/QUICK-START.md`](getting-started/QUICK-START.md) - Quick start
-- [`deployment/DEPLOYMENT-GUIDE.md`](deployment/DEPLOYMENT-GUIDE.md) - Deployment
+### Getting Started
+- [`getting-started/START-HERE.md`](getting-started/START-HERE.md) - Project overview
+- [`getting-started/QUICK-START.md`](getting-started/QUICK-START.md) - Quick start guide
+- [`getting-started/TROUBLESHOOTING.md`](getting-started/TROUBLESHOOTING.md) - Common issues
 
-### Folders
+---
 
-- **`archive/`** - Historical documentation
-- **`changelog/`** - Complete changelog history
+## 📁 Documentation Structure
+
+### Core Documentation
+- **Root files** - Main guides and status
+- **`getting-started/`** - Onboarding and setup guides
+- **`onchain/`** - Blockchain implementation (see guide files above)
 - **`deployment/`** - Deployment guides
-- **`onchain/`** - Blockchain implementation details (34 files)
-- **`getting-started/`** - Getting started guides
-- **`knowledge/`** - Knowledge base (problems solved, cross-project patterns)
-- **`history/`** - Project milestones and completion summaries
+
+### Reference Documentation
 - **`untp/`** - UNTP compliance documentation
-- **`ux/`** - UX documentation and fixes
-- **`meta/`** - Meta documentation (documentation rules, audits)
+- **`ux/`** - UX documentation and design system
+- **`knowledge/`** - Knowledge base (problems solved, patterns)
+- **`archive/`** - Historical documentation (deprecated)
 
-## Quick Links
+---
 
-- **IOTA Explorer**: https://explorer.iota.org/testnet
-- **Faucet**: https://faucet.testnet.iotaledger.net
-- **IOTA Docs**: https://wiki.iota.org/
+## ⚠️ Important Note: SDK Limitation
+
+**Current Status**: Transactions are submitted successfully, but DID documents are not attached due to SDK incompatibility.
+
+**Details**: See [`DEVELOPER-CONNECT-IOTA-VERIFY-DIDS.md`](DEVELOPER-CONNECT-IOTA-VERIFY-DIDS.md) and [`STATUS.md`](STATUS.md)
+
+**Solution**: See [`onchain/IOTA-2.0-DID-PUBLISHING-GUIDE.md`](onchain/IOTA-2.0-DID-PUBLISHING-GUIDE.md) for Rust approach
+
+---
+
+## 🔗 Quick Links
+
+- **IOTA Explorer**: https://explorer.iota.org/?network=testnet
+- **Testnet Faucet**: https://faucet.testnet.iotaledger.net
+- **IOTA Docs**: https://docs.iota.org/
+- **dApp Kit**: https://docs.iota.org/developer/ts-sdk/dapp-kit/
+
+---
+
+**Need help?** Start with [`DEVELOPER-ONBOARDING.md`](DEVELOPER-ONBOARDING.md) or check [`STATUS.md`](STATUS.md) for current limitations.

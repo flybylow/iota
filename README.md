@@ -55,7 +55,7 @@ Then open: **http://localhost:3000**
 The platform includes **real IOTA Identity SDK integration** with mode toggling:
 
 - **🎭 Demo Mode** (default): Instant operation with mock data - no wallet required
-- **⛓️ Blockchain Mode**: Real DID creation with IOTA Identity SDK on Shimmer testnet
+- **⛓️ Blockchain Mode**: Real DID creation with IOTA Identity SDK on IOTA testnet
 
 **Access Points:**
 - **Main App:** http://localhost:3000 (supply chain journey with mode toggle)
@@ -64,7 +64,7 @@ The platform includes **real IOTA Identity SDK integration** with mode toggling:
 - **Simple Tests:** http://localhost:3000/simple-test
 
 **Features:**
-- Real blockchain transactions on IOTA Shimmer testnet
+- Real blockchain transactions on IOTA testnet
 - On-chain DID publishing and credential issuance
 - Verifiable credential chain validation
 - QR code generation for consumer verification
@@ -108,7 +108,7 @@ See `docs/onchain/IMPLEMENTATION-STATUS.md` for full details.
 | Layer | Technology |
 |-------|-----------|
 | **Framework** | Next.js 15 + TypeScript |
-| **Blockchain** | IOTA Tangle (Shimmer Testnet) |
+| **Blockchain** | IOTA Tangle (IOTA Testnet) |
 | **Identity** | IOTA Identity SDK (W3C compliant) |
 | **Styling** | Tailwind CSS + Design System |
 | **Icons** | Lucide React |
@@ -168,13 +168,13 @@ The `StepsCarousel` component on the home page requires specific image positioni
 ### Stakeholder Details
 
 **Maria's Organic Cocoa Farm** (Ecuador)
-- **DID:** `did:iota:smr:0xfarmer...`
+- **DID:** `did:iota:0xfarmer...`
 - **Role:** Origin certification
 - **Certifications:** EU Organic, Fair Trade
 - **Issues:** Harvest certificate (date, weight, variety, fermentation)
 
 **Chocolate Dreams Factory** (Belgium)
-- **DID:** `did:iota:smr:0xfactory...`
+- **DID:** `did:iota:0xfactory...`
 - **Role:** Production certification  
 - **Certifications:** ISO 22000, BRC Food Safety
 - **Issues:** Production certificate (batch #, recipe, quality checks)
@@ -209,8 +209,8 @@ The key innovation is **credential chaining** - each step references previous st
 ```typescript
 // Farmer issues origin certificate
 const originCert = {
-  issuer: "did:iota:smr:0xfarmer...",
-  subject: "did:iota:smr:0xproduct-ch-2025-001",
+  issuer: "did:iota:0xfarmer...",
+  subject: "did:iota:0xproduct-ch-2025-001",
   type: "OrganicOriginCertification",
   data: {
     farm: "Maria's Organic Cocoa",
@@ -227,8 +227,8 @@ if (!verify.isValid) {
 
 // Factory issues production cert that LINKS to farmer's cert
 const productionCert = {
-  issuer: "did:iota:smr:0xfactory...",
-  subject: "did:iota:smr:0xproduct-ch-2025-001",
+  issuer: "did:iota:0xfactory...",
+  subject: "did:iota:0xproduct-ch-2025-001",
   type: "ProductionCertification",
   data: { /* production details */ },
   previousCredentials: [originCert] // 🔗 THE CHAIN
@@ -275,7 +275,7 @@ const productionCert = {
 ### IOTA Resources
 - **[IOTA Identity Docs](https://docs.iota.org/developer/iota-identity/)** - Full SDK documentation
 - **[IOTA Tangle](https://www.iota.org/)** - Feeless distributed ledger
-- **[Shimmer Network](https://shimmer.network/)** - IOTA staging network (we use testnet)
+- **[IOTA Testnet](https://testnet.iota.cafe/)** - IOTA 2.0 test network (what we use)
 
 ### DPP Use Cases
 - **[Battery Passport](https://www.batterypass.eu/)** - Battery traceability initiative

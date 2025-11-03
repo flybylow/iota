@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { industryData, type IndustryId } from '@/data/industry-data';
 import { Loader2, CheckCircle2, Copy, ExternalLink, Info, ChevronDown, ChevronUp } from 'lucide-react';
-import { getRealExplorerURL, getBlockExplorerURL } from '@/lib/iotaExplorer';
+import { getRealExplorerURL, getBlockExplorerURL, getDIDViewerURL, getDIDExplorerURL } from '@/lib/iotaExplorer';
 import { isBlockchainMode } from '@/lib/dppMode';
 import { createDID, issueCredential } from '@/lib/iotaIdentityReal';
 import { buildUNTPDPPCredential } from '@/lib/schemas/untp/dpp-builder';
@@ -13,13 +13,12 @@ import { Tooltip } from './Tooltip';
 import { CTAButton } from './CTAButton';
 import { useWalletStatus } from '@/lib/hooks/useWalletStatus';
 import { useSignAndExecuteTransaction, useIotaClient } from '@iota/dapp-kit';
-import { Transaction } from '@iota/iota-sdk/transactions';
+// Note: No longer using Transaction from @iota/iota-sdk
+// Using object-based Identity model instead (no Alias Outputs)
 import type { DPPCredential, OriginCertificationData } from '@/types/dpp';
-import { publishDIDToBlockchain, prepareDIDForPublishing } from '@/lib/publishDID';
+// Removed: publishDIDToBlockchain - now using publishIdentityToChain for object-based publishing
 
-// Import AliasOutputBuilder for transaction building
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let IotaSDK: any = null;
+// Note: Using object-based Identity model (no Alias Outputs, no Transaction building)
 
 /**
  * Origin Certification Component
@@ -136,141 +135,13 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             }
           );
           
-          // Step 4: Publish credential to blockchain if wallet is connected
-          if (isConnected && address) {
-            console.log('✅ Wallet connected - ready for blockchain publishing');
-            
-            // Publish to blockchain automatically if wallet is connected
-            if (isConnected && address && signAndExecute) {
-              console.log('📝 Publishing to blockchain via dApp Kit...');
-              
-              // Prepare DID for blockchain publishing
-              try {
-                const publishResult = await publishDIDToBlockchain(
-                  issuerDID,
-                  { id: issuerDID, '@context': 'https://www.w3.org/ns/did/v1', ...document },
-                  new Uint8Array(32), // Placeholder for private key (wallet handles signing)
-                  address
-                );
-                
-                if (publishResult.success) {
-                  console.log('✅ DID prepared for blockchain publishing');
-                  console.log('📋 Transaction ID:', publishResult.transactionId);
-                  
-                  // Full blockchain publishing implementation
-                  try {
-                    // Step 1: Prepare DID document for publishing
-                    console.log('📦 Step 1: Preparing DID document...');
-                    const preparedDID = await prepareDIDForPublishing(issuerDID, address);
-                    console.log('✅ Document prepared:', preparedDID.did);
-                    
-                    // Step 2: Use IOTA Client from dApp Kit
-                    console.log('📦 Step 2: Getting IOTA Client from dApp Kit...');
-                    console.log('✅ Client available:', !!client);
-                    
-                    // Step 3: Prepare transaction with doc.publish(client)
-                    console.log('📦 Step 3: Creating Alias Output transaction...');
-                    console.log('💡 Call doc.publish(client) to create Alias Output');
-                    console.log('💡 This will prepare the transaction for signing');
-                    
-                    // Step 4: Build Alias Output transaction using IOTA SDK
-                    console.log('📦 Step 4: Building Alias Output transaction...');
-                    
-                    // Import IOTA SDK for transaction building
-                    if (!IotaSDK) {
-                        IotaSDK = await import('@iota/iota-sdk/client');
-                        console.log('✅ IOTA SDK loaded');
-                    }
-                    
-                    // Build Alias Output with DID document
-                    // Note: Full AliasOutputBuilder implementation requires proper SDK setup
-                    console.log('💡 Alias Output building via dApp Kit');
-                    console.log('📋 Transaction data prepared');
-                    
-                    // Prepare transaction for signing
-                    // Note: signAndExecute() will handle the transaction building
-                    const transactionData = {
-                        type: 'alias',
-                        stateMetadata: preparedDID.packedDoc || new Uint8Array(),
-                        aliasId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-                    };
-                    
-                    console.log('✅ Transaction data prepared');
-                    console.log('💡 Ready for signAndExecute()');
-                    
-                    // Step 5: Note about blockchain publishing
-                    console.log('📦 Step 5: Blockchain publishing integration complete');
-                    console.log('💡 Infrastructure ready for blockchain submission:');
-                    console.log('   ✅ IOTA Identity SDK integrated');
-                    console.log('   ✅ Wallet connected');
-                    console.log('   ✅ IOTA Client available');
-                    console.log('   ✅ Document packed for blockchain');
-                    console.log('   ✅ Transaction data prepared');
-                    
-                    // Step 6: Submit transaction to blockchain
-                    console.log('📦 Step 6: Submitting transaction to blockchain...');
-                    console.log('💡 Note: Transaction is submitted but DID data attachment requires');
-                    console.log('   proper Alias Output building using IOTA SDK Client.');
-                    console.log('   Current: Submitting basic transaction (empty for now)');
-                    console.log('   Future: Need to build Alias Output with DID metadata');
-                    
-                    // DID metadata is ready
-                    const didMetadata = publishResult.packedDocument || preparedDID.packedDoc;
-                    const metadataBytes = Array.from(didMetadata);
-                    console.log('📦 DID metadata size:', metadataBytes.length, 'bytes');
-                    console.log('💡 DID data ready but needs proper Alias Output integration');
-                    
-                    // Create a Transaction object for submission
-                    // Note: To actually publish DIDs, we'd need to build Alias Outputs
-                    // with proper state metadata. The current approach submits a basic transaction.
-                    const tx = new Transaction();
-                    
-                    console.log('📤 Submitting via signAndExecute...');
-                    
-                    // Submit using the proper Transaction object
-                    await new Promise<void>((resolve, reject) => {
-                      signAndExecute(
-                        { transaction: tx },
-                        {
-                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                          onSuccess: (result: any) => {
-                            console.log('✅ Transaction submitted to blockchain!');
-                            console.log('📋 Result:', result);
-                            blockchainBlockId = result.blockId || result.id || result.digest || null;
-                            console.log('🔗 Block ID:', blockchainBlockId);
-                            resolve();
-                          },
-                          onError: (error: Error) => {
-                            console.error('❌ Transaction failed:', error);
-                            console.log('💡 Error details:', error.message);
-                            reject(error);
-                          }
-                        }
-                      );
-                    });
-                    
-                    console.log('✅ Transaction submitted successfully!');
-                    
-                    // Generate explorer URL with the actual block ID
-                    const { getBlockExplorerURL } = await import('@/lib/iotaExplorer');
-                    const explorerUrl = blockchainBlockId
-                      ? getBlockExplorerURL(blockchainBlockId)
-                      : 'https://explorer.iota.org/testnet';
-                    
-                    console.log('💾 Transaction submission complete');
-                    console.log('🔗 Block ID:', blockchainBlockId || 'none');
-                    console.log('🔗 Explorer URL:', explorerUrl);
-                  } catch (publishError) {
-                    console.error('❌ Publishing error:', publishError);
-                  }
-                } else {
-                  console.error('❌ Publishing failed:', publishResult.error);
-                }
-              } catch (publishError) {
-                console.error('❌ Publishing error:', publishError);
-              }
-            }
-          }
+          // Note: Certificate creation doesn't require blockchain publishing
+          // DIDs and credentials are created locally and stored
+          // Publishing DIDs to blockchain is optional and requires wallet signing
+          // Credentials work locally without blockchain publishing
+          console.log('✅ Certificate created successfully (local)');
+          console.log('💡 Credential is ready to use - no blockchain publishing needed');
+          console.log('📋 DID publishing to blockchain is optional and requires wallet signing');
           
           dppCredential = {
             jwt: credentialJWT,
@@ -612,18 +483,105 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             </div>
           </div>
 
-          {/* Blockchain Explorer Link - Big CTA */}
-          {credential.transactionId && (
-            <div className="mb-4">
+          {/* Publish DID to Blockchain Button */}
+          {credential.issuerDID && isConnected && address && (
+            <div className="mb-4 space-y-2">
+              <button
+                onClick={async () => {
+                  if (!signAndExecute) {
+                    alert('Wallet signing not available');
+                    return;
+                  }
+                  
+                  try {
+                    setLoading(true);
+                    console.log('📤 Publishing DID to blockchain...');
+                    
+                    const { publishIdentityToChain } = await import('@/lib/publishIdentityToChain');
+                    const result = await publishIdentityToChain(
+                      credential.issuerDID,
+                      address,
+                      signAndExecute
+                    );
+                    
+                    if (result.success && result.blockId) {
+                      console.log('✅ DID published to blockchain!');
+                      console.log('🔗 Block ID:', result.blockId);
+                      alert(`DID published successfully!\nBlock ID: ${result.blockId}\n${result.explorerUrl ? `View: ${result.explorerUrl}` : ''}`);
+                      
+                      // Update credential with transaction ID
+                      setCredential({
+                        ...credential,
+                        transactionId: result.blockId,
+                        onChain: true
+                      });
+                    } else {
+                      console.error('❌ Publishing failed:', result.error);
+                      alert(`Failed to publish DID: ${result.error || 'Unknown error'}`);
+                    }
+                  } catch (error) {
+                    console.error('❌ Publishing error:', error);
+                    alert(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                disabled={loading}
+                className="block w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:opacity-50 text-white font-bold py-3.5 px-6 rounded-lg transition-all duration-200 text-center"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 inline-block mr-2 mb-0.5 animate-spin" />
+                    Publishing DID...
+                  </>
+                ) : (
+                  <>
+                    📡 Publish DID to Blockchain
+                  </>
+                )}
+              </button>
+              
+              {/* DID Link */}
               <a
-                href={getBlockExplorerURL(credential.transactionId, 'testnet')}
+                href={getDIDViewerURL(credential.issuerDID, 'testnet')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-full bg-[#0f0f0f] border-2 border-white text-white font-bold py-3.5 px-6 rounded-lg transition-all duration-200 text-center hover:bg-[#1a1a1a]"
               >
                 <ExternalLink className="w-4 h-4 inline-block mr-2 mb-0.5" />
-                View Transaction on Blockchain
+                View Your DID on Blockchain
               </a>
+              
+              {/* Transaction Link (if available) */}
+              {credential.transactionId && (
+                <a
+                  href={getBlockExplorerURL(credential.transactionId, 'testnet')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full bg-[#1a1a1a] border border-[#3a3a3a] text-white font-medium py-2.5 px-6 rounded-lg transition-all duration-200 text-center hover:bg-[#2a2a2a] text-sm"
+                >
+                  <ExternalLink className="w-3 h-3 inline-block mr-2 mb-0.5" />
+                  View Transaction
+                </a>
+              )}
+            </div>
+          )}
+          
+          {/* DID Link (when not connected) */}
+          {credential.issuerDID && (!isConnected || !address) && (
+            <div className="mb-4">
+              <a
+                href={getDIDViewerURL(credential.issuerDID, 'testnet')}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full bg-[#0f0f0f] border-2 border-white text-white font-bold py-3.5 px-6 rounded-lg transition-all duration-200 text-center hover:bg-[#1a1a1a]"
+              >
+                <ExternalLink className="w-4 h-4 inline-block mr-2 mb-0.5" />
+                View Your DID (Local)
+              </a>
+              <p className="text-xs text-zinc-500 mt-2 text-center">
+                Connect wallet to publish DID to blockchain
+              </p>
             </div>
           )}
 
@@ -749,13 +707,13 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                     </a>
                   ) : credential.issuerDID ? (
                     <a
-                      href={`https://explorer.iota.org/search/${credential.issuerDID.replace('did:iota:', '').replace('did:iota:0x:', '')}?network=testnet`}
+                      href={getDIDViewerURL(credential.issuerDID, 'testnet')}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1"
                     >
                       <ExternalLink className="w-3 h-3" />
-                      <span>Search DID</span>
+                      <span>View DID</span>
                     </a>
                   ) : null}
                 </div>

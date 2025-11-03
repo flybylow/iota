@@ -58,7 +58,7 @@ Choose from 4 industries:
 - Real IOTA Identity SDK integration
 - Creates real DIDs locally
 - W3C Verifiable Credentials format
-- Can publish to Shimmer testnet (requires tokens)
+- Can publish to IOTA testnet (requires tokens)
 
 ---
 

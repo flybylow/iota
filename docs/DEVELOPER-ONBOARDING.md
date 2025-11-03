@@ -261,42 +261,45 @@ localStorage.setItem('dpp-mode', 'blockchain');
 
 ### ⚠️ Important: Blockchain Publishing Status
 
-**Current Reality (CORRECTED):**
-- ❌ **NOT publishing** to blockchain yet
-- ✅ DID creation works (local mode)
+**Current Reality:**
+- ✅ **Transactions ARE being submitted** to IOTA testnet
+- ✅ **Block IDs ARE generated** successfully
+- ✅ DID creation works (local with IOTA format)
 - ✅ Wallet connection works
-- ✅ Transaction format needs proper IOTA SDK integration
-- ✅ All infrastructure ready, just missing transaction builder
+- ❌ **DID documents are NOT attached** to transactions (SDK incompatibility)
 
 **What the Code Does:**
 ```typescript
+// components/FarmerOrigin.tsx - Submits empty transactions
+const tx = new Transaction(); // Empty transaction
+signAndExecute({ transaction: tx }); // ✅ Submits successfully
+// ❌ But DID document never attached
+
 // lib/publishDID.ts - Creates real IotaDocument
 const doc = new IotaDocument('iota');
 const didString = doc.id().toString();
 const packedDoc = new TextEncoder().encode(docJson);
-// Returns DID ready for blockchain (but not published yet)
-
-// components/FarmerOrigin.tsx - Skips transaction submission
-// Why: signAndExecute requires proper IOTA SDK transaction object
-// Current: Just logs "DID ready" without submitting
+// DID ready for blockchain but can't attach to transaction
 ```
 
-**Why Not Publishing:**
-- `signAndExecute()` expects proper IOTA SDK transaction object
-- Needs `AliasOutput` from `@iota/iota-sdk`
-- Transaction object must have `.toJSON()` method
-- Current plain object causes "Cannot read properties of undefined (reading 'toJSON')" error
+**Why DID Publishing Doesn't Work:**
+- `@iota/identity-wasm` (beta) and `@iota/iota-sdk` use incompatible transaction serialization
+- Identity SDK's `buildProgrammableTransaction()` returns bytes incompatible with IOTA SDK's `Transaction.from()`
+- Both `Transaction.fromKind()` and `Transaction.from()` fail with enum errors
+- No conversion path exists between the two SDK formats
 
 **How it works now:**
 1. ✅ Creates DID with IOTA Identity SDK
 2. ✅ Packs DID document for blockchain  
-3. ⏸️ Skips transaction submission (avoids error)
-4. ✅ Returns local success
-5. ✅ Everything works perfectly for demo
+3. ✅ Submits transaction (empty) to testnet
+4. ✅ Gets real block ID back
+5. ❌ DID document not attached (stored in localStorage only)
 
-**Cost:** $0.00 (local mode, no actual blockchain transactions)
+**Cost:** Minimal (testnet transactions are essentially free)
 
-**See:** `docs/knowledge/problems-solved/ERROR-TOJSON-FIX.md` for full details on the transaction error
+**See:** 
+- `docs/DEVELOPER-CONNECT-IOTA-VERIFY-DIDS.md` - Full SDK incompatibility details
+- `docs/onchain/IOTA-2.0-DID-PUBLISHING-GUIDE.md` - ⭐ Rust solution for IOTA 2.0
 
 ---
 
