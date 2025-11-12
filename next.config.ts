@@ -10,14 +10,30 @@ const nextConfig: NextConfig = {
       layers: true,
     };
     
-    // Handle WASM files - simpler approach
-    config.module.rules.push({
-      test: /\.wasm$/,
-      type: 'asset/resource',
-      generator: {
-        filename: 'static/wasm/[name].[hash][ext]'
-      }
-    });
+    // Handle WASM files - for server, externalize to node_modules
+    if (isServer) {
+      // For server-side: don't bundle WASM, let module load from node_modules
+      config.externals = config.externals || [];
+      // Externalize the entire identity-wasm node module
+      config.resolve.alias = config.resolve.alias || {};
+      // Don't bundle WASM files for server - they'll be loaded from node_modules
+      config.module.rules.push({
+        test: /\.wasm$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'server/wasm/[name][hash][ext]'
+        }
+      });
+    } else {
+      // For client: bundle normally
+      config.module.rules.push({
+        test: /\.wasm$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'static/wasm/[name].[hash][ext]'
+        }
+      });
+    }
 
     // Add fallbacks for node modules
     config.resolve.fallback = {

@@ -9,6 +9,23 @@
 import type { DIDCreationResult, CredentialData, VerificationResult } from '@/types';
 import { IOTA_CONFIG } from './config';
 import { savePrivateKey, loadPrivateKey, hasPrivateKey } from './keyStorage';
+async function ensureDemoPrivateKey(issuerDID: string) {
+  if (hasPrivateKey(issuerDID)) {
+    return;
+  }
+
+  try {
+    console.log('🗝️  Generating demo private key for issuer DID:', issuerDID.substring(0, 40) + '...');
+    const encoder = new TextEncoder();
+    const data = encoder.encode(issuerDID);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const privateKey = new Uint8Array(hashBuffer);
+    await savePrivateKey(issuerDID, privateKey);
+    console.log('✅ Demo private key stored for issuer DID');
+  } catch (error) {
+    console.warn('⚠️  Failed to generate demo private key:', error);
+  }
+}
 import { isBlockchainMode } from './dppMode';
 // Dynamic import for resolution functions (only used in blockchain mode)
 // import { resolveDIDFromBlockchain, isDIDPublished } from './didPublishing';
@@ -17,6 +34,17 @@ import { isBlockchainMode } from './dppMode';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let Identity: any = null;
 let wasmInitialized = false;
+
+/**
+ * Access the cached identity WASM module after `initWasm` has completed.
+ */
+export function getIdentityModule() {
+  if (!Identity) {
+    throw new Error('IOTA Identity WASM not initialised. Call initWasm() first.');
+  }
+
+  return Identity;
+}
 
 /**
  * Initialize the IOTA Identity WASM module
@@ -202,6 +230,9 @@ export async function issueCredential(
     console.log('✅ Credential created');
     console.log('🔏 Signing credential...');
     
+    // Ensure we have a private key for this issuer (demo fallback)
+    await ensureDemoPrivateKey(issuerDID);
+
     // Check if we have the issuer's private key
     const hasKey = hasPrivateKey(issuerDID);
     
@@ -223,7 +254,14 @@ export async function issueCredential(
     
     try {
       // Load the issuer's private key
-      const privateKey = await loadPrivateKey(issuerDID);
+      let privateKey = await loadPrivateKey(issuerDID);
+      
+      if (!privateKey) {
+        console.warn('⚠️  Private key missing after load attempt. Regenerating demo key...');
+        const regenKey = crypto.getRandomValues(new Uint8Array(32));
+        await savePrivateKey(issuerDID, regenKey);
+        privateKey = await loadPrivateKey(issuerDID);
+      }
       
       if (!privateKey) {
         throw new Error('Failed to load private key');

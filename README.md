@@ -44,11 +44,18 @@ cd iota
 # Install dependencies
 npm install
 
+# Start the identity publishing microservice (run in a separate terminal)
+npm run identity-service
+
 # Run development server
 npm run dev
 ```
 
 Then open: **http://localhost:3000**
+
+> **Environment variable**  
+> The frontend calls the microservice via `NEXT_PUBLIC_IDENTITY_SERVICE_URL`.  
+> By default it falls back to `http://localhost:4000`, matching the script above.
 
 ### 🔗 Blockchain Integration Modes
 
@@ -107,12 +114,13 @@ See `docs/onchain/IMPLEMENTATION-STATUS.md` for full details.
 
 | Layer | Technology |
 |-------|-----------|
-| **Framework** | Next.js 15 + TypeScript |
-| **Blockchain** | IOTA Tangle (IOTA Testnet) |
-| **Identity** | IOTA Identity SDK (W3C compliant) |
-| **Styling** | Tailwind CSS + Design System |
+| **Framework** | Next.js 15.5 + React 19 + TypeScript 5 |
+| **Blockchain** | IOTA Tangle (IOTA Testnet) via `@iota/iota-sdk` |
+| **Identity** | IOTA Identity WASM SDK (`@iota/identity-wasm`) |
+| **Wallet / DApp** | `@iota/dapp-kit` (Wallet Standard integration) |
+| **Styling** | Tailwind CSS 4 + custom design system |
 | **Icons** | Lucide React |
-| **State** | React Hooks + LocalStorage |
+| **State** | React hooks + browser `localStorage` (demo persistence) |
 | **Deployment** | Vercel (automated from `dev` branch) |
 
 ### Design System

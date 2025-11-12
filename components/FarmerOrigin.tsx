@@ -12,7 +12,7 @@ import { Tabs } from './Tabs';
 import { Tooltip } from './Tooltip';
 import { CTAButton } from './CTAButton';
 import { useWalletStatus } from '@/lib/hooks/useWalletStatus';
-import { useSignAndExecuteTransaction, useIotaClient } from '@iota/dapp-kit';
+import { useSignAndExecuteTransaction } from '@iota/dapp-kit';
 // Note: No longer using Transaction from @iota/iota-sdk
 // Using object-based Identity model instead (no Alias Outputs)
 import type { DPPCredential, OriginCertificationData } from '@/types/dpp';
@@ -54,8 +54,9 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
   
   // Blockchain mode hooks
   const { isConnected, address } = useWalletStatus();
-  const { mutate: signAndExecute } = useSignAndExecuteTransaction();
-  const client = useIotaClient();
+  
+  // dApp Kit transaction signing hook
+  const { mutateAsync: signAndExecuteTransaction } = useSignAndExecuteTransaction();
   
   // Harvest data form state
   const [harvestData, setHarvestData] = useState({
@@ -488,40 +489,101 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             <div className="mb-4 space-y-2">
               <button
                 onClick={async () => {
-                  if (!signAndExecute) {
-                    alert('Wallet signing not available');
+                  if (!credential || !credential.certificationData) {
+                    alert('Credential data missing. Please issue the credential again before publishing on-chain.');
                     return;
                   }
-                  
+
                   try {
                     setLoading(true);
-                    console.log('📤 Publishing DID to blockchain...');
-                    
-                    const { publishIdentityToChain } = await import('@/lib/publishIdentityToChain');
-                    const result = await publishIdentityToChain(
-                      credential.issuerDID,
-                      address,
-                      signAndExecute
-                    );
-                    
-                    if (result.success && result.blockId) {
-                      console.log('✅ DID published to blockchain!');
-                      console.log('🔗 Block ID:', result.blockId);
-                      alert(`DID published successfully!\nBlock ID: ${result.blockId}\n${result.explorerUrl ? `View: ${result.explorerUrl}` : ''}`);
-                      
-                      // Update credential with transaction ID
-                      setCredential({
-                        ...credential,
-                        transactionId: result.blockId,
-                        onChain: true
-                      });
-                    } else {
-                      console.error('❌ Publishing failed:', result.error);
-                      alert(`Failed to publish DID: ${result.error || 'Unknown error'}`);
+                    console.log('📡 Starting client-side DID publishing with wallet signing...');
+
+                    if (!address) {
+                      throw new Error('Wallet not connected. Please connect your IOTA Wallet.');
                     }
+
+                    // Create a wrapper function for the dApp Kit mutation
+                    const signAndExecute = async (transaction: any) => {
+                      console.log('🔏 Signing transaction with wallet...');
+                      const result = await signAndExecuteTransaction({
+                        transaction,
+                        waitForTransaction: true, // Wait for confirmation
+                      });
+                      return result;
+                    };
+
+                    const { publishIdentityToChain } = await import('@/lib/publishIdentityToChain');
+                    const result = await publishIdentityToChain(null, address, signAndExecute);
+
+                    if (!result.success || !result.did) {
+                      const message = result.error || 'Unknown error while publishing DID.';
+                      throw new Error(message);
+                    }
+
+                    const did = result.did;
+                    const digest = result.blockId;
+
+                    console.log('✅ DID published on-chain:', did);
+
+                    const certificationData = credential.certificationData as OriginCertificationData;
+                    const untpCredential = buildUNTPDPPCredential(
+                      did,
+                      product.did,
+                      {
+                        name: product.name,
+                        description: ('description' in product ? product.description : product.name) as string,
+                        countryOfOrigin: originStakeholder.country,
+                        manufacturer: {
+                          name: originStakeholder.name,
+                          did,
+                        },
+                      },
+                      certificationData
+                    );
+
+                    const credentialJWT = await issueCredential(
+                      did,
+                      product.did,
+                      {
+                        type: labels.originCredential,
+                        certificationData,
+                        untpCredential,
+                      }
+                    );
+
+                    const updatedCredential: DPPCredential = {
+                      ...credential,
+                      jwt: credentialJWT,
+                      issuerDID: did,
+                      onChain: true,
+                      transactionId: digest,
+                      untpCredential,
+                    };
+
+                    localStorage.setItem('farmer-credential', JSON.stringify(updatedCredential));
+                    setCredential(updatedCredential);
+
+                    const explorerHint = result.explorerUrl ? `\nExplorer: ${result.explorerUrl}` : '';
+                    alert(`DID published successfully!${digest ? `\nTransaction ID: ${digest}` : ''}${explorerHint}`);
                   } catch (error) {
-                    console.error('❌ Publishing error:', error);
-                    alert(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+                    console.error('❌ Failed to publish DID on-chain:', error);
+                    const message = error instanceof Error ? error.message : 'Unknown error';
+                    
+                    // Check if this is the microservice limitation error
+                    if (message.includes('DID publishing via microservice is not supported') || 
+                        message.includes('wallet private key')) {
+                      alert(
+                        'DID Publishing Not Available\n\n' +
+                        'On-chain DID publishing requires wallet signing, which must happen client-side.\n\n' +
+                        'This feature is not yet implemented. For now, DIDs are created locally and can be used for credential issuance.\n\n' +
+                        'To publish DIDs on-chain, you would need to:\n' +
+                        '1. Build the identity transaction client-side\n' +
+                        '2. Sign it with your wallet via @iota/dapp-kit\n' +
+                        '3. Submit the signed transaction to the network'
+                      );
+                    } else {
+                      alert(`Publishing failed: ${message}`);
+                    }
                   } finally {
                     setLoading(false);
                   }
