@@ -44,18 +44,14 @@ cd iota
 # Install dependencies
 npm install
 
-# Start the identity publishing microservice (run in a separate terminal)
-npm run identity-service
-
 # Run development server
 npm run dev
 ```
 
 Then open: **http://localhost:3000**
 
-> **Environment variable**  
-> The frontend calls the microservice via `NEXT_PUBLIC_IDENTITY_SERVICE_URL`.  
-> By default it falls back to `http://localhost:4000`, matching the script above.
+> **Note:** DID publishing now uses client-side wallet signing via `@iota/dapp-kit`.  
+> You'll need to connect an IOTA wallet when publishing DIDs to the blockchain.
 
 ### 🔗 Blockchain Integration Modes
 
@@ -72,9 +68,15 @@ The platform includes **real IOTA Identity SDK integration** with mode toggling:
 
 **Features:**
 - Real blockchain transactions on IOTA testnet
-- On-chain DID publishing and credential issuance
+- Client-side DID publishing with wallet signing (`@iota/dapp-kit`)
+- On-chain credential issuance
 - Verifiable credential chain validation
 - QR code generation for consumer verification
+
+**⚠️ Current Limitation:**
+- DID publishing requires wallet support for identity transactions
+- Wallet 1.4.2 doesn't support identity transactions yet (waiting for wallet update)
+- Implementation is ready - just needs wallet support
 
 See `docs/onchain/IMPLEMENTATION-STATUS.md` for full details.
 
@@ -242,6 +244,21 @@ const productionCert = {
   previousCredentials: [originCert] // 🔗 THE CHAIN
 };
 ```
+
+### Client-Side DID Publishing
+
+The platform uses **client-side DID publishing** with wallet signing:
+
+1. **IdentityBuilder** creates the identity transaction using `@iota/identity-wasm/web`
+2. **CreateIdentity** builds the programmable transaction bytes
+3. **Wallet signing** via `@iota/dapp-kit`'s `useSignAndExecuteTransaction` hook
+4. **Transaction execution** on IOTA testnet
+
+This approach ensures:
+- ✅ Private keys never leave the user's wallet
+- ✅ No server-side key storage required
+- ✅ User maintains full control of their identity
+- ✅ Follows IOTA 2.0 object-oriented model
 
 ### W3C Standards Compliance
 
