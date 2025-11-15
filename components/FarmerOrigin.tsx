@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { industryData, type IndustryId } from '@/data/industry-data';
 import { Loader2, CheckCircle2, Copy, ExternalLink, Info, ChevronDown, ChevronUp } from 'lucide-react';
 import { getRealExplorerURL, getBlockExplorerURL, getDIDViewerURL, getDIDExplorerURL } from '@/lib/iotaExplorer';
-import { isBlockchainMode } from '@/lib/dppMode';
+import { isBlockchainMode, isDemoMode } from '@/lib/dppMode';
 import { createDID, issueCredential } from '@/lib/iotaIdentityReal';
 import { buildUNTPDPPCredential } from '@/lib/schemas/untp/dpp-builder';
 import { UNTPSection } from './UNTPSection';
@@ -441,25 +441,63 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
       {credential && (
         <div className="bg-[#2a2a2a] border border-green-500/20 rounded-lg p-7 space-y-4">
           
+          {/* Mode Indicator */}
+          <div className={`border rounded-lg p-3 mb-4 ${isBlockchainMode() ? 'bg-green-500/10 border-green-500/30' : 'bg-yellow-500/10 border-yellow-500/30'}`}>
+            <div className="flex items-center gap-2 mb-2">
+              {isBlockchainMode() ? (
+                <>
+                  <span className="text-base">🔗</span>
+                  <span className="text-sm font-semibold text-green-400">Blockchain Mode</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-base">🎭</span>
+                  <span className="text-sm font-semibold text-yellow-400">Demo Mode</span>
+                </>
+              )}
+            </div>
+            <div className="text-xs text-zinc-300 space-y-1">
+              {isBlockchainMode() ? (
+                <>
+                  <p>✅ <strong>Real cryptographic signatures</strong> using IOTA Identity SDK</p>
+                  <p>✅ <strong>W3C Verifiable Credentials</strong> with Ed25519 signatures</p>
+                  <p>✅ <strong>Cryptographically verifiable</strong> - tamper-proof JWT</p>
+                  <p>ℹ️ DIDs created locally (blockchain publishing requires wallet approval)</p>
+                </>
+              ) : (
+                <>
+                  <p>🎭 <strong>Mock credentials</strong> for demonstration</p>
+                  <p>🎭 <strong>Simple base64 encoding</strong> (not cryptographically signed)</p>
+                  <p>🎭 <strong>Simulated verification</strong> - no real crypto verification</p>
+                  <p>💡 Switch to Blockchain Mode to see real cryptographic signatures</p>
+                </>
+              )}
+            </div>
+          </div>
+
           {/* What happens here? Explanation */}
           <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 mb-4">
             <h4 className="text-sm font-medium text-blue-400 mb-2">💡 What happens here?</h4>
             <div className="space-y-2 text-xs text-zinc-300 leading-relaxed">
               <p>
-                <strong className="text-white">Certificate issued:</strong> A cryptographically signed credential 
-                proving the origin and quality of your harvest batch.
+                <strong className="text-white">Certificate issued:</strong> {isBlockchainMode() 
+                  ? 'A cryptographically signed credential proving the origin and quality of your harvest batch.'
+                  : 'A mock credential demonstrating the certificate format (not cryptographically signed).'}
               </p>
               <p>
-                <strong className="text-white">Storage:</strong> Stored on the <a 
-                  href="https://docs.iota.org/developer/iota-identity/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-400 hover:text-blue-300 underline"
-                >IOTA network</a> as an immutable record that cannot be altered or faked.
+                <strong className="text-white">Storage:</strong> {isBlockchainMode()
+                  ? <>Stored locally with cryptographic signatures. Can be published to the <a 
+                      href="https://docs.iota.org/developer/iota-identity/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:text-blue-300 underline"
+                    >IOTA network</a> as an immutable record that cannot be altered or faked.</>
+                  : 'Stored locally for demonstration purposes (not published to blockchain).'}
               </p>
               <p>
-                <strong className="text-white">Why it matters:</strong> This certificate is the foundation of your 
-                supply chain. Factories must verify it before producing, creating trust without middlemen.
+                <strong className="text-white">Why it matters:</strong> This certificate {isBlockchainMode() 
+                  ? 'is the foundation of your supply chain. Factories must verify it before producing, creating trust without middlemen.'
+                  : 'demonstrates how blockchain credentials work. Switch to Blockchain Mode for real cryptographic signatures.'}
               </p>
             </div>
           </div>
@@ -467,8 +505,26 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
           <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-5 space-y-3">
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1">
-                <p className="text-xs text-white mb-1">Certificate JWT:</p>
+                <div className="flex items-center gap-2 mb-1">
+                  <p className="text-xs text-white">Certificate {isBlockchainMode() ? 'JWT (Real)' : 'Mock'}:</p>
+                  {isBlockchainMode() && (
+                    <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-400 rounded border border-green-500/30">
+                      🔐 Signed
+                    </span>
+                  )}
+                  {isDemoMode() && (
+                    <span className="text-xs px-2 py-0.5 bg-yellow-500/20 text-yellow-400 rounded border border-yellow-500/30">
+                      🎭 Mock
+                    </span>
+                  )}
+                </div>
                 <code className="text-xs text-zinc-300 break-all block">{credential.jwt.substring(0, 100)}...</code>
+                {isBlockchainMode() && (
+                  <p className="text-xs text-green-400 mt-2">✓ This is a real W3C Verifiable Credential with Ed25519 cryptographic signature</p>
+                )}
+                {isDemoMode() && (
+                  <p className="text-xs text-yellow-400 mt-2">ℹ️ This is a mock credential. Switch to Blockchain Mode for real cryptographic signatures.</p>
+                )}
               </div>
               <button
                 onClick={copyCredential}
@@ -485,7 +541,8 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
           </div>
 
           {/* Publish DID to Blockchain Button */}
-          {credential.issuerDID && isConnected && address && (
+          {/* Hide blockchain publishing for hackathon demo to avoid wallet rejection errors */}
+          {false && credential.issuerDID && isConnected && address && (
             <div className="mb-4 space-y-2">
               <button
                 onClick={async () => {
@@ -505,11 +562,30 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                     // Create a wrapper function for the dApp Kit mutation
                     const signAndExecute = async (transaction: any) => {
                       console.log('🔏 Signing transaction with wallet...');
-                      const result = await signAndExecuteTransaction({
-                        transaction,
-                        waitForTransaction: true, // Wait for confirmation
-                      });
-                      return result;
+                      console.log('📋 Transaction type:', typeof transaction);
+                      console.log('📋 Transaction length:', typeof transaction === 'string' ? transaction.length : 'N/A');
+                      
+                      try {
+                        const result = await signAndExecuteTransaction({
+                          transaction,
+                          waitForTransaction: true, // Wait for confirmation
+                        });
+                        return result;
+                      } catch (error) {
+                        console.error('❌ Wallet transaction error:', error);
+                        // Re-throw with better context
+                        if (error instanceof Error && error.message.includes('Rejected')) {
+                          throw new Error(
+                            'Transaction was rejected by your wallet. ' +
+                            'Make sure:\n' +
+                            '• You\'re on IOTA testnet\n' +
+                            '• You have sufficient balance\n' +
+                            '• The transaction is approved in the wallet popup\n\n' +
+                            'Note: Local DIDs work perfectly for credentials without blockchain publishing.'
+                          );
+                        }
+                        throw error;
+                      }
                     };
 
                     const { publishIdentityToChain } = await import('@/lib/publishIdentityToChain');
@@ -569,20 +645,24 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                     console.error('❌ Failed to publish DID on-chain:', error);
                     const message = error instanceof Error ? error.message : 'Unknown error';
                     
-                    // Check if this is the microservice limitation error
-                    if (message.includes('DID publishing via microservice is not supported') || 
-                        message.includes('wallet private key')) {
+                    // Show user-friendly error message
+                    if (message.includes('rejected') || message.includes('Rejected')) {
+                      alert(
+                        'Transaction Rejected\n\n' +
+                        message + '\n\n' +
+                        '💡 Tip: The demo works perfectly with local DIDs. ' +
+                        'Credentials can be issued and verified locally without blockchain publishing.'
+                      );
+                    } else if (message.includes('DID publishing via microservice is not supported') || 
+                               message.includes('wallet private key')) {
                       alert(
                         'DID Publishing Not Available\n\n' +
                         'On-chain DID publishing requires wallet signing, which must happen client-side.\n\n' +
-                        'This feature is not yet implemented. For now, DIDs are created locally and can be used for credential issuance.\n\n' +
-                        'To publish DIDs on-chain, you would need to:\n' +
-                        '1. Build the identity transaction client-side\n' +
-                        '2. Sign it with your wallet via @iota/dapp-kit\n' +
-                        '3. Submit the signed transaction to the network'
+                        'For now, DIDs are created locally and work perfectly for credential issuance.\n\n' +
+                        'Note: Local DIDs are fully functional for demo purposes.'
                       );
                     } else {
-                      alert(`Publishing failed: ${message}`);
+                      alert(`Publishing failed: ${message}\n\nTip: The demo works perfectly with local DIDs.`);
                     }
                   } finally {
                     setLoading(false);
@@ -629,8 +709,8 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             </div>
           )}
           
-          {/* DID Link (when not connected) */}
-          {credential.issuerDID && (!isConnected || !address) && (
+          {/* DID Link (when not connected) - Hidden in demo mode */}
+          {credential.issuerDID && (!isConnected || !address) && !isDemoMode() && (
             <div className="mb-4">
               <a
                 href={getDIDViewerURL(credential.issuerDID, 'testnet')}
@@ -767,7 +847,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                       <ExternalLink className="w-3 h-3" />
                       <span>View</span>
                     </a>
-                  ) : credential.issuerDID ? (
+                  ) : credential.issuerDID && !isDemoMode() ? (
                     <a
                       href={getDIDViewerURL(credential.issuerDID, 'testnet')}
                       target="_blank"

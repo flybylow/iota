@@ -194,7 +194,27 @@ export async function publishIdentityToChainClientSide(
     console.log('📋 Transaction length (base64):', transactionBase64.length);
     console.log('📋 Transaction ready for dApp Kit');
     
-    const result = await signAndExecuteTransaction(transactionBase64);
+    // Note: signAndExecuteTransaction wrapper from components expects to receive the base64 string
+    // and will wrap it in { transaction, waitForTransaction: true } for the dApp Kit hook
+    let result;
+    try {
+      result = await signAndExecuteTransaction(transactionBase64);
+    } catch (error) {
+      // Handle user rejection or other wallet errors
+      if (error instanceof Error) {
+        if (error.message.includes('Rejected') || error.message.includes('rejected')) {
+          throw new Error(
+            'Transaction rejected by wallet. ' +
+            'This may happen if:\n' +
+            '1. The wallet is on a different network (ensure testnet)\n' +
+            '2. Insufficient balance for storage deposit\n' +
+            '3. The transaction format is not supported\n\n' +
+            'For the demo, DIDs work locally without blockchain publishing.'
+          );
+        }
+      }
+      throw error;
+    }
     
     console.log('✅ Transaction signed and executed');
     console.log('📋 Result type:', typeof result);

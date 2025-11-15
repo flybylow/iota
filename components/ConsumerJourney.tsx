@@ -5,7 +5,7 @@ import { CheckCircle2, Shield, ExternalLink, Sprout, Factory } from 'lucide-reac
 import { QRCodeSVG } from 'qrcode.react';
 import confetti from 'canvas-confetti';
 import { getExplorerURL, getRealExplorerURL, getBlockExplorerURL } from '@/lib/iotaExplorer';
-import { isBlockchainMode } from '@/lib/dppMode';
+import { isBlockchainMode, isDemoMode } from '@/lib/dppMode';
 import { verifyCredential } from '@/lib/iotaIdentityReal';
 import { industryData, type IndustryId } from '@/data/industry-data';
 import type { DPPCredential, OriginCertificationData, ProductionCertificationData } from '@/types/dpp';
@@ -236,8 +236,44 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
               </h3>
             </div>
             <p className="text-sm text-zinc-300 mb-4">
-              Complete traceability from farm harvest to production. Data verified using IOTA Identity with cryptographic signatures.
+              {isBlockchainMode() 
+                ? 'Complete traceability from farm harvest to production. Data verified using IOTA Identity with cryptographic signatures.'
+                : 'Complete traceability demonstrated. (Demo mode - simulated verification, not cryptographically verified)'}
             </p>
+          </div>
+
+          {/* Mode Indicator */}
+          <div className={`border rounded-lg p-3 ${isBlockchainMode() ? 'bg-green-500/10 border-green-500/30' : 'bg-yellow-500/10 border-yellow-500/30'}`}>
+            <div className="flex items-center gap-2 mb-2">
+              {isBlockchainMode() ? (
+                <>
+                  <span className="text-base">🔗</span>
+                  <span className="text-sm font-semibold text-green-400">Blockchain Mode - Real Verification</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-base">🎭</span>
+                  <span className="text-sm font-semibold text-yellow-400">Demo Mode - Simulated Verification</span>
+                </>
+              )}
+            </div>
+            <div className="text-xs text-zinc-300 space-y-1">
+              {isBlockchainMode() ? (
+                <>
+                  <p>✅ <strong>Real cryptographic verification</strong> using IOTA Identity SDK</p>
+                  <p>✅ <strong>Ed25519 signature validation</strong> for each credential</p>
+                  <p>✅ <strong>Credential chain verified</strong> - tamper-proof verification</p>
+                  <p>✅ <strong>On-chain DID resolution</strong> (if published)</p>
+                </>
+              ) : (
+                <>
+                  <p>🎭 <strong>Simulated verification</strong> - no real crypto checks</p>
+                  <p>🎭 <strong>Mock credential validation</strong> - structural only</p>
+                  <p>🎭 <strong>No signature verification</strong> - just UI simulation</p>
+                  <p>💡 Switch to Blockchain Mode to see real cryptographic verification</p>
+                </>
+              )}
+            </div>
           </div>
 
           {/* What happens here? Explanation */}
@@ -245,20 +281,24 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
             <h4 className="text-sm font-medium text-green-400 mb-2">💡 What happens here?</h4>
             <div className="space-y-2 text-xs text-zinc-300 leading-relaxed">
               <p>
-                <strong className="text-white">Verification confirmed:</strong> All supply chain steps have been 
-                cryptographically verified. Each certificate&apos;s signature proves authenticity.
+                <strong className="text-white">Verification confirmed:</strong> {isBlockchainMode()
+                  ? 'All supply chain steps have been cryptographically verified. Each certificate\'s signature proves authenticity.'
+                  : 'All supply chain steps have been verified (simulated). Switch to Blockchain Mode for real cryptographic verification.'}
               </p>
               <p>
-                <strong className="text-white">Storage:</strong> The complete chain is permanently stored on the <a 
-                  href="https://docs.iota.org/developer/iota-identity/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-green-400 hover:text-green-300 underline"
-                >IOTA network</a>. Anyone can verify this product&apos;s history anytime, anywhere.
+                <strong className="text-white">Storage:</strong> {isBlockchainMode()
+                  ? <>The complete chain is stored locally with cryptographic signatures. Can be published to the <a 
+                      href="https://docs.iota.org/developer/iota-identity/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-green-400 hover:text-green-300 underline"
+                    >IOTA network</a>. Anyone can verify this product\'s history anytime, anywhere.</>
+                  : 'The complete chain is stored locally for demonstration (not published to blockchain).'}
               </p>
               <p>
-                <strong className="text-white">Why it matters:</strong> You can trust this product. The blockchain 
-                proof is immutable—no one can alter or fake the origin, production, or quality data.
+                <strong className="text-white">Why it matters:</strong> {isBlockchainMode()
+                  ? 'You can trust this product. The cryptographic proof is immutable—no one can alter or fake the origin, production, or quality data.'
+                  : 'Demonstrates how consumers can verify supply chains. Switch to Blockchain Mode for real cryptographic verification.'}
               </p>
             </div>
           </div>
