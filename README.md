@@ -8,7 +8,7 @@ Final hackathon-ready implementation of blockchain-powered supply chain transpar
 
 **[View Live Demo →](https://iota-snowy-nine.vercel.app)**  
 **[Home →](https://iota-snowy-nine.vercel.app/home)**
-**[Docs Page →](https://www.notion.so/tabulas/Iota-EU-Hackaton-2ad9229a2a2380fab651d8f85f6a2c95?source=copy_lin)k**
+**[Docs Page →](https://www.notion.so/tabulas/Iota-EU-Hackaton-2ad9229a2a2380fab651d8f85f6a2c95?source=copy_link)**
 
 **Deployment:** Automated via Vercel from `dev` branch
 
@@ -541,4 +541,4 @@ npm run type-check
 
 ---
 
-*Last Updated: January 2025*
+*Last Updated: November 2025*
