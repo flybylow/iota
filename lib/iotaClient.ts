@@ -1,103 +1,191 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /**
- * IOTA Client Integration
- * 
- * Handles connection to IOTA testnet for publishing DIDs and credentials
+ * IOTA Identity Client Integration (Object-Based Model)
+ *
+ * Handles connection to the IOTA testnet for DID resolution.
+ * This implementation uses the TypeScript SDK (`@iota/iota-sdk`) together
+ * with the web build of `@iota/identity-wasm` to obtain an `IdentityClientReadOnly`
+ * instance that can resolve DIDs created with the object-based model.
  */
 
 import { IOTA_CONFIG } from './config';
 
-let ClientInstance: any = null;
-let clientInitialized = false;
+type IdentityConnection = {
+  apiEndpoint: string;
+  network: string;
+  iotaClient: any;
+  identityClientReadOnly: any;
+  identityModule: any;
+};
 
-/**
- * Initialize IOTA Client for network operations
- * This is separate from WASM init because it requires network connection
- */
-export async function initClient() {
-  if (clientInitialized && ClientInstance) {
-    return ClientInstance;
-  }
-  
-  try {
-    console.log('🔄 Initializing IOTA Client...');
-    console.log('📡 Connecting to:', IOTA_CONFIG.apiEndpoint);
-    
-    const identityModule = await import('@iota/identity-wasm/web');
-    
-    // Attempt to create client connection
-    // Note: This requires the SDK's Client class which may not be available in all versions
-    const Client = (identityModule as any).Client;
-    
-    if (!Client) {
-      console.warn('⚠️ Client class not available in this SDK version');
-      console.warn('⚠️ DIDs will be created locally only');
-      return null;
-    }
-    
-    // Try to connect to network
-    try {
-      ClientInstance = await Client.create({
-        nodes: [IOTA_CONFIG.apiEndpoint],
-        localPow: true, // Use local proof-of-work for testnet
-      });
-      
-      clientInitialized = true;
-      console.log('✅ IOTA Client initialized');
-      console.log('🌐 Network: Connected to IOTA testnet');
-      
-      return ClientInstance;
-    } catch (networkError) {
-      console.warn('⚠️  Network connection failed:', networkError);
-      console.warn('⚠️  Falling back to local DID creation');
-      return null;
-    }
-  } catch (error) {
-    console.error('❌ Failed to initialize IOTA Client:', error);
-    console.log('💡 DIDs will be created locally (not published to blockchain)');
+let identityConnection: IdentityConnection | null = null;
+let clientInitialized = false;
+let initializingPromise: Promise<IdentityConnection | null> | null = null;
+
+async function createConnection(): Promise<IdentityConnection | null> {
+  if (typeof window === 'undefined') {
+    console.warn('⚠️ Identity client can only be initialized in the browser');
     return null;
   }
+
+  try {
+    console.log('🔄 Initializing IOTA client...');
+    console.log('📡 Connecting to:', IOTA_CONFIG.apiEndpoint);
+
+    const identityModule = await import('@iota/identity-wasm/web');
+
+    if (typeof (identityModule as any).init === 'function') {
+      await (identityModule as any).init({});
+    } else if (typeof (identityModule as any).start === 'function') {
+      (identityModule as any).start();
+    }
+
+    const IdentityClientReadOnly = (identityModule as any).IdentityClientReadOnly;
+
+    if (!IdentityClientReadOnly) {
+      console.warn('⚠️ IdentityClientReadOnly not available in this @iota/identity-wasm build');
+      return null;
+    }
+
+    const { IotaClient } = await import('@iota/iota-sdk/client');
+
+    if (!IotaClient) {
+      console.warn('⚠️ IotaClient class not available in @iota/iota-sdk/client');
+      return null;
+    }
+
+    const baseClient = new IotaClient({ url: IOTA_CONFIG.apiEndpoint });
+    const readOnlyClient = await IdentityClientReadOnly.create(baseClient);
+
+    console.log('✅ IdentityClientReadOnly initialized');
+    console.log('🌐 Network:', IOTA_CONFIG.network);
+
+    return {
+      apiEndpoint: IOTA_CONFIG.apiEndpoint,
+      network: IOTA_CONFIG.network,
+      iotaClient: baseClient,
+      identityClientReadOnly: readOnlyClient,
+      identityModule,
+    };
+  } catch (error) {
+    console.error('❌ Failed to initialize Identity Client:', error);
+    console.warn('⚠️ DIDs will be created locally only');
+    return null;
+  }
+}
+
+/**
+ * Initialize Identity Client for network operations
+ * This uses the object-based IOTA Identity model via IdentityClientReadOnly
+ */
+export async function initIdentityClient(): Promise<IdentityConnection | null> {
+  if (clientInitialized && identityConnection) {
+    return identityConnection;
+  }
+
+  if (initializingPromise) {
+    return initializingPromise;
+  }
+
+  initializingPromise = (async () => {
+    const connection = await createConnection();
+
+    if (connection) {
+      identityConnection = connection;
+      clientInitialized = true;
+    } else {
+      identityConnection = null;
+      clientInitialized = false;
+    }
+
+    return identityConnection;
+  })();
+
+  const result = await initializingPromise;
+  initializingPromise = null;
+  return result;
 }
 
 /**
  * Check if we have an active network connection
  */
 export function isClientConnected(): boolean {
-  return clientInitialized && ClientInstance !== null;
+  return clientInitialized && Boolean(identityConnection?.identityClientReadOnly);
 }
 
 /**
  * Get client info for debugging
  */
 export async function getClientInfo() {
-  if (!ClientInstance) {
+  if (!identityConnection) {
     return {
       connected: false,
-      message: 'No client connection - creating DIDs locally only'
+      message: 'No Identity Client connection - creating DIDs locally only',
     };
   }
-  
+
   try {
-    // Try to get network info
-    const info = await ClientInstance.getInfo();
+    const [protocolConfig, rpcVersion] = await Promise.all([
+      identityConnection.iotaClient?.getProtocolConfig?.().catch(() => null),
+      identityConnection.iotaClient?.getRpcApiVersion?.().catch(() => undefined),
+    ]);
+
     return {
       connected: true,
-      networkInfo: info,
-      message: 'Connected to IOTA testnet'
+      network: identityConnection.network,
+      message: `Connected to IOTA testnet via ${identityConnection.apiEndpoint}`,
+      rpcVersion,
+      protocolConfig,
     };
   } catch (error) {
     return {
       connected: false,
       error: error instanceof Error ? error.message : 'Unknown error',
-      message: 'Connection check failed'
+      message: 'Connection check failed',
     };
   }
 }
 
 /**
- * Get the active client instance (may be null)
+ * Get the active Identity Client connection bundle (may be null)
  */
-export function getClient() {
-  return ClientInstance;
+export function getIdentityClient(): IdentityConnection | null {
+  return identityConnection;
+}
+
+/**
+ * Legacy function name for backwards compatibility
+ */
+export function getClient(): IdentityConnection | null {
+  return getIdentityClient();
+}
+
+/**
+ * Access the underlying read-only Identity client
+ */
+export function getReadOnlyIdentityClient() {
+  return identityConnection?.identityClientReadOnly ?? null;
+}
+
+/**
+ * Access the low-level IOTA RPC client
+ */
+export function getIotaClient() {
+  return identityConnection?.iotaClient ?? null;
+}
+
+/**
+ * Access the loaded identity WASM module for helper utilities
+ */
+export function getIdentityModule() {
+  return identityConnection?.identityModule ?? null;
+}
+
+/**
+ * Legacy init function for backwards compatibility
+ * @deprecated Use initIdentityClient() instead
+ */
+export async function initClient() {
+  return initIdentityClient();
 }
 

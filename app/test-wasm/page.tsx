@@ -1,9 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/no-unescaped-entities */
 'use client';
 
 import { useState } from 'react';
 import { testWasmInit, testCreateDID } from '@/lib/wasm-test';
+import Link from 'next/link';
+
+interface TestResult {
+  success: boolean;
+  message: string;
+  exports?: string[];
+  error?: unknown;
+}
 
 /**
  * WASM Test Page
@@ -11,8 +18,8 @@ import { testWasmInit, testCreateDID } from '@/lib/wasm-test';
  */
 
 export default function TestWasmPage() {
-  const [initResult, setInitResult] = useState<any>(null);
-  const [didResult, setDidResult] = useState<any>(null);
+  const [initResult, setInitResult] = useState<TestResult | null>(null);
+  const [didResult, setDidResult] = useState<TestResult | null>(null);
   const [loading, setLoading] = useState<string | null>(null);
 
   const runInitTest = async () => {
@@ -99,13 +106,15 @@ export default function TestWasmPage() {
                   </details>
                 )}
                 
-                {initResult.error && (
+                {initResult.error !== undefined && (
                   <details className="mt-2">
                     <summary className="text-xs text-zinc-400 cursor-pointer hover:text-zinc-300">
                       Error Details
                     </summary>
                     <pre className="text-xs text-zinc-500 mt-2 overflow-auto max-h-48 bg-[#0a0a0a] p-2 rounded">
-                      {JSON.stringify(initResult.error, null, 2)}
+                      {typeof initResult.error === 'string' 
+                        ? initResult.error 
+                        : JSON.stringify(initResult.error, null, 2)}
                     </pre>
                   </details>
                 )}
@@ -153,13 +162,15 @@ export default function TestWasmPage() {
                   {didResult.message}
                 </p>
                 
-                {didResult.error && (
+                {didResult.error !== undefined && (
                   <details className="mt-2">
                     <summary className="text-xs text-zinc-400 cursor-pointer hover:text-zinc-300">
                       Error Details
                     </summary>
                     <pre className="text-xs text-zinc-500 mt-2 overflow-auto max-h-48 bg-[#0a0a0a] p-2 rounded">
-                      {JSON.stringify(didResult.error, null, 2)}
+                      {typeof didResult.error === 'string' 
+                        ? didResult.error 
+                        : JSON.stringify(didResult.error, null, 2)}
                     </pre>
                   </details>
                 )}

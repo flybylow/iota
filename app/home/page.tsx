@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { Sprout, Factory, Shield, ShieldCheck, Link as LinkIcon, Zap, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { ModeToggle } from '@/components/ModeToggle';
 import { setDPPMode, isBlockchainMode } from '@/lib/dppMode';
 import { CTAButton } from '@/components/CTAButton';
-import './home.css';
 import { Fold } from '@/components/Fold';
 import { Footer } from '@/components/Footer';
 
@@ -197,15 +197,15 @@ function HeroCarousel() {
       </div>
       
       {/* Dots Indicator */}
-      <div className="flex justify-center gap-2">
+      <div className="flex justify-center items-center gap-2.5">
         {heroCards.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentIndex(idx)}
             className={`transition-all rounded-full ${
               currentIndex === idx
-                ? 'w-12 bg-blue-500 h-2'
-                : 'w-2 bg-gray-300 h-2 hover:bg-blue-500/50'
+                ? 'w-16 h-[15px] bg-blue-500 md:w-20 md:h-[15px] shadow-[0_10px_15px_-3px_rgba(59,130,246,0.5),0_4px_6px_-2px_rgba(59,130,246,0.3),0_0_0_2px_rgba(96,165,250,1),inset_0_0_0_1px_rgba(255,255,255,1)]'
+                : 'w-3 h-[15px] bg-gray-400/60 hover:bg-gray-400 opacity-50 hover:opacity-75'
             }`}
             aria-label={`Go to card ${idx + 1}`}
           />
@@ -215,7 +215,16 @@ function HeroCarousel() {
   );
 }
 
-function KeywordGrid({ keywords }) {
+interface Keyword {
+  label: string;
+  info: string;
+}
+
+interface KeywordGridProps {
+  keywords: Keyword[];
+}
+
+function KeywordGrid({ keywords }: KeywordGridProps) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 items-stretch">
       {keywords.map((kw, i) => (
@@ -239,6 +248,103 @@ function KeywordGrid({ keywords }) {
   );
 }
 
+function StepsCarousel() {
+    const steps = ['/1.png','/2.png','/3.png','/4.png','/5.png','/6.png','/7.png','/8.png'];
+    const [index, setIndex] = React.useState(0);
+    const [imageError, setImageError] = React.useState<Record<number, boolean>>({});
+    const [imageLoaded, setImageLoaded] = React.useState<Record<number, boolean>>({});
+    const next = () => setIndex((p) => (p + 1) % steps.length);
+    const prev = () => setIndex((p) => (p - 1 + steps.length) % steps.length);
+
+    // Preload next and previous images
+    React.useEffect(() => {
+      const nextIndex = (index + 1) % steps.length;
+      const prevIndex = (index - 1 + steps.length) % steps.length;
+      
+      [nextIndex, prevIndex].forEach((idx) => {
+        if (!imageError[idx] && !imageLoaded[idx]) {
+          const img = new Image();
+          img.onload = () => setImageLoaded((prev) => ({ ...prev, [idx]: true }));
+          img.onerror = () => setImageError((prev) => ({ ...prev, [idx]: true }));
+          img.src = steps[idx];
+        }
+      });
+    }, [index, steps, imageError, imageLoaded]);
+
+    const handleImageLoad = () => {
+      setImageLoaded((prev) => ({ ...prev, [index]: true }));
+    };
+
+    const handleImageError = () => {
+      setImageError((prev) => ({ ...prev, [index]: true }));
+    };
+
+    const currentImageError = imageError[index];
+    const currentImageLoaded = imageLoaded[index];
+
+    return (
+      <section className="relative w-full mt-6 mb-8">
+        <div className="relative home-step-card w-[95%] md:w-[60%] mx-auto h-[460px] md:h-[640px] overflow-hidden">
+          {currentImageError ? (
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+              <div className="text-6xl mb-4">📸</div>
+              <p className="text-lg text-white mb-2">Screenshot {index + 1} / {steps.length}</p>
+              <p className="text-sm text-zinc-400">
+                Image not found: {steps[index]}
+              </p>
+              <p className="text-xs text-zinc-500 mt-4">
+                Please add {steps[index]} to the /public directory
+              </p>
+            </div>
+          ) : (
+            <>
+              {!currentImageLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/30 z-10">
+                  <div className="text-white text-lg">Loading...</div>
+                </div>
+              )}
+              <img
+                key={index}
+                src={steps[index]}
+                alt={`Step ${index + 1}`}
+                className="absolute inset-0 w-full h-full object-contain object-left block"
+                onLoad={handleImageLoad}
+                onError={handleImageError}
+              />
+            </>
+          )}
+          <div className="absolute top-3 right-3 text-sm md:text-base px-3 py-1.5 rounded bg-black/80 text-white border border-white/30 shadow">
+            Step {index + 1} / {steps.length}
+          </div>
+
+          <button onClick={prev} aria-label="Previous"
+            className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-black rounded-full w-9 h-9 md:w-12 md:h-12 grid place-items-center shadow focus:outline-none focus:ring-2 focus:ring-blue-400/60">
+            <ChevronRight size={20} className="rotate-180" />
+          </button>
+          <button onClick={next} aria-label="Next"
+            className="absolute right-2 md:right-3 top-[calc(50%+40px)] -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-black rounded-full w-9 h-9 md:w-12 md:h-12 grid place-items-center shadow focus:outline-none focus:ring-2 focus:ring-blue-400/60">
+            <ChevronRight size={20} />
+          </button>
+        </div>
+
+        <div className="flex justify-center items-center gap-2.5 mt-3">
+          {steps.map((_, i) => (
+            <button
+              key={i}
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => setIndex(i)}
+              className={`transition-all rounded-full ${
+                i === index
+                  ? 'w-16 h-[15px] bg-blue-500 shadow-[0_10px_15px_-3px_rgba(59,130,246,0.5),0_4px_6px_-2px_rgba(59,130,246,0.3),0_0_0_2px_rgba(96,165,250,1),inset_0_0_0_1px_rgba(255,255,255,1)]'
+                  : 'w-3 h-[15px] bg-gray-400/60 hover:bg-gray-400 opacity-50 hover:opacity-75'
+              }`}
+            />
+          ))}
+        </div>
+      </section>
+    );
+}
+
 export default function HomePage() {
   const router = useRouter();
   // Use state to avoid hydration mismatch - start with false, update after mount
@@ -259,70 +365,33 @@ export default function HomePage() {
     router.push('/');
   };
 
-  function StepsCarousel() {
-    const steps = ['/1.png','/2.png','/3.png','/4.png','/5.png','/6.png','/7.png','/8.png'];
-    const [index, setIndex] = React.useState(0);
-    const next = () => setIndex((p) => (p + 1) % steps.length);
-    const prev = () => setIndex((p) => (p - 1 + steps.length) % steps.length);
-
-    return (
-      <section className="relative w-full mt-6 mb-8">
-        <div className="relative bg-black/90 rounded-2xl w-[95%] md:w-[60%] mx-auto h-[420px] md:h-[600px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.4)] border border-white/10 overflow-hidden">
-          <img
-            src={steps[index]}
-            alt={`Step ${index + 1}`}
-            className="absolute inset-0 w-full h-full object-contain object-left block"
-          />
-          <div className="absolute top-3 right-3 text-sm md:text-base px-3 py-1.5 rounded bg-black/80 text-white border border-white/30 shadow">
-            Step {index + 1} / {steps.length}
-          </div>
-
-          <button onClick={prev} aria-label="Previous"
-            className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-black rounded-full w-9 h-9 md:w-12 md:h-12 grid place-items-center shadow focus:outline-none focus:ring-2 focus:ring-blue-400/60">
-            <ChevronRight size={20} className="rotate-180" />
-          </button>
-          <button onClick={next} aria-label="Next"
-            className="absolute right-2 md:right-3 top-[calc(50%+40px)] -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-black rounded-full w-9 h-9 md:w-12 md:h-12 grid place-items-center shadow focus:outline-none focus:ring-2 focus:ring-blue-400/60">
-            <ChevronRight size={20} />
-          </button>
-        </div>
-
-        <div className="flex justify-center gap-2 mt-3">
-          {steps.map((_, i) => (
-            <button
-              key={i}
-              aria-label={`Go to slide ${i + 1}`}
-              onClick={() => setIndex(i)}
-              className={`transition-all rounded-full ${i === index ? 'w-10 bg-blue-500 h-2' : 'w-2 bg-gray-300 h-2 hover:bg-blue-400'}`}
-            />
-          ))}
-        </div>
-      </section>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-dpp-bg-primary w-full">
       {/* Desktop-optimized marketing page container - 800px max width */}
       <div className="min-h-screen bg-dpp-bg-primary w-full max-w-md md:max-w-[800px] mx-auto shadow-2xl">
-        {/* Header */}
-        <header className="bg-gradient-to-b from-dpp-bg-card to-dpp-bg-primary border-b border-dpp-border-default mb-8 md:mb-12 w-full">
-          <div className="w-full px-4 md:px-8 py-6 md:py-8">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2">
-                <span className="text-3xl">👛</span>
+        {/* Top Navigation - match main */}
+        <div className="fixed top-0 left-0 right-0 w-screen bg-gradient-to-b from-[#1c1c1c] to-[#0f0f0f] border-b border-[#2a2a2e] z-[100] overflow-x-hidden" style={{ isolation: 'isolate' }}>
+          <div className="flex items-center justify-between px-4 py-4 w-full gap-4 min-w-0 relative z-[100]">
+            {/* Logo - Left */}
+            <Link href="/home">
+              <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
+                <span className="text-2xl">👛</span>
                 <div className="flex flex-col">
-                  <span className="text-lg font-bold text-dpp-text-primary leading-tight">DPP</span>
-                  <span className="text-xs text-dpp-text-primary leading-tight">Digital Product Passport</span>
+                  <span className="text-sm font-bold text-white leading-tight">DPP</span>
+                  <span className="text-[9px] text-white leading-tight">Digital Product Passport</span>
                 </div>
               </div>
-              <ModeToggle />
-            </div>
+            </Link>
+
+            {/* Mode Toggle - Right */}
+            <ModeToggle />
           </div>
-        </header>
+        </div>
 
         {/* Main Content */}
         <main className="w-full px-4 md:px-8 py-8 md:py-12">
+          {/* Spacer for fixed topnav */}
+          <div className="h-[73px]" />
           {/* Hero Section */}
           <div className="rounded-lg p-8 md:p-12 mb-8 md:mb-12 relative overflow-hidden shadow-sm shadow-black/20">
             <div 
@@ -348,7 +417,7 @@ export default function HomePage() {
           {/* Content Container - 800px max width */}
           <div className="max-w-[800px] mx-auto">
             {/* Hero Section */}
-            <div className="bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-green-500/10 rounded-xl p-8 md:p-12 mb-8 md:mb-12 text-center shadow-sm shadow-black/10">
+            <div className="bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-green-500/10 rounded-xl p-8 md:p-12 mb-8 md:mb-12 text-center shadow-sm shadow-black/10 space-y-8 md:space-y-10">
             
             {/* How It Works */}
             <div className="mb-6 md:mb-8">
@@ -406,8 +475,8 @@ export default function HomePage() {
 
             {/* Mode Selection - Visual Card */}
             <div className="mb-6 md:mb-8">
-              <div className="home-step-card">
-                <h2 className="text-2xl md:text-3xl font-bold text-dpp-text-primary text-center mt-1 mb-2">DEMO</h2>
+              <div className="home-step-card pt-6 md:pt-8">
+                <h2 className="text-2xl md:text-3xl font-bold text-dpp-text-primary text-center mt-0 mb-0">DEMO</h2>
                 <div className="grid grid-cols-2 gap-6 md:gap-10 items-start">
                   <div className="flex justify-center">
                     <button

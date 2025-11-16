@@ -2,7 +2,7 @@
 Hackathon Final Submission — November 2025
 Final hackathon-ready implementation of blockchain-powered supply chain transparency using **IOTA Decentralized Identifiers (DIDs)** and **Verifiable Credentials** for **EU Digital Product Passport** compliance. Live on Vercel with both Demo and On-Chain modes.
 
-![Next.js](https://img.shields.io/badge/Next.js-15-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![IOTA](https://img.shields.io/badge/IOTA-Identity-teal) ![DPP](https://img.shields.io/badge/DPP-EU%20Ready-green)
+![Next.js](https://img.shields.io/badge/Next.js-15-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![IOTA](https://img.shields.io/badge/IOTA-Identity-teal) ![DPP](https://img.shields.io/badge/DPP-EU%20Ready-green) ![Vercel](https://img.shields.io/badge/Vercel-Deployed-black)
 
 ## 🌐 Live Demo
 
@@ -21,19 +21,22 @@ Final hackathon-ready implementation of blockchain-powered supply chain transpar
 
 ## 🎯 What This Demonstrates
 
-A **working reference implementation** showing how **W3C Decentralized Identifiers** and **Verifiable Credentials** enable transparent, verifiable supply chains for **EU Digital Product Passport** compliance.
+A **production-ready reference implementation** showing how **W3C Decentralized Identifiers** and **Verifiable Credentials** enable transparent, verifiable supply chains for **EU Digital Product Passport** compliance.
 
 **Journey:** Ecuador farm → Belgian factory → Dutch consumer  
-**Tech:** IOTA Tangle + W3C DID standards + Next.js  
-**Purpose:** Prove DPP implementation expertise for consulting clients
+**Tech:** IOTA Tangle + W3C DID standards + Next.js 15  
+**Purpose:** Prove DPP implementation expertise for consulting clients  
+**Deployment:** Automated Vercel builds from `dev` branch
 
 ### Real-World Business Value
 
-This demo proves you can build production DPP solutions. Perfect for showing:
+This platform proves you can build production DPP solutions. Perfect for showing:
 - 🍫 Food & Beverage manufacturers (chocolate, coffee, wine)
-- 🔋 Battery producers (EU mandatory 2027)
-- 👕 Fashion brands (textile transparency)
-- 📱 Electronics companies (ESPR compliance)
+- 🔋 Battery producers (EU mandatory Feb 2027)
+- 👕 Fashion brands (textile transparency - 2027)
+- 📱 Electronics companies (ESPR compliance - 2028)
+- 🪑 Furniture manufacturers (2028)
+- 🏗️ Construction materials (2028)
 
 ---
 
@@ -53,17 +56,33 @@ npm run dev
 
 Then open: **http://localhost:3000**
 
-### 🔗 New: Blockchain Integration Mode
+> **Note:** DID publishing now uses client-side wallet signing via `@iota/dapp-kit`.  
+> You'll need to connect an IOTA wallet when publishing DIDs to the blockchain.
 
-This demo now includes **real IOTA Identity SDK integration**! Toggle between:
+### 🔗 Blockchain Integration Modes
 
-- **🎭 Demo Mode** (default): Instant operation with mock data
-- **⛓️ Blockchain Mode**: Real DID creation with IOTA Identity SDK
+The platform includes **real IOTA Identity SDK integration** with mode toggling:
 
-Access blockchain features:
-- **Main App with Mode Toggle:** http://localhost:3000
+- **🎭 Demo Mode** (default): Instant operation with mock data - no wallet required
+- **⛓️ Blockchain Mode**: Real DID creation with IOTA Identity SDK on IOTA testnet
+
+**Access Points:**
+- **Main App:** http://localhost:3000 (supply chain journey with mode toggle)
+- **Home / Marketing:** http://localhost:3000/home (landing page with hero, demo section, screenshots)
 - **Integration Tests:** http://localhost:3000/integration-test
 - **Simple Tests:** http://localhost:3000/simple-test
+
+**Features:**
+- Real blockchain transactions on IOTA testnet
+- Client-side DID publishing with wallet signing (`@iota/dapp-kit`)
+- On-chain credential issuance
+- Verifiable credential chain validation
+- QR code generation for consumer verification
+
+**⚠️ Current Limitation:**
+- DID publishing requires wallet support for identity transactions
+- Wallet 1.4.2 doesn't support identity transactions yet (waiting for wallet update)
+- Implementation is ready - just needs wallet support
 
 See `docs/onchain/IMPLEMENTATION-STATUS.md` for full details.
 
@@ -103,12 +122,37 @@ See `docs/onchain/IMPLEMENTATION-STATUS.md` for full details.
 
 | Layer | Technology |
 |-------|-----------|
-| **Framework** | Next.js 15 + TypeScript |
-| **Blockchain** | IOTA Tangle (Shimmer Testnet) |
-| **Identity** | IOTA Identity SDK (W3C compliant) |
-| **Styling** | Tailwind CSS |
+| **Framework** | Next.js 15.5 + React 19 + TypeScript 5 |
+| **Blockchain** | IOTA Tangle (IOTA Testnet) via `@iota/iota-sdk` |
+| **Identity** | IOTA Identity WASM SDK (`@iota/identity-wasm`) |
+| **Wallet / DApp** | `@iota/dapp-kit` (Wallet Standard integration) |
+| **Styling** | Tailwind CSS 4 + custom design system |
 | **Icons** | Lucide React |
-| **State** | React Hooks + LocalStorage |
+| **State** | React hooks + browser `localStorage` (demo persistence) |
+| **Deployment** | Vercel (automated from `dev` branch) |
+
+### Design System
+
+The project includes a **centralized design system** documented in:
+- `app/design-system.css` - CSS variables and utility classes
+- `docs/ux/CARD-DESIGN-SYSTEM.md` - Card patterns and dot indicators
+- Consistent typography, colors, and component styles throughout
+
+#### Screenshots Slider Image Positioning
+
+The `StepsCarousel` component on the home page requires specific image positioning:
+
+**Working Solution:**
+- **Image Class:** `absolute inset-0 w-full h-full object-contain object-left block`
+- **Container:** Uses `home-step-card` class (no padding override needed)
+- **X Position:** The `object-left` Tailwind class correctly aligns the image flush with the left border
+- **Image Path:** Images from `/public/1.png` through `/8.png` are displayed in sequence
+
+**Important Notes:**
+- Do NOT override padding with `p-0` - the `home-step-card` padding works correctly with absolute positioning
+- Do NOT use inline `style={{ objectPosition }}` - use Tailwind's `object-left` class instead
+- The `absolute inset-0` positions the image relative to the container, and `object-left` aligns it to the left edge
+- This solution was verified working in commit `0d44b27` and restored in commit `046afe2`
 
 ---
 
@@ -140,13 +184,13 @@ See `docs/onchain/IMPLEMENTATION-STATUS.md` for full details.
 ### Stakeholder Details
 
 **Maria's Organic Cocoa Farm** (Ecuador)
-- **DID:** `did:iota:smr:0xfarmer...`
+- **DID:** `did:iota:0xfarmer...`
 - **Role:** Origin certification
 - **Certifications:** EU Organic, Fair Trade
 - **Issues:** Harvest certificate (date, weight, variety, fermentation)
 
 **Chocolate Dreams Factory** (Belgium)
-- **DID:** `did:iota:smr:0xfactory...`
+- **DID:** `did:iota:0xfactory...`
 - **Role:** Production certification  
 - **Certifications:** ISO 22000, BRC Food Safety
 - **Issues:** Production certificate (batch #, recipe, quality checks)
@@ -181,8 +225,8 @@ The key innovation is **credential chaining** - each step references previous st
 ```typescript
 // Farmer issues origin certificate
 const originCert = {
-  issuer: "did:iota:smr:0xfarmer...",
-  subject: "did:iota:smr:0xproduct-ch-2025-001",
+  issuer: "did:iota:0xfarmer...",
+  subject: "did:iota:0xproduct-ch-2025-001",
   type: "OrganicOriginCertification",
   data: {
     farm: "Maria's Organic Cocoa",
@@ -199,13 +243,28 @@ if (!verify.isValid) {
 
 // Factory issues production cert that LINKS to farmer's cert
 const productionCert = {
-  issuer: "did:iota:smr:0xfactory...",
-  subject: "did:iota:smr:0xproduct-ch-2025-001",
+  issuer: "did:iota:0xfactory...",
+  subject: "did:iota:0xproduct-ch-2025-001",
   type: "ProductionCertification",
   data: { /* production details */ },
   previousCredentials: [originCert] // 🔗 THE CHAIN
 };
 ```
+
+### Client-Side DID Publishing
+
+The platform uses **client-side DID publishing** with wallet signing:
+
+1. **IdentityBuilder** creates the identity transaction using `@iota/identity-wasm/web`
+2. **CreateIdentity** builds the programmable transaction bytes
+3. **Wallet signing** via `@iota/dapp-kit`'s `useSignAndExecuteTransaction` hook
+4. **Transaction execution** on IOTA testnet
+
+This approach ensures:
+- ✅ Private keys never leave the user's wallet
+- ✅ No server-side key storage required
+- ✅ User maintains full control of their identity
+- ✅ Follows IOTA 2.0 object-oriented model
 
 ### W3C Standards Compliance
 
@@ -247,7 +306,7 @@ const productionCert = {
 ### IOTA Resources
 - **[IOTA Identity Docs](https://docs.iota.org/developer/iota-identity/)** - Full SDK documentation
 - **[IOTA Tangle](https://www.iota.org/)** - Feeless distributed ledger
-- **[Shimmer Network](https://shimmer.network/)** - IOTA staging network (we use testnet)
+- **[IOTA Testnet](https://testnet.iota.cafe/)** - IOTA 2.0 test network (what we use)
 
 ### DPP Use Cases
 - **[Battery Passport](https://www.batterypass.eu/)** - Battery traceability initiative
@@ -448,5 +507,43 @@ Perfect for:
 ---
 
 **Built with ❤️ for a more transparent, sustainable supply chain future**
+
+---
+
+## 🚀 Deployment
+
+The application is automatically deployed to Vercel from the `dev` branch:
+
+- **Main Deployment:** https://iota-snowy-nine.vercel.app
+- **Home Page:** https://iota-snowy-nine.vercel.app/home
+- **Build Status:** Check Vercel dashboard for latest builds
+
+### Building Locally
+
+```bash
+# Install dependencies
+npm install
+
+# Build for production
+npm run build
+
+# Run production build locally
+npm start
+```
+
+### Development
+
+```bash
+# Run development server
+npm run dev
+
+# Lint code
+npm run lint
+
+# Type check
+npm run type-check
+```
+
+---
 
 *Last Updated: November 2025*

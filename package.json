@@ -6,12 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "identity-service": "node server/identity-service/index.js"
   },
   "dependencies": {
     "@iota/dapp-kit": "^0.5.3",
     "@iota/identity-wasm": "^1.7.0-beta.1",
     "@iota/iota-sdk": "^1.6.1",
+    "express": "^4.19.2",
     "@vercel/speed-insights": "^1.2.0",
     "canvas-confetti": "^1.9.3",
     "embla-carousel-react": "^8.6.0",

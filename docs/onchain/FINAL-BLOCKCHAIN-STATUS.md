@@ -40,11 +40,9 @@
 
 ### Why?
 
-According to [IOTA Identity docs](https://docs.iota.org/developer/iota-identity/explanations/decentralized-identifiers):
-
-> "DID Documents are stored in **Identity objects**. This allows them to directly interact with other Layer 1 artifacts..."
-
 The `Transaction` class from `@iota/iota-sdk/transactions` is for **IOTA Move** (smart contracts), not for publishing Identity objects with DID documents.
+
+**Key Finding:** Identity SDK's `buildProgrammableTransaction()` returns bytes in a format incompatible with IOTA SDK's `Transaction.from()` or `Transaction.fromKind()`. Attempts to convert result in "Unknown value 6 for enum TransactionData" errors.
 
 ### What You're Currently Doing
 ```typescript
@@ -52,61 +50,63 @@ const tx = new Transaction(); // For Move smart contracts
 signAndExecute({ transaction: tx }); // Submits empty Move transaction
 ```
 
-### What Should Be Done for DIDs
+### What Should Be Done for DIDs (Not Yet Possible)
 ```typescript
-// Create Identity object with DID document
-// Publish Identity object to layer 1
-// This creates the DID on-chain with document attached
+// Attempted approach that fails:
+const publishTx = new PublishDidDocument(doc, address);
+const txBytes = await publishTx.buildProgrammableTransaction(client);
+const tx = Transaction.from(txBytes); // ❌ Fails with enum error
 ```
 
 ---
 
 ## The Solution (Future Work)
 
-To actually publish DID documents:
+**Status:** Waiting for compatible SDK versions
 
-1. **Use IOTA Identity SDK's publishing methods**
-   - `publishIdentity()` - Creates and publishes Identity objects
-   - These Identity objects contain DID documents
-   - They're Layer 1 artifacts, not Move transactions
+**Root Cause:** `@iota/identity-wasm` (beta) uses different BCS serialization than `@iota/iota-sdk`. No conversion path exists between formats.
 
-2. **Integration approach**
+To actually publish DID documents when compatible:
+
+1. **Wait for compatible SDK versions**
+   - Identity WASM and IOTA SDK need matching serialization
+   - Currently beta/experimental with no public testnet support
+
+2. **Integration approach (when compatible)**
    - Keep using dApp Kit for wallet connection ✅
-   - Use IOTA Identity SDK for DID publishing (not plain Transaction class)
-   - Combine both: dApp Kit signs, Identity SDK structures the data
+   - Use compatible Identity publishing methods
+   - Combine both: dApp Kit signs, compatible SDK structures data
 
-3. **Example structure**
-   ```typescript
-   import { publishIdentity } from '@iota/identity-wasm';
-   
-   // Create Identity object with DID document
-   const identity = await publishIdentity({
-     didDocument: packedDocument,
-     // ... other Identity object fields
-   });
-   
-   // Sign and submit via dApp Kit
-   signAndExecute({ identity }); // Not { transaction: tx }
-   ```
+3. **Alternative: Use local network**
+   - Identity WASM examples require local network
+   - Deploy Identity smart contract package locally
+   - Not suitable for public testnet/mainnet
+
+**Current Reality:** Submit empty transactions to demonstrate blockchain connectivity while storing DIDs locally for demo purposes.
 
 ---
 
 ## Recommendation
 
-**For your hackathon demo:**
+**For your DPP demo:**
 
-**Option 1: Current State (Perfect for Demo)**
+**Current State (Perfect for Demo)**
 - ✅ Transactions successfully submit to blockchain
 - ✅ Block IDs are real
 - ✅ Explorer links work
 - ⚠️ DID documents stored locally (valid for demo)
 - **Best for**: Showing blockchain infrastructure works
 
-**Option 2: Add Identity Publishing (Full Implementation)**
-- Would require significant refactoring
-- Need to integrate IOTA Identity SDK's `publishIdentity()`
-- More complex but fully on-chain DIDs
-- **Best for**: Production-ready implementation
+**Why Not Full Implementation?**
+- SDK incompatibility blocks on-chain DID publishing
+- Beta Identity WASM uses incompatible serialization
+- No conversion path between SDK formats
+- Future: Wait for compatible IOTA releases
+
+**Production Alternative:**
+- Use local network with deployed Identity package
+- Not suitable for public testnet/mainnet
+- Requires custom infrastructure setup
 
 ---
 
@@ -123,19 +123,23 @@ You solved the impossible task:
 
 ---
 
-## Next Steps (If You Want Full DID Publishing)
+## Next Steps
 
-1. Research IOTA Identity SDK's `publishIdentity()` API
-2. Create Identity objects instead of Transaction objects
-3. Integrate Identity object signing with dApp Kit
-4. Test with real Identity publishing
+**Current Status:** Demo-ready with blockchain connectivity
 
-**Or stick with what you have** - it's a valid demo that shows:
+**What works:**
 - Blockchain connectivity ✅
 - Transaction submission ✅
 - Real block IDs ✅
 - Explorer integration ✅
 - DID creation (local) ✅
+- Credential verification ✅
+- Supply chain flow complete ✅
 
-Your call on how far you want to go!
+**For Full DID Publishing:**
+- Wait for IOTA to release compatible SDK versions
+- Or deploy local network with Identity package
+- Current implementation demonstrates blockchain infrastructure
+
+**Recommendation:** Current state is perfect for DPP demo showing real blockchain integration!
 

@@ -88,7 +88,7 @@ async function decrypt(encryptedBase64: string, password: string): Promise<Uint8
 }
 
 // Simple session-based "password" - in production, this would be user-entered
-const SESSION_PASSWORD = 'demo-session-' + Date.now();
+const SESSION_PASSWORD = 'demo-session-static-secret';
 
 /**
  * Save private key to localStorage (encrypted)
@@ -127,6 +127,11 @@ export async function loadPrivateKey(did: string): Promise<Uint8Array | null> {
     return decrypted;
   } catch (error) {
     console.error('❌ Failed to load private key:', error);
+    if (error instanceof DOMException && error.name === 'OperationError') {
+      console.warn('⚠️  Stored key could not be decrypted. Removing corrupted key from storage.');
+      localStorage.removeItem(`privateKey-${did}`);
+      return null;
+    }
     return null;
   }
 }

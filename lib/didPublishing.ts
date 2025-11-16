@@ -33,9 +33,9 @@ export async function publishDIDToBlockchain(
 ): Promise<{ published: boolean; transactionId?: string; error?: string }> {
   try {
     await initWasm();
-    const client = await initClient();
+    const connection = await initClient();
     
-    if (!client || !isClientConnected()) {
+    if (!connection || !isClientConnected()) {
       return {
         published: false,
         error: 'No network connection - DID created locally only'
@@ -44,31 +44,14 @@ export async function publishDIDToBlockchain(
     
     console.log('📤 Attempting to publish DID to blockchain...');
     
-    // Note: Wallet connection now handled by dApp Kit
-    // See lib/hooks/useDIDPublishing.ts for the new approach
-    // This function still works but uses deprecated wallet-connection.ts
+    console.warn('⚠️ IdentityClientReadOnly is connected, but write operations require wallet signing.');
+    console.warn('💡 Publishing to the Tangle currently requires the dApp Kit transaction flow.');
+    console.warn('💡 Use lib/hooks/useDIDPublishing.ts together with a connected wallet once testnet tokens are available.');
     
-    console.log('⚠️ Using deprecated wallet connection approach');
-    console.log('💡 For new code, use lib/hooks/useDIDPublishing.ts with dApp Kit');
-    
-    // Step 2: Prepare DID document for blockchain publishing
-    // Note: @iota/identity-wasm creates documents locally; publishing requires transaction submission
-    console.log('📝 Preparing DID document for blockchain publishing...');
-    
-    // For now, we acknowledge the document is ready but needs transaction submission
-    // The actual publishing will be handled by the wallet extension when tokens are available
-    console.log('💡 DID document created and ready for publishing');
-    console.log('💡 To complete publishing:');
-    console.log('   1. Ensure wallet has testnet tokens');
-    console.log('   2. Transaction will be submitted via wallet extension');
-    console.log('   3. Transaction ID will be returned and tracked');
-    
-    // Return success (actual publishing happens via wallet when user proceeds)
-    // The presence of the document + wallet connection = ready to publish
-      return {
-        published: true, // Mark as published (framework ready)
-        transactionId: `tx_pending_${Date.now()}`, // Placeholder - real tx ID from wallet
-      };
+    return {
+      published: false,
+      error: 'Blockchain publishing requires wallet signing via dApp Kit. This demo currently creates DIDs locally only.',
+    };
     
   } catch (error) {
     console.error('❌ Failed to publish DID:', error);
@@ -152,26 +135,40 @@ export async function createAndPublishDID(): Promise<DIDCreationResult> {
  */
 export async function isDIDPublished(did: string): Promise<boolean> {
   try {
-    const client = await initClient();
+    const connection = await initClient();
     
-    if (!client || !isClientConnected()) {
+    if (!connection || !isClientConnected()) {
       return false;
     }
     
-    const identityModule = await import('@iota/identity-wasm/web');
-    const IotaIdentityClient = (identityModule as any).IotaIdentityClient;
+    const identityModule =
+      connection.identityModule ?? (await import('@iota/identity-wasm/web'));
+    const IotaDID = (identityModule as any).IotaDID;
     
-    if (!IotaIdentityClient) {
+    if (!IotaDID || typeof IotaDID.parse !== 'function') {
+      console.warn('⚠️ IotaDID parser not available - cannot resolve on-chain DID');
       return false;
     }
     
-    const identityClient = new IotaIdentityClient(client);
-    
-    // Try to resolve the DID from blockchain
+    let parsedDid: any;
     try {
-      await identityClient.resolveDid(did);
+      parsedDid = IotaDID.parse(did);
+    } catch (parseError) {
+      console.warn('⚠️ Invalid DID format for on-chain resolution:', parseError);
+      return false;
+    }
+    
+    const readOnlyClient = connection.identityClientReadOnly;
+    if (!readOnlyClient || typeof readOnlyClient.resolveDid !== 'function') {
+      console.warn('⚠️ IdentityClientReadOnly not available - cannot resolve DID');
+      return false;
+    }
+
+    try {
+      await readOnlyClient.resolveDid(parsedDid);
       return true; // Successfully resolved = published
-    } catch {
+    } catch (resolveError) {
+      console.warn('⚠️ DID resolution failed:', resolveError);
       return false; // Resolution failed = not published
     }
     
@@ -189,23 +186,34 @@ export async function isDIDPublished(did: string): Promise<boolean> {
  */
 export async function resolveDIDFromBlockchain(did: string) {
   try {
-    const client = await initClient();
+    const connection = await initClient();
     
-    if (!client || !isClientConnected()) {
+    if (!connection || !isClientConnected()) {
       throw new Error('No network connection');
     }
     
-    const identityModule = await import('@iota/identity-wasm/web');
-    const IotaIdentityClient = (identityModule as any).IotaIdentityClient;
+    const identityModule =
+      connection.identityModule ?? (await import('@iota/identity-wasm/web'));
+    const IotaDID = (identityModule as any).IotaDID;
     
-    if (!IotaIdentityClient) {
-      throw new Error('IotaIdentityClient not available');
+    if (!IotaDID || typeof IotaDID.parse !== 'function') {
+      throw new Error('IotaDID parser not available');
     }
     
-    const identityClient = new IotaIdentityClient(client);
+    let parsedDid: any;
+    try {
+      parsedDid = IotaDID.parse(did);
+    } catch (parseError) {
+      throw new Error(`Invalid DID format: ${parseError instanceof Error ? parseError.message : String(parseError)}`);
+    }
+
+    const readOnlyClient = connection.identityClientReadOnly;
+    if (!readOnlyClient || typeof readOnlyClient.resolveDid !== 'function') {
+      throw new Error('IdentityClientReadOnly not available');
+    }
     
     console.log('🔍 Resolving DID from blockchain:', did);
-    const resolved = await identityClient.resolveDid(did);
+    const resolved = await readOnlyClient.resolveDid(parsedDid);
     
     console.log('✅ DID resolved successfully');
     return resolved;

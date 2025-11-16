@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { getDPPMode, setDPPMode, type DPPMode } from '@/lib/dppMode';
 import { Settings, Zap, Network, Info } from 'lucide-react';
-import { ConnectButton } from '@iota/dapp-kit';
 import { useWalletStatus } from '@/lib/hooks/useWalletStatus';
+import { WalletConnectButton } from './WalletConnectButton';
 
 /**
  * Mode Toggle Component
@@ -142,7 +142,7 @@ export function ModeToggle() {
                           ✓ Connected: {address?.substring(0, 10)}...
                         </div>
                       ) : (
-                        <ConnectButton
+                        <WalletConnectButton
                           connectText="🔗 Connect IOTA Wallet"
                           className="px-4 py-2 rounded-lg text-sm font-medium transition-colors border bg-black border-white text-white hover:bg-gray-900"
                           style={{ backgroundColor: '#000000', borderColor: '#ffffff', color: '#ffffff' }}

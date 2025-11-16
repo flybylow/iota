@@ -6,14 +6,17 @@ import { Loader2, CheckCircle2, XCircle, AlertCircle, Factory, ExternalLink, Che
 import { UNTPSection } from './UNTPSection';
 import { Tooltip } from './Tooltip';
 import { CTAButton } from './CTAButton';
-import { isBlockchainMode } from '@/lib/dppMode';
+import { Fold } from './Fold';
+import { isBlockchainMode, isDemoMode } from '@/lib/dppMode';
 import { createDID, issueCredential, verifyCredential } from '@/lib/iotaIdentityReal';
 import { buildUNTPDPPCredential } from '@/lib/schemas/untp/dpp-builder';
-import { getBlockExplorerURL } from '@/lib/iotaExplorer';
+import { getBlockExplorerURL, getDIDExplorerURL, getDIDViewerURL } from '@/lib/iotaExplorer';
 import { useWalletStatus } from '@/lib/hooks/useWalletStatus';
 import { useSignAndExecuteTransaction } from '@iota/dapp-kit';
-import { Transaction } from '@iota/iota-sdk/transactions';
+// Note: No longer using Transaction from @iota/iota-sdk
+// Using object-based Identity model instead (no Alias Outputs)
 import type { DPPCredential, ProductionCertificationData } from '@/types/dpp';
+import { initWasm } from '@/lib/iotaIdentityReal';
 
 /**
  * Production Component
@@ -52,7 +55,9 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
   
   // Wallet status for blockchain publishing
   const { isConnected, address } = useWalletStatus();
-  const { mutate: signAndExecute } = useSignAndExecuteTransaction();
+  
+  // dApp Kit transaction signing hook
+  const { mutateAsync: signAndExecuteTransaction } = useSignAndExecuteTransaction();
 
   // Calculate production units from harvest data
   const calculateProductionUnits = () => {
@@ -210,54 +215,13 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
           // Store block ID from blockchain submission
           let blockchainBlockId: string | null = null;
           
-          // Publish to blockchain if wallet is connected
-          if (isConnected && address && signAndExecute) {
-            try {
-              console.log('📤 Publishing factory credential to blockchain...');
-              console.log('✅ Wallet connected:', address);
-              console.log('✅ Sign and execute available');
-              
-              // Create DID for manufacturer
-              const didResult = await createDID();
-              const factoryDID = didResult.did;
-              console.log('📝 Factory DID:', factoryDID);
-              
-              // Create a proper Transaction object
-              const tx = new Transaction();
-              
-              // Add the UNTP credential data to the transaction
-              console.log('💡 Adding UNTP credential data to transaction...');
-              const credentialData = JSON.stringify(untpCredential);
-              const credentialBytes = Array.from(new TextEncoder().encode(credentialData));
-              console.log('📦 Credential data size:', credentialBytes.length, 'bytes');
-              
-              console.log('📤 Submitting via signAndExecute...');
-              
-              // Submit transaction
-              await new Promise<void>((resolve, reject) => {
-                signAndExecute(
-                  { transaction: tx },
-                  {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    onSuccess: (result: any) => {
-                      console.log('✅ Transaction submitted to blockchain!');
-                      console.log('📋 Result:', result);
-                      blockchainBlockId = result.blockId || result.id || result.digest || null;
-                      console.log('🔗 Block ID:', blockchainBlockId);
-                      resolve();
-                    },
-                    onError: (error: Error) => {
-                      console.error('❌ Transaction failed:', error);
-                      reject(error);
-                    }
-                  }
-                );
-              });
-            } catch (error) {
-              console.error('❌ Blockchain publishing failed:', error);
-              // Continue without blocking
-            }
-          }
+          // Note: Certificate creation doesn't require blockchain publishing
+          // DIDs and credentials are created locally and stored
+          // Publishing DIDs to blockchain is optional and requires wallet signing
+          // Credentials work locally without blockchain publishing
+          console.log('✅ Certificate created successfully (local)');
+          console.log('💡 Credential is ready to use - no blockchain publishing needed');
+          console.log('📋 DID publishing to blockchain is optional and requires wallet signing');
           
           dppCredential = {
             jwt: credentialJWT,
@@ -670,28 +634,69 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
             <h3 className="text-lg font-semibold">Production Certificate Issued!</h3>
           </div>
 
-          {/* What happens here? Explanation */}
-          <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 mb-4">
-            <h4 className="text-sm font-medium text-blue-400 mb-2">💡 What happens here?</h4>
-            <div className="space-y-2 text-xs text-zinc-300 leading-relaxed">
-              <p>
-                <strong className="text-white">Transaction confirmed:</strong> Your production certificate 
-                is cryptographically linked to the origin certificate, creating an immutable chain.
-              </p>
-              <p>
-                <strong className="text-white">Storage:</strong> Both certificates are stored on the <a 
-                  href="https://docs.iota.org/developer/iota-identity/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-400 hover:text-blue-300 underline"
-                >IOTA network</a>, creating a permanent record of the complete supply chain.
-              </p>
-              <p>
-                <strong className="text-white">Why it matters:</strong> Consumers can now verify the entire journey 
-                from farm to factory instantly. No one can fake or alter this proof.
-              </p>
+          {/* Mode Indicator */}
+          <div className={`border rounded-lg p-3 mb-4 ${isBlockchainMode() ? 'bg-green-500/10 border-green-500/30' : 'bg-yellow-500/10 border-yellow-500/30'}`}>
+            <div className="flex items-center gap-2 mb-2">
+              {isBlockchainMode() ? (
+                <>
+                  <span className="text-base">🔗</span>
+                  <span className="text-sm font-semibold text-green-400">Blockchain Mode</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-base">🎭</span>
+                  <span className="text-sm font-semibold text-yellow-400">Demo Mode</span>
+                </>
+              )}
+            </div>
+            <div className="text-xs text-zinc-300 space-y-1">
+              {isBlockchainMode() ? (
+                <>
+                  <p>✅ <strong>Real cryptographic signatures</strong> using IOTA Identity SDK</p>
+                  <p>✅ <strong>Credential chaining</strong> with cryptographic links</p>
+                  <p>✅ <strong>Cryptographically verifiable</strong> - tamper-proof JWT</p>
+                  <p>ℹ️ DIDs created locally (blockchain publishing requires wallet approval)</p>
+                </>
+              ) : (
+                <>
+                  <p>🎭 <strong>Mock credentials</strong> for demonstration</p>
+                  <p>🎭 <strong>Simulated credential chaining</strong> (not cryptographically linked)</p>
+                  <p>🎭 <strong>No real crypto verification</strong> - just simulation</p>
+                  <p>💡 Switch to Blockchain Mode to see real cryptographic signatures</p>
+                </>
+              )}
             </div>
           </div>
+
+          {/* What happens here? Explanation - Foldable */}
+          <Fold 
+            title={<span className="text-blue-400">💡 What happens here?</span>} 
+            defaultOpen={false}
+            className="mb-4"
+          >
+            <div className="space-y-2 text-xs text-zinc-300 leading-relaxed">
+              <p>
+                <strong className="text-white">Transaction confirmed:</strong> {isBlockchainMode()
+                  ? 'Your production certificate is cryptographically linked to the origin certificate, creating an immutable chain.'
+                  : 'Your production certificate is linked to the origin certificate (simulated, not cryptographically signed).'}
+              </p>
+              <p>
+                <strong className="text-white">Storage:</strong> {isBlockchainMode()
+                  ? <>Both certificates are stored locally with cryptographic signatures. Can be published to the <a 
+                      href="https://docs.iota.org/developer/iota-identity/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:text-blue-300 underline"
+                    >IOTA network</a>, creating a permanent record of the complete supply chain.</>
+                  : 'Both certificates are stored locally for demonstration (not published to blockchain).'}
+              </p>
+              <p>
+                <strong className="text-white">Why it matters:</strong> {isBlockchainMode()
+                  ? 'Consumers can now verify the entire journey from farm to factory instantly. No one can fake or alter this proof.'
+                  : 'Demonstrates how consumers can verify the supply chain. Switch to Blockchain Mode for real cryptographic verification.'}
+              </p>
+            </div>
+          </Fold>
 
           <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4">
             <p className="text-sm text-white font-medium mb-3">Production Summary:</p>
@@ -737,27 +742,198 @@ export function FactoryProduction({ industry, onNextStep }: FactoryProductionPro
             </div>
           )}
 
-          {/* Explorer Link */}
-          {productionCredential.transactionId && (
-            <div className="bg-[#1a1a1a] border-2 border-white rounded-lg p-5">
+          {/* Publish DID to Blockchain Button */}
+          {/* Hide blockchain publishing for hackathon demo to avoid wallet rejection errors */}
+          {false && productionCredential.issuerDID && isConnected && address && (
+            <div className="mb-4">
+              <button
+                onClick={async () => {
+                  if (!productionCredential || !productionCredential.certificationData) {
+                    alert('Production credential data missing. Issue the credential again before publishing.');
+                    return;
+                  }
+
+                  try {
+                    setLoading(true);
+                    console.log('📡 Starting client-side factory DID publishing with wallet signing...');
+
+                    if (!address) {
+                      throw new Error('Wallet not connected. Please connect your IOTA Wallet.');
+                    }
+
+                    // Create a wrapper function for the dApp Kit mutation
+                    const signAndExecute = async (transaction: any) => {
+                      console.log('🔏 Signing transaction with wallet...');
+                      console.log('📋 Transaction type:', typeof transaction);
+                      console.log('📋 Transaction length:', typeof transaction === 'string' ? transaction.length : 'N/A');
+                      
+                      try {
+                        const result = await signAndExecuteTransaction({
+                          transaction,
+                          waitForTransaction: true, // Wait for confirmation
+                        });
+                        return result;
+                      } catch (error) {
+                        console.error('❌ Wallet transaction error:', error);
+                        // Re-throw with better context
+                        if (error instanceof Error && error.message.includes('Rejected')) {
+                          throw new Error(
+                            'Transaction was rejected by your wallet. ' +
+                            'Make sure:\n' +
+                            '• You\'re on IOTA testnet\n' +
+                            '• You have sufficient balance\n' +
+                            '• The transaction is approved in the wallet popup\n\n' +
+                            'Note: Local DIDs work perfectly for credentials without blockchain publishing.'
+                          );
+                        }
+                        throw error;
+                      }
+                    };
+
+                    const { publishIdentityToChain } = await import('@/lib/publishIdentityToChain');
+                    const result = await publishIdentityToChain(null, address, signAndExecute);
+
+                    if (!result.success || !result.did) {
+                      const message = result.error || 'Unknown error while publishing DID.';
+                      throw new Error(message);
+                    }
+
+                    const did = result.did;
+                    const digest = result.blockId;
+
+                    console.log('✅ Factory DID published on-chain:', did);
+
+                    const certificationData = productionCredential.certificationData as ProductionCertificationData;
+
+                    const untpCredential = buildUNTPDPPCredential(
+                      did,
+                      productionCredential.subject || product.did,
+                      {
+                        name: product.name,
+                        description: ('description' in product ? product.description : product.name) as string,
+                        countryOfOrigin: productionStakeholder.country,
+                        manufacturer: {
+                          name: productionStakeholder.name,
+                          did,
+                        },
+                      },
+                      certificationData as any
+                    );
+
+                    const credentialJWT = await issueCredential(
+                      did,
+                      productionCredential.subject || product.did,
+                      {
+                        type: labels.productionCredential,
+                        certificationData,
+                        untpCredential,
+                        previousCredentials: [farmerCredential?.jwt].filter(Boolean),
+                      }
+                    );
+
+                    const updatedCredential: DPPCredential = {
+                      ...productionCredential,
+                      jwt: credentialJWT,
+                      issuerDID: did,
+                      onChain: true,
+                      transactionId: digest,
+                      untpCredential,
+                    };
+
+                    localStorage.setItem('factory-credential', JSON.stringify(updatedCredential));
+                    setProductionCredential(updatedCredential);
+
+                    const explorerHint = result.explorerUrl ? `\nExplorer: ${result.explorerUrl}` : '';
+                    alert(`Factory DID published successfully!${digest ? `\nTransaction ID: ${digest}` : ''}${explorerHint}`);
+                  } catch (error) {
+                    console.error('❌ Failed to publish factory DID on-chain:', error);
+                    const message = error instanceof Error ? error.message : 'Unknown error';
+                    
+                    // Show user-friendly error message
+                    if (message.includes('rejected') || message.includes('Rejected')) {
+                      alert(
+                        'Transaction Rejected\n\n' +
+                        message + '\n\n' +
+                        '💡 Tip: The demo works perfectly with local DIDs. ' +
+                        'Credentials can be issued and verified locally without blockchain publishing.'
+                      );
+                    } else if (message.includes('DID publishing via microservice is not supported') || 
+                               message.includes('wallet private key')) {
+                      alert(
+                        'DID Publishing Not Available\n\n' +
+                        'On-chain DID publishing requires wallet signing, which must happen client-side.\n\n' +
+                        'For now, DIDs are created locally and work perfectly for credential issuance.\n\n' +
+                        'Note: Local DIDs are fully functional for demo purposes.'
+                      );
+                    } else {
+                      alert(`Publishing failed: ${message}\n\nTip: The demo works perfectly with local DIDs.`);
+                    }
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                disabled={loading}
+                className="block w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:opacity-50 text-white font-bold py-3.5 px-6 rounded-lg transition-all duration-200 text-center mb-2"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 inline-block mr-2 mb-0.5 animate-spin" />
+                    Publishing DID...
+                  </>
+                ) : (
+                  <>
+                    📡 Publish DID to Blockchain
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+
+          {/* DID and Transaction Links - Hidden in demo mode */}
+          {productionCredential.issuerDID && !isDemoMode() && (
+            <div className="bg-[#1a1a1a] border-2 border-white rounded-lg p-5 space-y-3">
+              {/* DID Link */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Factory className="w-4 h-4 text-blue-400" />
                   <div>
-                    <p className="text-xs font-medium text-white">Blockchain Verification</p>
-                    <p className="text-xs text-zinc-500">Transaction: {productionCredential.transactionId.substring(0, 20)}...</p>
+                    <p className="text-xs font-medium text-white">Your Factory DID</p>
+                    <p className="text-xs text-zinc-500 font-mono break-all">
+                      {productionCredential.issuerDID.substring(0, 30)}...
+                    </p>
                   </div>
                 </div>
                 <a
-                  href={getBlockExplorerURL(productionCredential.transactionId, 'testnet')}
+                  href={getDIDViewerURL(productionCredential.issuerDID, 'testnet')}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                  className="flex items-center gap-2 text-xs text-blue-400 hover:text-blue-300 transition-colors whitespace-nowrap"
                 >
                   <ExternalLink className="w-3 h-3" />
-                  <span>View Transaction</span>
+                  <span>View DID</span>
                 </a>
               </div>
+              
+              {/* Transaction Link (if available) */}
+              {productionCredential.transactionId && (
+                <div className="flex items-center justify-between pt-3 border-t border-[#3a3a3a]">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-zinc-400">Transaction:</span>
+                    <span className="text-xs text-zinc-500 font-mono">
+                      {productionCredential.transactionId.substring(0, 20)}...
+                    </span>
+                  </div>
+                  <a
+                    href={getBlockExplorerURL(productionCredential.transactionId, 'testnet')}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                  >
+                    <ExternalLink className="w-3 h-3" />
+                    <span>View Transaction</span>
+                  </a>
+                </div>
+              )}
             </div>
           )}
 

@@ -40,15 +40,6 @@
   --text-primary: #ffffff;
   --text-secondary: #d4d4d8;
   --text-tertiary: #a1a1aa;
-  /* Typography */
-  --font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-  --font-size-title: 1rem; /* 16px */
-  --font-size-subtitle: 0.875rem; /* 14px */
-  --font-size-body: 0.875rem; /* 14px */
-  --font-size-small: 0.75rem; /* 12px */
-  --font-size-label: 0.625rem; /* 10px */
-  --line-height-tight: 1.25;
-  --line-height-normal: 1.5;
   
   /* Status */
   --success: #34d399;
@@ -143,6 +134,44 @@
 
 /* Easy editing: Just change CSS variables above to update all cards globally */
 
+/* Default Card - matches home-step-card visuals (documented in docs/ux/CARD-DESIGN-SYSTEM.md) */
+.card-default {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+/* Home Page Specific Styles */
+/* Horizontal How It Works Layout */
+.home-how-it-works {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .home-how-it-works {
+    gap: 24px;
+    flex-wrap: nowrap;
+  }
+}
+
+/* Home Step Card - matches card-default but with specific styling */
+.home-step-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.5rem;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Hero Chip Styling */
+.home-hero-chip {
+  /* Chip effect for hero carousel - already has inline styles */
+}
+
 /* Typography Utilities - Centralized font system */
 .typ-title {
   font-family: var(--font-family);
@@ -182,4 +211,3 @@
   font-weight: 500;
   letter-spacing: 0.02em;
 }
-

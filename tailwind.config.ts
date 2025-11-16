@@ -34,27 +34,22 @@ const config: Config = {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
-        // Design System - Use nested structure for proper Tailwind syntax
-        dpp: {
-          // Backgrounds
-          'bg-primary': 'var(--bg-primary)',
-          'bg-secondary': 'var(--bg-secondary)',
-          'bg-tertiary': 'var(--bg-tertiary)',
-          'bg-card': 'var(--bg-card)',
-          // Text
-          'text-primary': 'var(--text-primary)',
-          'text-secondary': 'var(--text-secondary)',
-          'text-tertiary': 'var(--text-tertiary)',
-          // Borders
-          'border-default': 'var(--border)',
-          'border-hover': 'var(--border-hover)',
-          // Card System
-          'card-bg-primary': 'var(--card-bg-primary)',
-          'card-bg-secondary': 'var(--card-bg-secondary)',
-          'card-bg-tertiary': 'var(--card-bg-tertiary)',
-          'card-border-primary': 'var(--card-border-primary)',
-          'card-border-secondary': 'var(--card-border-secondary)',
-        },
+        // Design System - Flat structure for dpp-* classes
+        'dpp-bg-primary': 'var(--bg-primary)',
+        'dpp-bg-secondary': 'var(--bg-secondary)',
+        'dpp-bg-tertiary': 'var(--bg-tertiary)',
+        'dpp-bg-card': 'var(--bg-card)',
+        'dpp-text-primary': 'var(--text-primary)',
+        'dpp-text-secondary': 'var(--text-secondary)',
+        'dpp-text-tertiary': 'var(--text-tertiary)',
+        'dpp-border-default': 'var(--border)',
+        'dpp-border-hover': 'var(--border-hover)',
+        // Card System
+        'dpp-card-bg-primary': 'var(--card-bg-primary)',
+        'dpp-card-bg-secondary': 'var(--card-bg-secondary)',
+        'dpp-card-bg-tertiary': 'var(--card-bg-tertiary)',
+        'dpp-card-border-primary': 'var(--card-border-primary)',
+        'dpp-card-border-secondary': 'var(--card-border-secondary)',
       },
     },
   },

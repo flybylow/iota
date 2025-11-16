@@ -7,15 +7,25 @@
  */
 
 export const IOTA_EXPLORER_BASE = 'https://explorer.iota.org';
+export const IOTA_2_0_TESTNET_EXPLORER = 'https://explorer.iota.org/iota2-testnet';
 export const IOTA_IDENTITY_DOCS = 'https://wiki.iota.org/identity.rs/introduction/';
 
 /**
  * Extract address from DID
  * Format: did:iota:0x... → 0x...
+ * Handles: did:iota:0x:0x... (double 0x format) → 0x...
  */
 export function extractAddressFromDID(did: string): string {
   const parts = did.split(':');
-  return parts[parts.length - 1]; // Returns 0x...
+  let address = parts[parts.length - 1]; // Get the last part
+  
+  // Handle double 0x format (did:iota:0x:0x...)
+  if (address === '0x' && parts.length > 3) {
+    // If last part is just '0x', get the part before it
+    address = parts[parts.length - 2] + ':' + address;
+  }
+  
+  return address;
 }
 
 /**
@@ -118,15 +128,22 @@ export function getRealExplorerURL(did: string, network: 'testnet' | 'mainnet' =
  */
 export function getBlockExplorerURL(blockId: string | undefined, network: 'testnet' | 'mainnet' = 'testnet'): string {
   if (!blockId) {
-    return `${IOTA_EXPLORER_BASE}/testnet`;
+    // Link to explorer homepage with network parameter
+    return `${IOTA_EXPLORER_BASE}?network=${network}`;
   }
   
   // Remove 'block_' prefix if it's a demo block ID
   const cleanId = blockId.replace(/^block_\d+_/, '');
   
   // Use txblock format for all block IDs
-  // Examples: J1XA6HLRN2T6jwoKy851vys5r9xzBx6tRhWvcHBSLqaD or 4j8HwsCQEtjmY28drcnw9Kq7aLyN78UEq4LFDr8PdwL8
-  return `${IOTA_EXPLORER_BASE}/txblock/${cleanId}?network=${network}`;
+  // Format: https://explorer.iota.org/txblock/[BLOCK_ID]?network=testnet
+  // Examples: J1XA6HLRN2T6jwoKy851vys5r9xzBx6tRhWvcHBSLqaD or BdHQcAirbW2yiuyE2EwFUgkiG3xwPyWQFCq9DtgpCYPw
+  if (network === 'testnet') {
+    return `${IOTA_EXPLORER_BASE}/txblock/${cleanId}?network=testnet`;
+  }
+  
+  // Mainnet (no network parameter needed)
+  return `${IOTA_EXPLORER_BASE}/txblock/${cleanId}`;
 }
 
 /**
@@ -146,10 +163,11 @@ export function getIOTAIdentityDocsURL(): string {
 /**
  * Get general IOTA explorer URL for verification
  * Links to the main explorer (not individual transactions)
+ * Format: https://explorer.iota.org/?network=testnet
  */
 export function getExplorerHomeURL(network: 'testnet' | 'mainnet' = 'testnet'): string {
   if (network === 'testnet') {
-    return `${IOTA_EXPLORER_BASE}/testnet`;
+    return `${IOTA_EXPLORER_BASE}?network=testnet`;
   }
   return `${IOTA_EXPLORER_BASE}`;
 }
@@ -183,5 +201,138 @@ export function getStoredTransactionLinks(): Array<{ blockId: string; link: stri
     return JSON.parse(localStorage.getItem('iota-transaction-links') || '[]');
   }
   return [];
+}
+
+/**
+ * Get explorer URL for viewing a DID on IOTA 2.0
+ * For IOTA 2.0, DIDs can be resolved and viewed on the explorer
+ * Format: https://explorer.iota.org/address/[object-id]?network=testnet
+ * 
+ * Based on working format: /address/[id]?network=testnet
+ * 
+ * @param did - The DID to view (format: did:iota:0x... or did:iota:testnet:0x...)
+ * @param network - 'testnet' or 'mainnet'
+ * @returns Explorer URL for the DID
+ */
+export function getDIDExplorerURL(did: string, network: 'testnet' | 'mainnet' = 'testnet'): string {
+  // Extract object ID from DID
+  // Format: did:iota:0x... or did:iota:testnet:0x...
+  const parts = did.split(':');
+  let objectId = parts[parts.length - 1]; // Get the last part (0x...)
+  
+  // Clean object ID: remove '0x' prefix for length check, but keep it for URL
+  const cleanObjectId = objectId.startsWith('0x') ? objectId.substring(2) : objectId;
+  
+  // For IOTA testnet
+  if (network === 'testnet') {
+    // Try address view if object ID is available
+    if (cleanObjectId && cleanObjectId.length === 64) {
+      // IOTA 2.0 explorer format: /address/[object-id]?network=testnet
+      return `${IOTA_EXPLORER_BASE}/address/0x${cleanObjectId}?network=testnet`;
+    }
+    // Fallback to explorer homepage
+    return `${IOTA_EXPLORER_BASE}?network=testnet`;
+  } else {
+    // Mainnet
+    if (cleanObjectId && cleanObjectId.length === 64) {
+      return `${IOTA_EXPLORER_BASE}/address/0x${cleanObjectId}`;
+    }
+    return `${IOTA_EXPLORER_BASE}`;
+  }
+}
+
+/**
+ * Get a simple DID viewer/resolver URL
+ * For IOTA 2.0, links to address view using the object ID from the DID
+ * Format: https://explorer.iota.org/address/[object-id]?network=testnet
+ * 
+ * Based on working formats:
+ * - Transactions: /txblock/[id]?network=testnet
+ * - Addresses/Objects: /address/[id]?network=testnet
+ * 
+ * @param did - The DID to view (format: did:iota:0x... or did:iota:testnet:0x...)
+ * @param network - 'testnet' or 'mainnet'
+ * @returns URL to view/resolve the DID on IOTA 2.0 explorer
+ */
+export function getDIDViewerURL(did: string, network: 'testnet' | 'mainnet' = 'testnet'): string {
+  // Extract object ID from DID
+  // Formats: 
+  //   - did:iota:0x[64-char-hex] (real DIDs from createDID())
+  //   - did:iota:testnet:0x[64-char-hex] (testnet with network identifier)
+  //   - did:iota:0x:0x[...] (mock DIDs with double 0x)
+  
+  const parts = did.split(':');
+  let objectId = parts[parts.length - 1]; // Get the last part
+  
+  // Handle double 0x format (did:iota:0x:0x...)
+  if (objectId === '0x' && parts.length > 3) {
+    // Try to find the hex part in previous parts
+    for (let i = parts.length - 1; i >= 0; i--) {
+      if (parts[i].length > 2 && parts[i].startsWith('0x')) {
+        objectId = parts[i];
+        break;
+      }
+    }
+    // If still '0x', concatenate parts
+    if (objectId === '0x') {
+      const hexParts = parts.slice(parts.indexOf('0x'));
+      objectId = hexParts.join('').replace(/0x0x/g, '0x');
+    }
+  }
+  
+  // Clean: remove 0x if present, then extract hex part
+  let hexPart = objectId.startsWith('0x') ? objectId.substring(2) : objectId;
+  
+  // Remove any non-hex characters
+  hexPart = hexPart.replace(/[^0-9a-fA-F]/g, '');
+  
+  // Check if this is a mock DID (short hex or contains mock identifiers)
+  // Mock DIDs have short hex parts or contain identifiable strings
+  const isMockDID = hexPart.length < 32 || 
+                    did.includes('farmermaria') || 
+                    did.includes('factorychoco') || 
+                    did.includes('ch2025001') ||
+                    did.includes('minerlithium') ||
+                    did.includes('mfgbattery') ||
+                    did.includes('farmercotton') ||
+                    did.includes('factorytextile') ||
+                    did.includes('supplierrare') ||
+                    did.includes('mfgtechassembly');
+  
+  if (isMockDID) {
+    // For mock DIDs, link to explorer homepage with network parameter
+    if (network === 'testnet') {
+      return `${IOTA_EXPLORER_BASE}?network=testnet`;
+    }
+    return `${IOTA_EXPLORER_BASE}`;
+  }
+  
+  // For real DIDs with 64-char hex, use directly
+  if (hexPart.length >= 64) {
+    hexPart = hexPart.substring(0, 64);
+    const cleanObjectId = '0x' + hexPart.toLowerCase();
+    
+    if (network === 'testnet') {
+      return `${IOTA_EXPLORER_BASE}/address/${cleanObjectId}?network=testnet`;
+    }
+    return `${IOTA_EXPLORER_BASE}/address/${cleanObjectId}`;
+  } 
+  
+  // For 32-63 char hex, pad to 64 (might be valid but shorter)
+  if (hexPart.length >= 32) {
+    hexPart = hexPart.padEnd(64, '0');
+    const cleanObjectId = '0x' + hexPart.toLowerCase();
+    
+    if (network === 'testnet') {
+      return `${IOTA_EXPLORER_BASE}/address/${cleanObjectId}?network=testnet`;
+    }
+    return `${IOTA_EXPLORER_BASE}/address/${cleanObjectId}`;
+  }
+  
+  // Last resort: Link to explorer homepage
+  if (network === 'testnet') {
+    return `${IOTA_EXPLORER_BASE}?network=testnet`;
+  }
+  return `${IOTA_EXPLORER_BASE}`;
 }
 

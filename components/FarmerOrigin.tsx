@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { industryData, type IndustryId } from '@/data/industry-data';
 import { Loader2, CheckCircle2, Copy, ExternalLink, Info, ChevronDown, ChevronUp } from 'lucide-react';
-import { getRealExplorerURL, getBlockExplorerURL } from '@/lib/iotaExplorer';
-import { isBlockchainMode } from '@/lib/dppMode';
+import { getRealExplorerURL, getBlockExplorerURL, getDIDViewerURL, getDIDExplorerURL } from '@/lib/iotaExplorer';
+import { isBlockchainMode, isDemoMode } from '@/lib/dppMode';
 import { createDID, issueCredential } from '@/lib/iotaIdentityReal';
 import { buildUNTPDPPCredential } from '@/lib/schemas/untp/dpp-builder';
 import { UNTPSection } from './UNTPSection';
@@ -12,14 +12,13 @@ import { Tabs } from './Tabs';
 import { Tooltip } from './Tooltip';
 import { CTAButton } from './CTAButton';
 import { useWalletStatus } from '@/lib/hooks/useWalletStatus';
-import { useSignAndExecuteTransaction, useIotaClient } from '@iota/dapp-kit';
-import { Transaction } from '@iota/iota-sdk/transactions';
+import { useSignAndExecuteTransaction } from '@iota/dapp-kit';
+// Note: No longer using Transaction from @iota/iota-sdk
+// Using object-based Identity model instead (no Alias Outputs)
 import type { DPPCredential, OriginCertificationData } from '@/types/dpp';
-import { publishDIDToBlockchain, prepareDIDForPublishing } from '@/lib/publishDID';
+// Removed: publishDIDToBlockchain - now using publishIdentityToChain for object-based publishing
 
-// Import AliasOutputBuilder for transaction building
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let IotaSDK: any = null;
+// Note: Using object-based Identity model (no Alias Outputs, no Transaction building)
 
 /**
  * Origin Certification Component
@@ -55,8 +54,9 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
   
   // Blockchain mode hooks
   const { isConnected, address } = useWalletStatus();
-  const { mutate: signAndExecute } = useSignAndExecuteTransaction();
-  const client = useIotaClient();
+  
+  // dApp Kit transaction signing hook
+  const { mutateAsync: signAndExecuteTransaction } = useSignAndExecuteTransaction();
   
   // Harvest data form state
   const [harvestData, setHarvestData] = useState({
@@ -136,141 +136,13 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             }
           );
           
-          // Step 4: Publish credential to blockchain if wallet is connected
-          if (isConnected && address) {
-            console.log('✅ Wallet connected - ready for blockchain publishing');
-            
-            // Publish to blockchain automatically if wallet is connected
-            if (isConnected && address && signAndExecute) {
-              console.log('📝 Publishing to blockchain via dApp Kit...');
-              
-              // Prepare DID for blockchain publishing
-              try {
-                const publishResult = await publishDIDToBlockchain(
-                  issuerDID,
-                  { id: issuerDID, '@context': 'https://www.w3.org/ns/did/v1', ...document },
-                  new Uint8Array(32), // Placeholder for private key (wallet handles signing)
-                  address
-                );
-                
-                if (publishResult.success) {
-                  console.log('✅ DID prepared for blockchain publishing');
-                  console.log('📋 Transaction ID:', publishResult.transactionId);
-                  
-                  // Full blockchain publishing implementation
-                  try {
-                    // Step 1: Prepare DID document for publishing
-                    console.log('📦 Step 1: Preparing DID document...');
-                    const preparedDID = await prepareDIDForPublishing(issuerDID, address);
-                    console.log('✅ Document prepared:', preparedDID.did);
-                    
-                    // Step 2: Use IOTA Client from dApp Kit
-                    console.log('📦 Step 2: Getting IOTA Client from dApp Kit...');
-                    console.log('✅ Client available:', !!client);
-                    
-                    // Step 3: Prepare transaction with doc.publish(client)
-                    console.log('📦 Step 3: Creating Alias Output transaction...');
-                    console.log('💡 Call doc.publish(client) to create Alias Output');
-                    console.log('💡 This will prepare the transaction for signing');
-                    
-                    // Step 4: Build Alias Output transaction using IOTA SDK
-                    console.log('📦 Step 4: Building Alias Output transaction...');
-                    
-                    // Import IOTA SDK for transaction building
-                    if (!IotaSDK) {
-                        IotaSDK = await import('@iota/iota-sdk/client');
-                        console.log('✅ IOTA SDK loaded');
-                    }
-                    
-                    // Build Alias Output with DID document
-                    // Note: Full AliasOutputBuilder implementation requires proper SDK setup
-                    console.log('💡 Alias Output building via dApp Kit');
-                    console.log('📋 Transaction data prepared');
-                    
-                    // Prepare transaction for signing
-                    // Note: signAndExecute() will handle the transaction building
-                    const transactionData = {
-                        type: 'alias',
-                        stateMetadata: preparedDID.packedDoc || new Uint8Array(),
-                        aliasId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-                    };
-                    
-                    console.log('✅ Transaction data prepared');
-                    console.log('💡 Ready for signAndExecute()');
-                    
-                    // Step 5: Note about blockchain publishing
-                    console.log('📦 Step 5: Blockchain publishing integration complete');
-                    console.log('💡 Infrastructure ready for blockchain submission:');
-                    console.log('   ✅ IOTA Identity SDK integrated');
-                    console.log('   ✅ Wallet connected');
-                    console.log('   ✅ IOTA Client available');
-                    console.log('   ✅ Document packed for blockchain');
-                    console.log('   ✅ Transaction data prepared');
-                    
-                    // Step 6: Submit transaction to blockchain
-                    console.log('📦 Step 6: Submitting transaction to blockchain...');
-                    console.log('💡 Note: Transaction is submitted but DID data attachment requires');
-                    console.log('   proper Alias Output building using IOTA SDK Client.');
-                    console.log('   Current: Submitting basic transaction (empty for now)');
-                    console.log('   Future: Need to build Alias Output with DID metadata');
-                    
-                    // DID metadata is ready
-                    const didMetadata = publishResult.packedDocument || preparedDID.packedDoc;
-                    const metadataBytes = Array.from(didMetadata);
-                    console.log('📦 DID metadata size:', metadataBytes.length, 'bytes');
-                    console.log('💡 DID data ready but needs proper Alias Output integration');
-                    
-                    // Create a Transaction object for submission
-                    // Note: To actually publish DIDs, we'd need to build Alias Outputs
-                    // with proper state metadata. The current approach submits a basic transaction.
-                    const tx = new Transaction();
-                    
-                    console.log('📤 Submitting via signAndExecute...');
-                    
-                    // Submit using the proper Transaction object
-                    await new Promise<void>((resolve, reject) => {
-                      signAndExecute(
-                        { transaction: tx },
-                        {
-                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                          onSuccess: (result: any) => {
-                            console.log('✅ Transaction submitted to blockchain!');
-                            console.log('📋 Result:', result);
-                            blockchainBlockId = result.blockId || result.id || result.digest || null;
-                            console.log('🔗 Block ID:', blockchainBlockId);
-                            resolve();
-                          },
-                          onError: (error: Error) => {
-                            console.error('❌ Transaction failed:', error);
-                            console.log('💡 Error details:', error.message);
-                            reject(error);
-                          }
-                        }
-                      );
-                    });
-                    
-                    console.log('✅ Transaction submitted successfully!');
-                    
-                    // Generate explorer URL with the actual block ID
-                    const { getBlockExplorerURL } = await import('@/lib/iotaExplorer');
-                    const explorerUrl = blockchainBlockId
-                      ? getBlockExplorerURL(blockchainBlockId)
-                      : 'https://explorer.iota.org/testnet';
-                    
-                    console.log('💾 Transaction submission complete');
-                    console.log('🔗 Block ID:', blockchainBlockId || 'none');
-                    console.log('🔗 Explorer URL:', explorerUrl);
-                  } catch (publishError) {
-                    console.error('❌ Publishing error:', publishError);
-                  }
-                } else {
-                  console.error('❌ Publishing failed:', publishResult.error);
-                }
-              } catch (publishError) {
-                console.error('❌ Publishing error:', publishError);
-              }
-            }
-          }
+          // Note: Certificate creation doesn't require blockchain publishing
+          // DIDs and credentials are created locally and stored
+          // Publishing DIDs to blockchain is optional and requires wallet signing
+          // Credentials work locally without blockchain publishing
+          console.log('✅ Certificate created successfully (local)');
+          console.log('💡 Credential is ready to use - no blockchain publishing needed');
+          console.log('📋 DID publishing to blockchain is optional and requires wallet signing');
           
           dppCredential = {
             jwt: credentialJWT,
@@ -346,8 +218,6 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
         </h4>
         <h3 className="text-base font-medium text-white mt-1">{originStakeholder.name}</h3>
       </div>
-
-      {/* Wallet connection status moved under New Harvest button */}
 
       {/* Stakeholder Info Card */}
       <div className="border border-[#3a3a3a] rounded-lg p-6 relative overflow-hidden bg-green-900/30">
@@ -459,21 +329,6 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             </div>
           )}
 
-          {/* Wallet connection status under New Harvest button */}
-          {!showHarvestForm && !isConnected && (
-            <div className="w-[80%] mx-auto">
-              <div className="mt-3 rounded-lg px-4 py-3 bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 text-[11px]">
-                <div className="flex items-start gap-2">
-                  <span className="mt-0.5">⚠️</span>
-                  <div>
-                    <p className="font-medium">Wallet not connected</p>
-                    <p className="opacity-90">You can issue in Demo Mode, but connect your IOTA wallet to publish on-chain.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Harvest Details Form */}
           {showHarvestForm && (
             <>
@@ -482,7 +337,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             
             <div className="grid grid-cols-2 gap-x-10 gap-y-8 space-y-0">
               <div>
-                <label className="block typ-label mb-2">Harvest Date</label>
+                <label className="block text-[10px] text-zinc-300 mb-2">Harvest Date</label>
                 <input
                   type="date"
                   value={harvestData.harvestDate}
@@ -492,7 +347,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
               </div>
               
               <div>
-                <label className="block typ-label mb-2">Batch Weight (kg)</label>
+                <label className="block text-[10px] text-zinc-300 mb-2">Batch Weight (kg)</label>
                 <input
                   type="number"
                   min="100"
@@ -505,7 +360,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
               </div>
               
               <div>
-                <label className="block typ-label mb-2">Cocoa Variety</label>
+                <label className="block text-[10px] text-zinc-300 mb-2">Cocoa Variety</label>
                 <select
                   value={harvestData.cocoaVariety}
                   onChange={(e) => setHarvestData({...harvestData, cocoaVariety: e.target.value})}
@@ -519,7 +374,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
               </div>
               
               <div>
-                <label className="block typ-label mb-2">Fermentation (days)</label>
+                <label className="block text-[10px] text-zinc-300 mb-2">Fermentation (days)</label>
                 <input
                   type="number"
                   min="3"
@@ -531,7 +386,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
               </div>
               
               <div className="col-span-2">
-                <label className="block typ-label mb-2">Drying Method</label>
+                <label className="block text-[10px] text-zinc-300 mb-2">Drying Method</label>
                 <select
                   value={harvestData.dryingMethod}
                   onChange={(e) => setHarvestData({...harvestData, dryingMethod: e.target.value})}
@@ -544,7 +399,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
               </div>
               
               <div className="col-span-2 mt-6">
-                <label className="block typ-label mb-2">Certification #</label>
+                <label className="block text-[10px] text-zinc-300 mb-2">Certification #</label>
                 <input
                   value={`${industry?.toUpperCase()}-CERT-2025-12345`}
                   className="w-auto min-w-[250px] px-4 py-2.5 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg text-white text-sm"
@@ -586,13 +441,90 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
       {credential && (
         <div className="bg-[#2a2a2a] border border-green-500/20 rounded-lg p-7 space-y-4">
           
-          {/* Explanation moved outside the card at bottom of page */}
+          {/* Mode Indicator */}
+          <div className={`border rounded-lg p-3 mb-4 ${isBlockchainMode() ? 'bg-green-500/10 border-green-500/30' : 'bg-yellow-500/10 border-yellow-500/30'}`}>
+            <div className="flex items-center gap-2 mb-2">
+              {isBlockchainMode() ? (
+                <>
+                  <span className="text-base">🔗</span>
+                  <span className="text-sm font-semibold text-green-400">Blockchain Mode</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-base">🎭</span>
+                  <span className="text-sm font-semibold text-yellow-400">Demo Mode</span>
+                </>
+              )}
+            </div>
+            <div className="text-xs text-zinc-300 space-y-1">
+              {isBlockchainMode() ? (
+                <>
+                  <p>✅ <strong>Real cryptographic signatures</strong> using IOTA Identity SDK</p>
+                  <p>✅ <strong>W3C Verifiable Credentials</strong> with Ed25519 signatures</p>
+                  <p>✅ <strong>Cryptographically verifiable</strong> - tamper-proof JWT</p>
+                  <p>ℹ️ DIDs created locally (blockchain publishing requires wallet approval)</p>
+                </>
+              ) : (
+                <>
+                  <p>🎭 <strong>Mock credentials</strong> for demonstration</p>
+                  <p>🎭 <strong>Simple base64 encoding</strong> (not cryptographically signed)</p>
+                  <p>🎭 <strong>Simulated verification</strong> - no real crypto verification</p>
+                  <p>💡 Switch to Blockchain Mode to see real cryptographic signatures</p>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* What happens here? Explanation */}
+          <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 mb-4">
+            <h4 className="text-sm font-medium text-blue-400 mb-2">💡 What happens here?</h4>
+            <div className="space-y-2 text-xs text-zinc-300 leading-relaxed">
+              <p>
+                <strong className="text-white">Certificate issued:</strong> {isBlockchainMode() 
+                  ? 'A cryptographically signed credential proving the origin and quality of your harvest batch.'
+                  : 'A mock credential demonstrating the certificate format (not cryptographically signed).'}
+              </p>
+              <p>
+                <strong className="text-white">Storage:</strong> {isBlockchainMode()
+                  ? <>Stored locally with cryptographic signatures. Can be published to the <a 
+                      href="https://docs.iota.org/developer/iota-identity/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:text-blue-300 underline"
+                    >IOTA network</a> as an immutable record that cannot be altered or faked.</>
+                  : 'Stored locally for demonstration purposes (not published to blockchain).'}
+              </p>
+              <p>
+                <strong className="text-white">Why it matters:</strong> This certificate {isBlockchainMode() 
+                  ? 'is the foundation of your supply chain. Factories must verify it before producing, creating trust without middlemen.'
+                  : 'demonstrates how blockchain credentials work. Switch to Blockchain Mode for real cryptographic signatures.'}
+              </p>
+            </div>
+          </div>
 
           <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-5 space-y-3">
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1">
-                <p className="text-xs text-white mb-1">Certificate JWT:</p>
+                <div className="flex items-center gap-2 mb-1">
+                  <p className="text-xs text-white">Certificate {isBlockchainMode() ? 'JWT (Real)' : 'Mock'}:</p>
+                  {isBlockchainMode() && (
+                    <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-400 rounded border border-green-500/30">
+                      🔐 Signed
+                    </span>
+                  )}
+                  {isDemoMode() && (
+                    <span className="text-xs px-2 py-0.5 bg-yellow-500/20 text-yellow-400 rounded border border-yellow-500/30">
+                      🎭 Mock
+                    </span>
+                  )}
+                </div>
                 <code className="text-xs text-zinc-300 break-all block">{credential.jwt.substring(0, 100)}...</code>
+                {isBlockchainMode() && (
+                  <p className="text-xs text-green-400 mt-2">✓ This is a real W3C Verifiable Credential with Ed25519 cryptographic signature</p>
+                )}
+                {isDemoMode() && (
+                  <p className="text-xs text-yellow-400 mt-2">ℹ️ This is a mock credential. Switch to Blockchain Mode for real cryptographic signatures.</p>
+                )}
               </div>
               <button
                 onClick={copyCredential}
@@ -608,18 +540,190 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             </div>
           </div>
 
-          {/* Blockchain Explorer Link - Big CTA */}
-          {credential.transactionId && (
-            <div className="mb-4">
+          {/* Publish DID to Blockchain Button */}
+          {/* Hide blockchain publishing for hackathon demo to avoid wallet rejection errors */}
+          {false && credential.issuerDID && isConnected && address && (
+            <div className="mb-4 space-y-2">
+              <button
+                onClick={async () => {
+                  if (!credential || !credential.certificationData) {
+                    alert('Credential data missing. Please issue the credential again before publishing on-chain.');
+                    return;
+                  }
+
+                  try {
+                    setLoading(true);
+                    console.log('📡 Starting client-side DID publishing with wallet signing...');
+
+                    if (!address) {
+                      throw new Error('Wallet not connected. Please connect your IOTA Wallet.');
+                    }
+
+                    // Create a wrapper function for the dApp Kit mutation
+                    const signAndExecute = async (transaction: any) => {
+                      console.log('🔏 Signing transaction with wallet...');
+                      console.log('📋 Transaction type:', typeof transaction);
+                      console.log('📋 Transaction length:', typeof transaction === 'string' ? transaction.length : 'N/A');
+                      
+                      try {
+                        const result = await signAndExecuteTransaction({
+                          transaction,
+                          waitForTransaction: true, // Wait for confirmation
+                        });
+                        return result;
+                      } catch (error) {
+                        console.error('❌ Wallet transaction error:', error);
+                        // Re-throw with better context
+                        if (error instanceof Error && error.message.includes('Rejected')) {
+                          throw new Error(
+                            'Transaction was rejected by your wallet. ' +
+                            'Make sure:\n' +
+                            '• You\'re on IOTA testnet\n' +
+                            '• You have sufficient balance\n' +
+                            '• The transaction is approved in the wallet popup\n\n' +
+                            'Note: Local DIDs work perfectly for credentials without blockchain publishing.'
+                          );
+                        }
+                        throw error;
+                      }
+                    };
+
+                    const { publishIdentityToChain } = await import('@/lib/publishIdentityToChain');
+                    const result = await publishIdentityToChain(null, address, signAndExecute);
+
+                    if (!result.success || !result.did) {
+                      const message = result.error || 'Unknown error while publishing DID.';
+                      throw new Error(message);
+                    }
+
+                    const did = result.did;
+                    const digest = result.blockId;
+
+                    console.log('✅ DID published on-chain:', did);
+
+                    const certificationData = credential.certificationData as OriginCertificationData;
+                    const untpCredential = buildUNTPDPPCredential(
+                      did,
+                      product.did,
+                      {
+                        name: product.name,
+                        description: ('description' in product ? product.description : product.name) as string,
+                        countryOfOrigin: originStakeholder.country,
+                        manufacturer: {
+                          name: originStakeholder.name,
+                          did,
+                        },
+                      },
+                      certificationData
+                    );
+
+                    const credentialJWT = await issueCredential(
+                      did,
+                      product.did,
+                      {
+                        type: labels.originCredential,
+                        certificationData,
+                        untpCredential,
+                      }
+                    );
+
+                    const updatedCredential: DPPCredential = {
+                      ...credential,
+                      jwt: credentialJWT,
+                      issuerDID: did,
+                      onChain: true,
+                      transactionId: digest,
+                      untpCredential,
+                    };
+
+                    localStorage.setItem('farmer-credential', JSON.stringify(updatedCredential));
+                    setCredential(updatedCredential);
+
+                    const explorerHint = result.explorerUrl ? `\nExplorer: ${result.explorerUrl}` : '';
+                    alert(`DID published successfully!${digest ? `\nTransaction ID: ${digest}` : ''}${explorerHint}`);
+                  } catch (error) {
+                    console.error('❌ Failed to publish DID on-chain:', error);
+                    const message = error instanceof Error ? error.message : 'Unknown error';
+                    
+                    // Show user-friendly error message
+                    if (message.includes('rejected') || message.includes('Rejected')) {
+                      alert(
+                        'Transaction Rejected\n\n' +
+                        message + '\n\n' +
+                        '💡 Tip: The demo works perfectly with local DIDs. ' +
+                        'Credentials can be issued and verified locally without blockchain publishing.'
+                      );
+                    } else if (message.includes('DID publishing via microservice is not supported') || 
+                               message.includes('wallet private key')) {
+                      alert(
+                        'DID Publishing Not Available\n\n' +
+                        'On-chain DID publishing requires wallet signing, which must happen client-side.\n\n' +
+                        'For now, DIDs are created locally and work perfectly for credential issuance.\n\n' +
+                        'Note: Local DIDs are fully functional for demo purposes.'
+                      );
+                    } else {
+                      alert(`Publishing failed: ${message}\n\nTip: The demo works perfectly with local DIDs.`);
+                    }
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                disabled={loading}
+                className="block w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:opacity-50 text-white font-bold py-3.5 px-6 rounded-lg transition-all duration-200 text-center"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 inline-block mr-2 mb-0.5 animate-spin" />
+                    Publishing DID...
+                  </>
+                ) : (
+                  <>
+                    📡 Publish DID to Blockchain
+                  </>
+                )}
+              </button>
+              
+              {/* DID Link */}
               <a
-                href={getBlockExplorerURL(credential.transactionId, 'testnet')}
+                href={getDIDViewerURL(credential.issuerDID, 'testnet')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-full bg-[#0f0f0f] border-2 border-white text-white font-bold py-3.5 px-6 rounded-lg transition-all duration-200 text-center hover:bg-[#1a1a1a]"
               >
                 <ExternalLink className="w-4 h-4 inline-block mr-2 mb-0.5" />
-                View Transaction on Blockchain
+                View Your DID on Blockchain
               </a>
+              
+              {/* Transaction Link (if available) */}
+              {credential.transactionId && (
+                <a
+                  href={getBlockExplorerURL(credential.transactionId, 'testnet')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full bg-[#1a1a1a] border border-[#3a3a3a] text-white font-medium py-2.5 px-6 rounded-lg transition-all duration-200 text-center hover:bg-[#2a2a2a] text-sm"
+                >
+                  <ExternalLink className="w-3 h-3 inline-block mr-2 mb-0.5" />
+                  View Transaction
+                </a>
+              )}
+            </div>
+          )}
+          
+          {/* DID Link (when not connected) - Hidden in demo mode */}
+          {credential.issuerDID && (!isConnected || !address) && !isDemoMode() && (
+            <div className="mb-4">
+              <a
+                href={getDIDViewerURL(credential.issuerDID, 'testnet')}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full bg-[#0f0f0f] border-2 border-white text-white font-bold py-3.5 px-6 rounded-lg transition-all duration-200 text-center hover:bg-[#1a1a1a]"
+              >
+                <ExternalLink className="w-4 h-4 inline-block mr-2 mb-0.5" />
+                View Your DID (Local)
+              </a>
+              <p className="text-xs text-zinc-500 mt-2 text-center">
+                Connect wallet to publish DID to blockchain
+              </p>
             </div>
           )}
 
@@ -743,15 +847,15 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
                       <ExternalLink className="w-3 h-3" />
                       <span>View</span>
                     </a>
-                  ) : credential.issuerDID ? (
+                  ) : credential.issuerDID && !isDemoMode() ? (
                     <a
-                      href={`https://explorer.iota.org/search/${credential.issuerDID.replace('did:iota:', '').replace('did:iota:0x:', '')}?network=testnet`}
+                      href={getDIDViewerURL(credential.issuerDID, 'testnet')}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1"
                     >
                       <ExternalLink className="w-3 h-3" />
-                      <span>Search DID</span>
+                      <span>View DID</span>
                     </a>
                   ) : null}
                 </div>

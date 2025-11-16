@@ -264,7 +264,7 @@ export const BlockchainCarousel = () => {
           </button>
 
           {/* Dots Indicator */}
-          <div className="flex justify-center gap-3 mt-6 md:mt-8">
+          <div className="flex justify-center items-center gap-2.5 mt-6 md:mt-8">
             {cards.map((card, idx) => (
               <button
                 key={card.id}
@@ -272,11 +272,11 @@ export const BlockchainCarousel = () => {
                   setCurrentIndex(idx);
                   setExpandedCard(null);
                 }}
-                className={`transition-all ${
+                className={`transition-all rounded-full ${
                   currentIndex === idx
-                    ? 'w-8 md:w-12 bg-blue-500'
-                    : 'w-2 md:w-3 bg-dpp-card-border-primary hover:bg-blue-500/50'
-                } h-2 md:h-3 rounded-full`}
+                    ? 'w-16 h-[15px] bg-blue-500 md:w-20 md:h-[15px] shadow-[0_10px_15px_-3px_rgba(59,130,246,0.5),0_4px_6px_-2px_rgba(59,130,246,0.3),0_0_0_2px_rgba(96,165,250,1),inset_0_0_0_1px_rgba(255,255,255,1)]'
+                    : 'w-3 h-[15px] bg-dpp-card-border-primary/60 hover:bg-dpp-card-border-primary opacity-50 hover:opacity-75'
+                }`}
                 aria-label={`Go to slide ${idx + 1}`}
               />
             ))}
