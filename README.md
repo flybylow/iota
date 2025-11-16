@@ -1,12 +1,21 @@
-# 🍫 Digital Product Passport - Chocolate Supply Chain Demo
-
-Interactive demonstration of blockchain-powered supply chain transparency using **IOTA Decentralized Identifiers (DIDs)** and **Verifiable Credentials**.
+# 🌍 Digital Product Passport (DPP) - Supply Chain Transparency Platform
+Hackathon Final Submission — November 2025
+Final hackathon-ready implementation of blockchain-powered supply chain transparency using **IOTA Decentralized Identifiers (DIDs)** and **Verifiable Credentials** for **EU Digital Product Passport** compliance. Live on Vercel with both Demo and On-Chain modes.
 
 ![Next.js](https://img.shields.io/badge/Next.js-15-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![IOTA](https://img.shields.io/badge/IOTA-Identity-teal) ![DPP](https://img.shields.io/badge/DPP-EU%20Ready-green)
 
 ## 🌐 Live Demo
 
-**[View Live Demo →](https://iota-snowy-nine.vercel.app)**
+**[View Live Demo →](https://iota-snowy-nine.vercel.app)**  
+**[Home →](https://iota-snowy-nine.vercel.app/home)**
+**[Docs Page →](https://www.notion.so/tabulas/Iota-EU-Hackaton-2ad9229a2a2380fab651d8f85f6a2c95?source=copy_link)**
+
+**Deployment:** Automated via Vercel from `dev` branch
+ 
+### 📦 Milestones
+ 
+- feat: Complete Phase 1 - Blockchain-ready architecture _(3 weeks ago)_  
+  See detailed notes in `docs/changelog/CHANGELOG-COMPLETE.md` and current `docs/STATUS.md`.
 
 ---
 
@@ -440,4 +449,4 @@ Perfect for:
 
 **Built with ❤️ for a more transparent, sustainable supply chain future**
 
-*Last Updated: October 16, 2025*
+*Last Updated: November 2025*
