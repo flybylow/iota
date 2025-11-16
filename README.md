@@ -11,6 +11,11 @@ Final hackathon-ready implementation of blockchain-powered supply chain transpar
 **[Docs Page →](https://www.notion.so/tabulas/Iota-EU-Hackaton-2ad9229a2a2380fab651d8f85f6a2c95?source=copy_link)**
 
 **Deployment:** Automated via Vercel from `dev` branch
+ 
+### 📦 Milestones
+ 
+- feat: Complete Phase 1 - Blockchain-ready architecture _(3 weeks ago)_  
+  See detailed notes in `docs/changelog/CHANGELOG-COMPLETE.md` and current `docs/STATUS.md`.
 
 ---
 
