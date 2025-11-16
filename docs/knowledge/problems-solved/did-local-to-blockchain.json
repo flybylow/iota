@@ -1,0 +1,43 @@
+[
+  {
+    "project": "iota",
+    "title": "DID Publishing Status",
+    "problem": "Framework exists but on-chain DID publishing is incomplete; wallet and DID creation work locally, explorer shows no transactions.",
+    "solution_summary": "Maintain local mode while preparing IOTA Identity alias output creation and real transaction building. Define concrete next steps for SDK integration.",
+    "tags": ["DID", "Publishing", "Status", "IOTA", "Identity"],
+    "source_files": [
+      "docs/onchain/PUBLISHING-STATUS.md"
+    ]
+  },
+  {
+    "project": "iota",
+    "title": "IOTA dApp Kit Integration",
+    "problem": "Legacy extension-ID based wallet connection was unreliable and broke in browser.",
+    "solution_summary": "Adopt @iota/dapp-kit components and hooks for wallet detection and connection; remove extension-ID dependency.",
+    "tags": ["Wallet", "dApp Kit", "Integration", "IOTA"],
+    "source_files": [
+      "docs/onchain/IOTA-DAPP-KIT-INTEGRATION.md"
+    ]
+  },
+  {
+    "project": "iota",
+    "title": "On-Chain Publishing Steps",
+    "problem": "Need a concrete path to move from local DIDs to on-chain publication including alias output and transaction submission.",
+    "solution_summary": "Document phased steps: install @iota/sdk, create client, build alias output with packed DID document, post block, and resolve on-chain.",
+    "tags": ["Guide", "Steps", "AliasOutput", "@iota/sdk", "DID"],
+    "source_files": [
+      "docs/onchain/ON-CHAIN-STEPS.md"
+    ]
+  },
+  {
+    "project": "iota",
+    "title": "Transaction Submission Status",
+    "problem": "Errors using Client.create() and unclear signAndExecute payload; inability to construct a valid transaction object.",
+    "solution_summary": "Skip submission for stability; consider proper SDK client usage or Wallet SDK; wait for clearer dApp Kit docs/examples.",
+    "tags": ["Transactions", "toJSON", "Client.create", "dApp Kit"],
+    "source_files": [
+      "docs/onchain/TRANSACTION-SUBMISSION-STATUS.md"
+    ]
+  }
+]
+

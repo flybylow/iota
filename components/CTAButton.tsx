@@ -55,7 +55,6 @@ export function CTAButton({
     disabled:opacity-50 disabled:cursor-not-allowed
     transform hover:scale-110 active:scale-105
     relative overflow-hidden
-    m-2
   `;
 
   // SUPER FLASHY brand color: Bright electric cyan-blue gradient

@@ -46,8 +46,14 @@ html, body {
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
+  font-family: var(--font-family);
   /* Mobile constraint is handled at component level, not body level */
+}
+
+/* Readable monospace for code */
+code, pre, kbd, samp {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.95em;
 }
 
 /* Ensure button text color is respected - no default browser styles */
@@ -104,6 +110,14 @@ a {
 input[type="radio"] {
   accent-color: #3b82f6;
   cursor: pointer;
+}
+
+/* Ensure form controls inherit the global font */
+input,
+select,
+textarea,
+button {
+  font-family: var(--font-family);
 }
 
 input[type="radio"]:focus {
@@ -224,13 +238,6 @@ textarea:focus-visible {
 
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out;
-}
-
-/* Override w-full to prevent overflow with padding */
-.w-full {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 2px;
 }
 
 /* Confetti container */

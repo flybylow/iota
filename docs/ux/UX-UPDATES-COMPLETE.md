@@ -159,6 +159,22 @@ After:  Create Identity → Verify Identity
 - **Padding:** Reduced on small screens
 - **Scroll:** Smooth, no horizontal overflow
 
+## 🎨 Layout Specifications
+
+### Home Page Layout
+- **Desktop Max Width:** 800px (`max-w-md md:max-w-[800px]`)
+- **Mobile Max Width:** 448px (matches container)
+- **Centered:** All content centered with `mx-auto`
+- **Responsive Breakpoint:** 768px (md)
+
+### Credit Card Carousel
+- **Card Width:** Fixed 340px (credit card size)
+- **Aspect Ratio:** 1.586:1 (standard credit card ratio)
+- **Container:** Full width, content naturally constrained
+- **Buttons:** Positioned on left/right of card
+
+The credit card carousel maintains its standard 340px width regardless of the page container, while the home page body content is constrained to 800px for optimal readability.
+
 ---
 
 ## 🔍 Testing Checklist

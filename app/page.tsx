@@ -27,6 +27,23 @@ export default function Home() {
   const [selectedIndustry, setSelectedIndustry] = useState<string | null>('food-beverage');
   const [showIndustryDropdown, setShowIndustryDropdown] = useState(false);
   const [activeMainTab, setActiveMainTab] = useState<'farmer' | 'factory' | 'consumer'>('farmer');
+  const [farmerIssued, setFarmerIssued] = useState(false);
+
+  React.useEffect(() => {
+    // Initial check
+    try {
+      const stored = localStorage.getItem('farmer-credential');
+      setFarmerIssued(!!stored);
+    } catch {}
+    // Listen to storage events (if issued in another tab)
+    const handler = (e: StorageEvent) => {
+      if (e.key === 'farmer-credential') {
+        setFarmerIssued(!!e.newValue);
+      }
+    };
+    window.addEventListener('storage', handler);
+    return () => window.removeEventListener('storage', handler);
+  }, []);
 
   const tabs = [
     {
@@ -167,7 +184,7 @@ export default function Home() {
                   label: '🌱 Farmer',
                   description: tabs[0].description,
                   content: selectedIndustry ? (
-                    <div className="w-full m-4 border-4 border-white/90 rounded-[2rem] overflow-hidden bg-[#0f0f0f] shadow-[0_0_0_2px_rgba(255,255,255,0.1)] ring-2 ring-white/20">
+                    <div className="w-full m-4 border-[0.5px] border-white/15 rounded-[2rem] overflow-hidden bg-[#0f0f0f] shadow-sm">
                       <div className="px-6 py-6">
                         <FarmerOrigin industry={selectedIndustry} onNextStep={() => {
                           setActiveMainTab('factory');
@@ -176,7 +193,7 @@ export default function Home() {
                       </div>
                     </div>
                   ) : (
-                    <div className="w-full m-4 border-4 border-white/90 rounded-[2rem] overflow-hidden bg-[#0f0f0f] shadow-[0_0_0_2px_rgba(255,255,255,0.1)] ring-2 ring-white/20">
+                    <div className="w-full m-4 border-[0.5px] border-white/15 rounded-[2rem] overflow-hidden bg-[#0f0f0f] shadow-sm">
                       <div className="px-6 py-4">
                         <p className="text-white text-center py-8">Please select an industry first</p>
                       </div>
@@ -189,7 +206,7 @@ export default function Home() {
                   label: tabs[1].label,
                   description: tabs[1].description,
                   content: selectedIndustry ? (
-                    <div className="w-full m-4 border-4 border-white rounded-[2rem] overflow-hidden relative">
+                    <div className="w-full m-4 border-[0.5px] border-white/15 rounded-[2rem] overflow-hidden relative">
                       {/* Background Image - Factory Tab */}
                       <div 
                         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -210,7 +227,7 @@ export default function Home() {
                       </div>
                     </div>
                   ) : (
-                    <div className="w-full m-4 border-4 border-white rounded-[2rem] overflow-hidden bg-[#0f0f0f]">
+                    <div className="w-full m-4 border-[0.5px] border-white/15 rounded-[2rem] overflow-hidden bg-[#0f0f0f]">
                       <div className="px-6 py-8">
                         <p className="text-white text-center py-8">Please select an industry first</p>
                       </div>
@@ -223,13 +240,13 @@ export default function Home() {
                   label: '🛡️ Consumer',
                   description: tabs[2].description,
                   content: selectedIndustry ? (
-                    <div className="w-full m-4 border-4 border-white rounded-[2rem] overflow-hidden bg-[#0f0f0f]">
+                    <div className="w-full m-4 border-[0.5px] border-white/15 rounded-[2rem] overflow-hidden bg-[#0f0f0f]">
                       <div className="px-6 py-8 pb-12">
                         <ConsumerJourney industry={selectedIndustry} />
                       </div>
                     </div>
                   ) : (
-                    <div className="w-full m-4 border-4 border-white rounded-[2rem] overflow-hidden bg-[#0f0f0f]">
+                    <div className="w-full m-4 border-[0.5px] border-white/15 rounded-2xl overflow-hidden bg-[#0f0f0f]">
                       <div className="px-6 py-8 pb-12">
                         <p className="text-white text-center py-8">Please select an industry first</p>
                       </div>
@@ -251,28 +268,28 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Bottom Sections - Outside Card, Bottom of Screen - Only show on Consumer page */}
+        {/* Bottom Sections - Outside Card, Bottom of Screen */}
         {activeMainTab === 'consumer' && (
           <div className="max-w-[448px] mx-auto px-4 pb-8 space-y-6">
             {/* Why This Matters - Card */}
-            <details className="card card-primary overflow-hidden group">
-              <summary className="p-5 cursor-pointer list-none hover:bg-[#2f2f2f] transition-colors flex items-center gap-3">
+            <details className="card card-primary overflow-hidden group border-0">
+              <summary className="p-5 md:p-6 cursor-pointer list-none hover:bg-[#2f2f2f] transition-colors flex items-center gap-3">
                 <ChevronRight className="w-5 h-5 text-purple-400 transition-transform group-open:rotate-90 flex-shrink-0" />
-                <h4 className="text-base font-medium text-purple-400">
+                <h4 className="text-sm font-medium text-purple-400">
                   💡 What happens here?
                 </h4>
               </summary>
-              <div className="px-5 pb-5 pt-2 space-y-4">
+              <div className="px-5 md:px-6 pb-6 pt-3 space-y-4">
                 <div>
-                  <h4 className="text-sm font-medium text-white mb-2">For Consumers</h4>
-                  <p className="text-sm text-zinc-300 leading-relaxed">
+                  <h4 className="text-xs font-medium text-white mb-2">For Consumers</h4>
+                  <p className="text-xs text-zinc-300 leading-relaxed">
                     You can instantly verify product authenticity with your phone. No more wondering if claims 
                     about organic, fair trade, or origin are true. Get complete transparency in seconds, not days.
                   </p>
                 </div>
                 <div>
-                  <h4 className="text-sm font-medium text-blue-400 mb-2">For Your Business</h4>
-                  <p className="text-sm text-zinc-300 leading-relaxed">
+                  <h4 className="text-xs font-medium text-blue-400 mb-2">For Your Business</h4>
+                  <p className="text-xs text-zinc-300 leading-relaxed">
                     You can build trust with customers by showing verified supply chain data. Meet EU Digital 
                     Product Passport requirements, prevent fraud, and differentiate your products with 
                     blockchain-backed transparency.
@@ -282,25 +299,25 @@ export default function Home() {
             </details>
 
             {/* Technical & Legal Info - Card */}
-            <details className="card card-purple overflow-hidden group">
-              <summary className="p-5 cursor-pointer list-none hover:bg-purple-500/10 transition-colors flex items-center gap-3">
+            <details className="card card-purple overflow-hidden group border-0">
+              <summary className="p-5 md:p-6 cursor-pointer list-none hover:bg-purple-500/10 transition-colors flex items-center gap-3">
                 <ChevronRight className="w-5 h-5 text-purple-400 transition-transform group-open:rotate-90 flex-shrink-0" />
                 <div className="flex items-center gap-4 flex-1">
                   <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-2xl">🍫</span>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-base font-semibold text-white">
+                    <h3 className="text-sm font-semibold text-white">
                       Technical & Legal Info
                     </h3>
                   </div>
                 </div>
               </summary>
-              <div className="px-5 pb-5 pt-2 space-y-4">
-                <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4 space-y-3">
+              <div className="px-5 md:px-6 pb-6 pt-3 space-y-5">
+                <div className="bg-[#1a1a1a] rounded-lg p-5 space-y-4">
                   <div>
-                    <p className="text-xs font-medium text-purple-400 mb-1">🔧 Technical Standards:</p>
-                    <p className="text-xs text-zinc-300 leading-relaxed">
+                    <p className="text-[11px] font-medium text-purple-400 mb-1">🔧 Technical Standards:</p>
+                    <p className="text-[11px] text-zinc-300 leading-relaxed">
                       <strong>W3C Verifiable Credentials:</strong> Industry-standard format for digital certificates.
                       <br />
                       <strong>Ed25519 Signatures:</strong> Cryptographic proof of authenticity. 
@@ -309,8 +326,8 @@ export default function Home() {
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs font-medium text-blue-400 mb-1">⚖️ Legal Compliance:</p>
-                    <p className="text-xs text-zinc-300 leading-relaxed">
+                    <p className="text-[11px] font-medium text-blue-400 mb-1">⚖️ Legal Compliance:</p>
+                    <p className="text-[11px] text-zinc-300 leading-relaxed">
                       <strong>EU Digital Product Passport:</strong> Complies with upcoming 2027 regulations for batteries, textiles, and electronics.
                       <br />
                       <strong>UN/CEFACT UNTP:</strong> Standardized data schema for global trade.
@@ -319,8 +336,8 @@ export default function Home() {
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs font-medium text-green-400 mb-1">🔐 Security & Immutability:</p>
-                    <p className="text-xs text-zinc-300 leading-relaxed">
+                    <p className="text-[11px] font-medium text-green-400 mb-1">🔐 Security & Immutability:</p>
+                    <p className="text-[11px] text-zinc-300 leading-relaxed">
                       Each certificate is cryptographically signed and stored on the <a 
                         href="https://docs.iota.org/developer/iota-identity/" 
                         target="_blank" 
@@ -334,6 +351,8 @@ export default function Home() {
             </details>
           </div>
         )}
+
+        {/* Farmer bottom explanation removed per request */}
       </div> {/* Closes body container */}
       
       {/* Footer - Full Width (outside all containers) */}

@@ -17,6 +17,7 @@
 
 ### Cross-Project References
 - [AIGO Project](./cross-project/aigo-reference.md) - Patterns from aigo repo
+ - JSON indexes: [problems-solved/index.json](./problems-solved/index.json), [cross-project/index.json](./cross-project/index.json)
 
 ### Important Prompts
 - _Coming soon_ - Will be documented as we work
