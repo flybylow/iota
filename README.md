@@ -1,13 +1,14 @@
 # 🌍 Digital Product Passport (DPP) - Supply Chain Transparency Platform
-
-Production-ready implementation of blockchain-powered supply chain transparency using **IOTA Decentralized Identifiers (DIDs)** and **Verifiable Credentials** for **EU Digital Product Passport** compliance.
+Hackathon Final Submission — November 2025
+Final hackathon-ready implementation of blockchain-powered supply chain transparency using **IOTA Decentralized Identifiers (DIDs)** and **Verifiable Credentials** for **EU Digital Product Passport** compliance. Live on Vercel with both Demo and On-Chain modes.
 
 ![Next.js](https://img.shields.io/badge/Next.js-15-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![IOTA](https://img.shields.io/badge/IOTA-Identity-teal) ![DPP](https://img.shields.io/badge/DPP-EU%20Ready-green) ![Vercel](https://img.shields.io/badge/Vercel-Deployed-black)
 
 ## 🌐 Live Demo
 
 **[View Live Demo →](https://iota-snowy-nine.vercel.app)**  
-**[Home / Marketing Page →](https://iota-snowy-nine.vercel.app/home)**
+**[Home →](https://iota-snowy-nine.vercel.app/home)**
+**[Docs Page →](https://www.notion.so/tabulas/Iota-EU-Hackaton-2ad9229a2a2380fab651d8f85f6a2c95?source=copy_lin)k**
 
 **Deployment:** Automated via Vercel from `dev` branch
 
