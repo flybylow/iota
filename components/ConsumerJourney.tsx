@@ -239,6 +239,8 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
               {isBlockchainMode() 
                 ? 'Complete traceability from farm harvest to production. Data verified using IOTA Identity with cryptographic signatures.'
                 : 'Complete traceability demonstrated. (Demo mode - simulated verification, not cryptographically verified)'}
+            <p className="typ-body text-zinc-300 mb-4">
+              Complete traceability from farm harvest to production. Data verified using IOTA Identity with cryptographic signatures.
             </p>
           </div>
 
@@ -278,8 +280,8 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
 
           {/* What happens here? Explanation */}
           <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
-            <h4 className="text-sm font-medium text-green-400 mb-2">💡 What happens here?</h4>
-            <div className="space-y-2 text-xs text-zinc-300 leading-relaxed">
+            <h4 className="typ-subtitle text-green-400 mb-2">💡 What happens here?</h4>
+            <div className="space-y-2 typ-small text-zinc-300 leading-relaxed">
               <p>
                 <strong className="text-white">Verification confirmed:</strong> {isBlockchainMode()
                   ? 'All supply chain steps have been cryptographically verified. Each certificate\'s signature proves authenticity.'
@@ -575,13 +577,13 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
                   label: 'Proof',
                   content: (
                     <div className="space-y-4">
-                      <div className="bg-[#1a1a1a] border border-blue-500/20 rounded-lg p-6">
+            <div className="bg-[#1a1a1a] border border-blue-500/20 rounded-lg p-6">
                         <div className="flex items-center gap-2 mb-3">
                           <ExternalLink className="w-5 h-5 text-blue-400" />
-                          <h4 className="text-sm font-medium text-blue-400">🔒 External Proof</h4>
+                <h4 className="typ-subtitle text-blue-400">🔒 External Proof</h4>
                         </div>
                         
-                        <p className="text-xs text-white mb-4">
+              <p className="typ-small text-white mb-4">
                           {journey.some(step => step.onChain)
                             ? 'All identities and credentials are verifiable on the IOTA Tangle. Click below to independently verify on the blockchain:'
                             : 'In production, these would link to verifiable blockchain proof. Click to learn about IOTA Identity:'
@@ -640,7 +642,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
                         </div>
                         
                         <div className="mt-4 pt-3 border-t border-[#27272a]">
-                          <p className="text-xs text-zinc-500">
+                          <p className="typ-small text-zinc-500">
                             {journey.some(step => step.onChain)
                               ? '💡 These identities exist on a public, immutable blockchain. Anyone, anywhere can verify them independently without trusting this website.'
                               : '💡 In blockchain mode, these identities would exist on the IOTA Tangle, allowing independent verification by anyone.'
@@ -657,8 +659,8 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
                   content: (
                     <div className="space-y-4">
                       <div className="bg-[#1a1a1a] border border-[#27272a] rounded-lg p-5">
-                        <h4 className="text-sm font-medium text-white mb-2">🔐 How Verification Works</h4>
-                        <p className="text-xs text-white leading-relaxed mb-3">
+                        <h4 className="typ-subtitle text-white mb-2">🔐 How Verification Works</h4>
+                        <p className="typ-small text-white leading-relaxed mb-3">
                           Each step in the supply chain is cryptographically signed and stored on the{' '}
                           <a 
                             href="https://docs.iota.org/developer/iota-identity/" 
@@ -671,7 +673,7 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
                           . The factory&apos;s certificate <strong>references</strong> the farmer&apos;s certificate, 
                           creating an immutable chain that cannot be faked.
                         </p>
-                        <p className="text-xs text-zinc-500">
+                        <p className="typ-small text-zinc-500">
                           <strong>Technical:</strong> Uses W3C Verifiable Credentials with Ed25519 signatures • 
                           <a 
                             href="https://docs.iota.org/developer/iota-identity/" 
@@ -771,13 +773,13 @@ export function ConsumerJourney({ industry }: ConsumerJourneyProps) {
                         <h3 className="text-lg font-semibold text-white mb-3 text-center">
                           💡 For Digital Product Passports
                         </h3>
-                        <p className="text-sm text-zinc-300 mb-4 text-center">
+                        <p className="typ-body text-zinc-300 mb-4 text-center">
                           This demo shows the core technology behind EU Digital Product Passports. 
                           Every product will have a verifiable identity and supply chain history.
                         </p>
                         
                         <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-5">
-                          <p className="text-xs font-medium text-white mb-3">Works for any product:</p>
+                          <p className="typ-label text-white mb-3">Works for any product:</p>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                             <div className="flex items-center gap-2 text-zinc-300">
                               <span>🔋</span>

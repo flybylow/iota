@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { ModeToggle } from '@/components/ModeToggle';
 import { setDPPMode, isBlockchainMode } from '@/lib/dppMode';
 import { CTAButton } from '@/components/CTAButton';
+import './home.css';
 import { Fold } from '@/components/Fold';
 import { Footer } from '@/components/Footer';
 
@@ -365,6 +366,48 @@ export default function HomePage() {
     router.push('/');
   };
 
+  function StepsCarousel() {
+    const steps = ['/1.png','/2.png','/3.png','/4.png','/5.png','/6.png','/7.png','/8.png'];
+    const [index, setIndex] = React.useState(0);
+    const next = () => setIndex((p) => (p + 1) % steps.length);
+    const prev = () => setIndex((p) => (p - 1 + steps.length) % steps.length);
+
+    return (
+      <section className="relative w-full mt-6 mb-8">
+        <div className="relative bg-black/90 rounded-2xl w-[95%] md:w-[60%] mx-auto h-[420px] md:h-[600px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.4)] border border-white/10 overflow-hidden">
+          <img
+            src={steps[index]}
+            alt={`Step ${index + 1}`}
+            className="absolute inset-0 w-full h-full object-contain object-left block"
+          />
+          <div className="absolute top-3 right-3 text-sm md:text-base px-3 py-1.5 rounded bg-black/80 text-white border border-white/30 shadow">
+            Step {index + 1} / {steps.length}
+          </div>
+
+          <button onClick={prev} aria-label="Previous"
+            className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-black rounded-full w-9 h-9 md:w-12 md:h-12 grid place-items-center shadow focus:outline-none focus:ring-2 focus:ring-blue-400/60">
+            <ChevronRight size={20} className="rotate-180" />
+          </button>
+          <button onClick={next} aria-label="Next"
+            className="absolute right-2 md:right-3 top-[calc(50%+40px)] -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-black rounded-full w-9 h-9 md:w-12 md:h-12 grid place-items-center shadow focus:outline-none focus:ring-2 focus:ring-blue-400/60">
+            <ChevronRight size={20} />
+          </button>
+        </div>
+
+        <div className="flex justify-center gap-2 mt-3">
+          {steps.map((_, i) => (
+            <button
+              key={i}
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => setIndex(i)}
+              className={`transition-all rounded-full ${i === index ? 'w-10 bg-blue-500 h-2' : 'w-2 bg-gray-300 h-2 hover:bg-blue-400'}`}
+            />
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-dpp-bg-primary w-full">
       {/* Desktop-optimized marketing page container - 800px max width */}
@@ -376,6 +419,12 @@ export default function HomePage() {
             <Link href="/home">
               <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
                 <span className="text-2xl">👛</span>
+        {/* Header */}
+        <header className="bg-gradient-to-b from-dpp-bg-card to-dpp-bg-primary border-b border-dpp-border-default mb-8 md:mb-12 w-full">
+          <div className="w-full px-4 md:px-8 py-6 md:py-8">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <span className="text-3xl">👛</span>
                 <div className="flex flex-col">
                   <span className="text-sm font-bold text-white leading-tight">DPP</span>
                   <span className="text-[9px] text-white leading-tight">Digital Product Passport</span>
@@ -477,6 +526,8 @@ export default function HomePage() {
             <div className="mb-6 md:mb-8">
               <div className="home-step-card pt-6 md:pt-8">
                 <h2 className="text-2xl md:text-3xl font-bold text-dpp-text-primary text-center mt-0 mb-0">DEMO</h2>
+              <div className="home-step-card">
+                <h2 className="text-2xl md:text-3xl font-bold text-dpp-text-primary text-center mt-1 mb-2">DEMO</h2>
                 <div className="grid grid-cols-2 gap-6 md:gap-10 items-start">
                   <div className="flex justify-center">
                     <button

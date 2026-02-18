@@ -219,6 +219,8 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
         <h3 className="text-base font-medium text-white mt-1">{originStakeholder.name}</h3>
       </div>
 
+      {/* Wallet connection status moved under New Harvest button */}
+
       {/* Stakeholder Info Card */}
       <div className="border border-[#3a3a3a] rounded-lg p-6 relative overflow-hidden bg-green-900/30">
         <div 
@@ -329,6 +331,21 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             </div>
           )}
 
+          {/* Wallet connection status under New Harvest button */}
+          {!showHarvestForm && !isConnected && (
+            <div className="w-[80%] mx-auto">
+              <div className="mt-3 rounded-lg px-4 py-3 bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 text-[11px]">
+                <div className="flex items-start gap-2">
+                  <span className="mt-0.5">⚠️</span>
+                  <div>
+                    <p className="font-medium">Wallet not connected</p>
+                    <p className="opacity-90">You can issue in Demo Mode, but connect your IOTA wallet to publish on-chain.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Harvest Details Form */}
           {showHarvestForm && (
             <>
@@ -337,7 +354,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
             
             <div className="grid grid-cols-2 gap-x-10 gap-y-8 space-y-0">
               <div>
-                <label className="block text-[10px] text-zinc-300 mb-2">Harvest Date</label>
+                <label className="block typ-label mb-2">Harvest Date</label>
                 <input
                   type="date"
                   value={harvestData.harvestDate}
@@ -347,7 +364,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
               </div>
               
               <div>
-                <label className="block text-[10px] text-zinc-300 mb-2">Batch Weight (kg)</label>
+                <label className="block typ-label mb-2">Batch Weight (kg)</label>
                 <input
                   type="number"
                   min="100"
@@ -360,7 +377,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
               </div>
               
               <div>
-                <label className="block text-[10px] text-zinc-300 mb-2">Cocoa Variety</label>
+                <label className="block typ-label mb-2">Cocoa Variety</label>
                 <select
                   value={harvestData.cocoaVariety}
                   onChange={(e) => setHarvestData({...harvestData, cocoaVariety: e.target.value})}
@@ -374,7 +391,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
               </div>
               
               <div>
-                <label className="block text-[10px] text-zinc-300 mb-2">Fermentation (days)</label>
+                <label className="block typ-label mb-2">Fermentation (days)</label>
                 <input
                   type="number"
                   min="3"
@@ -386,7 +403,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
               </div>
               
               <div className="col-span-2">
-                <label className="block text-[10px] text-zinc-300 mb-2">Drying Method</label>
+                <label className="block typ-label mb-2">Drying Method</label>
                 <select
                   value={harvestData.dryingMethod}
                   onChange={(e) => setHarvestData({...harvestData, dryingMethod: e.target.value})}
@@ -399,7 +416,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
               </div>
               
               <div className="col-span-2 mt-6">
-                <label className="block text-[10px] text-zinc-300 mb-2">Certification #</label>
+                <label className="block typ-label mb-2">Certification #</label>
                 <input
                   value={`${industry?.toUpperCase()}-CERT-2025-12345`}
                   className="w-auto min-w-[250px] px-4 py-2.5 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg text-white text-sm"
@@ -501,6 +518,7 @@ export function FarmerOrigin({ industry, onNextStep }: FarmerOriginProps) {
               </p>
             </div>
           </div>
+          {/* Explanation moved outside the card at bottom of page */}
 
           <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-5 space-y-3">
             <div className="flex items-start justify-between gap-3">
